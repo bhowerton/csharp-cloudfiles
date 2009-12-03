@@ -4,9 +4,9 @@
 
 using System.Collections.Generic;
 using System.Net;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.domain
+namespace Rackspace.CloudFiles.domain
 {
     public class StorageItemInformation
     {

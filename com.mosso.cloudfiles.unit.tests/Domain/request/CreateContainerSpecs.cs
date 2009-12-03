@@ -1,11 +1,11 @@
 using System;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 using SpecMaker.Core.Matchers;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.CreateContainerSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.CreateContainerSpecs
 {
     public class CreateContainerSpecs: BaseSpec
     {

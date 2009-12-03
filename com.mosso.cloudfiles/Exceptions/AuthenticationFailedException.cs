@@ -4,7 +4,7 @@
 
 using System;
 
-namespace com.mosso.cloudfiles.exceptions
+namespace Rackspace.CloudFiles.exceptions
 {
     /// <summary>
     /// Thrown when the user has incorrect authentication credentials.

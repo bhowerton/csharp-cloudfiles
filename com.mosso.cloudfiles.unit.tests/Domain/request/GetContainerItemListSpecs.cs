@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.unit.tests.CustomMatchers;
+using Rackspace.CloudFiles.unit.tests.CustomMatchers;
 using Moq;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.GetContainerItemListSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetContainerItemListSpecs
 {
     public class GentContainerItemListSpec : BaseSpec
     {

@@ -1,8 +1,8 @@
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.utils;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace com.mosso.cloudfiles.unit.tests.Utils.StringHelperSpecs
+namespace Rackspace.CloudFiles.unit.tests.Utils.StringHelperSpecs
 {
     [TestFixture]
     public class when_capitalizing_a_string

@@ -4,7 +4,7 @@
 
 using System;
 
-namespace com.mosso.cloudfiles.exceptions
+namespace Rackspace.CloudFiles.exceptions
 {
     /// <summary>
     /// This exception is thrown when the length of the meta value in the meta data header is longer than the maximum allowed length

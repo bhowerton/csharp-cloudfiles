@@ -1,9 +1,9 @@
 using System;
-using com.mosso.cloudfiles.domain;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain;
 
-namespace com.mosso.cloudfiles.unit.tests.domain
+namespace Rackspace.CloudFiles.unit.tests.domain
 {
     
     [TestFixture]

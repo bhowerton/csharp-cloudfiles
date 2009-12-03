@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace com.mosso.cloudfiles.domain.response
+namespace Rackspace.CloudFiles.domain.response
 {
     /// <summary>
     /// An interface representing responses with a content body

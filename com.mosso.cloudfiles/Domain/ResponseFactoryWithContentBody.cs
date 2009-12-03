@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.domain.response;
-using com.mosso.cloudfiles.domain.response.Interfaces;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.domain.response;
+using Rackspace.CloudFiles.domain.response.Interfaces;
 
-namespace com.mosso.cloudfiles.domain
+namespace Rackspace.CloudFiles.domain
 {
     public interface IResponseFactoryWithContentBody
     {

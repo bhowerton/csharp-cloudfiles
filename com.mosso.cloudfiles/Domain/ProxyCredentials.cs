@@ -2,7 +2,7 @@
 /// See COPYING file for licensing information
 /// 
 
-namespace com.mosso.cloudfiles.domain
+namespace Rackspace.CloudFiles.domain
 {
     /// <summary>
     /// ProxyCredentials

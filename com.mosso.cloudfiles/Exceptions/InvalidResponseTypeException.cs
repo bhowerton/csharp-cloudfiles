@@ -4,7 +4,7 @@
 
 using System;
 
-namespace com.mosso.cloudfiles.exceptions
+namespace Rackspace.CloudFiles.exceptions
 {
     /// <summary>
     /// This exception is thrown when the wrong IResponse type is passed into an instance of ResponseFactory

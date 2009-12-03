@@ -12,12 +12,12 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.domain.response;
-using com.mosso.cloudfiles.domain.response.Interfaces;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.domain.response;
+using Rackspace.CloudFiles.domain.response.Interfaces;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.domain.request
+namespace Rackspace.CloudFiles.domain.request
 {
     /// <summary>
     /// Wraps requests to optionally handle proxy credentials and ssl
@@ -105,7 +105,7 @@ namespace com.mosso.cloudfiles.domain.request
 
 
             _httpWebRequest.Timeout = Constants.CONNECTION_TIMEOUT;
-            _httpWebRequest.UserAgent = Constants.USER_AGENT;
+            _httpWebRequest.UserAgent = System.Security.Cryptography.Constants.USER_AGENT;
 
             //   HandleIsModifiedSinceHeaderRequestFieldFor(_httpWebRequest);
 
@@ -175,8 +175,8 @@ namespace com.mosso.cloudfiles.domain.request
 
         public string ETag
         {
-            get { return Headers[Constants.ETAG]; }
-            private set { Headers.Add(Constants.ETAG, value); }
+            get { return Headers[System.Security.Cryptography.Constants.ETAG]; }
+            private set { Headers.Add(System.Security.Cryptography.Constants.ETAG, value); }
         }
 
         public bool AllowWriteStreamBuffering
@@ -217,7 +217,7 @@ namespace com.mosso.cloudfiles.domain.request
         {
             using (var webstream = request.GetRequestStream())
             {
-                byte[] buffer = new byte[Constants.CHUNK_SIZE];
+                byte[] buffer = new byte[System.Security.Cryptography.Constants.CHUNK_SIZE];
 
                 var amt = 0;
                 while ((amt = ContentStream.Read(buffer, 0, buffer.Length)) != 0)

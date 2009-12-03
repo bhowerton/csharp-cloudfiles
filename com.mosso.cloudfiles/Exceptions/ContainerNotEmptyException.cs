@@ -4,7 +4,7 @@
 
 using System;
 
-namespace com.mosso.cloudfiles.exceptions
+namespace Rackspace.CloudFiles.exceptions
 {
     /// <summary>
     /// This exception is thrown when the user attempts to delete a container that still has storage objects associated with it

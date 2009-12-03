@@ -1,8 +1,8 @@
 using System;
 using System.Net;
-using com.mosso.cloudfiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace com.mosso.cloudfiles.domain.request
+namespace Rackspace.CloudFiles.domain.request
 {
     public interface IRequestFactory
     {

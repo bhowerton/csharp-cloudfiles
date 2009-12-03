@@ -1,9 +1,9 @@
 using System.Net;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
 using NUnit.Framework;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace com.mosso.cloudfiles.unit.tests
+namespace Rackspace.CloudFiles.unit.tests
 {
     public class Asserts
     {

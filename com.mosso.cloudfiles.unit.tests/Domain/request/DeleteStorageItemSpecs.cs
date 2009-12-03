@@ -1,12 +1,12 @@
 using System;
 using System.Net;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core.Matchers;
 using SpecMaker.Core;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.DeleteStorageItemSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.DeleteStorageItemSpecs
 {
     public class DeleteStorageItemSpecs: BaseSpec
     {

@@ -1,14 +1,14 @@
 using System;
 using System.Net;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 using SpecMaker.Core.Matchers;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.DeleteContainerSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.DeleteContainerSpecs
 {
     public class DeleteContainerSpecs : BaseSpec
     {

@@ -1,7 +1,7 @@
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.domain.response.Interfaces;
+using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.domain.response.Interfaces;
 
-namespace com.mosso.cloudfiles.domain.request
+namespace Rackspace.CloudFiles.domain.request
 {
     public interface IWebRequestEngine
     {

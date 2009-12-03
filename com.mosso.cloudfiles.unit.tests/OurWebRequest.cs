@@ -1,7 +1,7 @@
 using System.IO;
 using System.Net;
 
-namespace com.mosso.cloudfiles.unit.tests
+namespace Rackspace.CloudFiles.unit.tests
 {
     internal class OurWebRequest : Request
     {

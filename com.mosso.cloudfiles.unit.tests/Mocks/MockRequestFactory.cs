@@ -1,4 +1,4 @@
-namespace com.mosso.cloudfiles.unit.tests.mocks
+namespace Rackspace.CloudFiles.unit.tests.mocks
 {
     public class MockRequestFactory : RequestFactory
     {

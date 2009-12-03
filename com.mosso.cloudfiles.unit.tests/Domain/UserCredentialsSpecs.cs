@@ -1,9 +1,9 @@
 using System;
-using com.mosso.cloudfiles.domain;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain;
 
-namespace com.mosso.cloudfiles.unit.tests.domain.UserCredentialsSpecs
+namespace Rackspace.CloudFiles.unit.tests.domain.UserCredentialsSpecs
 {
     [TestFixture]
     public class When_creating_usercredentials_with_auth_url

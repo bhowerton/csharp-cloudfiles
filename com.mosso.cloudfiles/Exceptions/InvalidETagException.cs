@@ -4,7 +4,7 @@
 
 using System;
 
-namespace com.mosso.cloudfiles.exceptions
+namespace Rackspace.CloudFiles.exceptions
 {
     /// <summary>
     /// This exception is thrown when an invalid MD5 ETag is supplied with a file being stored on cloudfiles

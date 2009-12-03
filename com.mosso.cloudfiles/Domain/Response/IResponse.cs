@@ -4,7 +4,7 @@
 
 using System.Net;
 
-namespace com.mosso.cloudfiles.domain.response
+namespace Rackspace.CloudFiles.domain.response
 {
     /// <summary>
     /// The interface for all responses returned from cloudfiles

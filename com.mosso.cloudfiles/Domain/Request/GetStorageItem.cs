@@ -7,11 +7,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.exceptions;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.domain.request
+namespace Rackspace.CloudFiles.domain.request
 {
     /// <summary>
     /// possible http comparison header fields to apply to this request

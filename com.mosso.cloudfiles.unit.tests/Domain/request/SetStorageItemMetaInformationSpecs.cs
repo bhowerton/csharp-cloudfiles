@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.SetStorageItemMetaInformationSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.SetStorageItemMetaInformationSpecs
 {
     [TestFixture]
     public class when_setting_storage_item_information_and_storage_url_is_null

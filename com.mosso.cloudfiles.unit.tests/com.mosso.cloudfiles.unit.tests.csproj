@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8720F9D5-59B8-49DC-A05A-DAEE3611DA00}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -59,9 +59,6 @@
     <Compile Include="Domain\request\SetLoggingToContainerRequestSpec.cs" />
     <Compile Include="Utils\ContainerNameValidatorSpecs.cs" />
     <Compile Include="Domain\AccountSpecs.cs" />
-    <Compile Include="Domain\CF\AccountSpecs.cs" />
-    <Compile Include="Domain\CF\ContainerSpecs.cs" />
-    <Compile Include="Domain\CF\ObjectSpecs.cs" />
     <Compile Include="Domain\request\CreateContainerSpecs.cs" />
     <Compile Include="Domain\request\DeleteContainerSpecs.cs" />
     <Compile Include="Domain\request\DeleteStorageItemSpecs.cs" />

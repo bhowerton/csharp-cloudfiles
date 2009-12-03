@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace com.mosso.cloudfiles.utils
+namespace Rackspace.CloudFiles.utils
 {
     public static class Writer
     {

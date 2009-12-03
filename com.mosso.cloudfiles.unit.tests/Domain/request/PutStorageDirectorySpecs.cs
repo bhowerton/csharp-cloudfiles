@@ -1,13 +1,13 @@
 using System;
 using System.IO;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.unit.tests.CustomMatchers;
+using Rackspace.CloudFiles.unit.tests.CustomMatchers;
 using Moq;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 using SpecMaker.Core.Matchers;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request
+namespace Rackspace.CloudFiles.unit.tests.Domain.request
 {
     public class PutStorageDirectorySpecs:BaseSpec
     {

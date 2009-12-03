@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using com.mosso.cloudfiles.domain;
 using com.mosso.cloudfiles.utils;
 using NUnit.Framework;

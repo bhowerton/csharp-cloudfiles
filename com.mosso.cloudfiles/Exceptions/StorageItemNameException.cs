@@ -3,9 +3,9 @@
 ///
 
 using System;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.exceptions
+namespace Rackspace.CloudFiles.exceptions
 {
     /// <summary>
     /// Thrown when the name of the object is invalid

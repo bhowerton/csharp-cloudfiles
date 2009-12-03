@@ -4,11 +4,11 @@
 
 using System;
 using System.Collections.Generic;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.exceptions;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.domain.request
+namespace Rackspace.CloudFiles.domain.request
 {
     /// <summary>
     /// SetStorageItemMetaInformation

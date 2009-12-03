@@ -1,12 +1,12 @@
 using System;
 using System.Net;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.SetPublicContainerDetailsSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.SetPublicContainerDetailsSpecs
 {
     [TestFixture]
     public class when_setting_public_container_details_and_cdn_management_url_is_null

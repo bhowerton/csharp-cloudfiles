@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.exceptions;
-using com.mosso.cloudfiles.utils;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request
+namespace Rackspace.CloudFiles.unit.tests.Domain.request
 {
     [TestFixture]
     public class When_getting_a_storage_object

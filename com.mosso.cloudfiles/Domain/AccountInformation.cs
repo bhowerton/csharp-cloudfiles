@@ -4,7 +4,7 @@
 
 using System;
 
-namespace com.mosso.cloudfiles.domain
+namespace Rackspace.CloudFiles.domain
 {
     /// <summary>
     /// encapsulates the container count and bytes used by a customer

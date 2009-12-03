@@ -5,9 +5,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.domain.response
+namespace Rackspace.CloudFiles.domain.response
 {
     /// <summary>
     /// This class wraps the response from the cloud files request when expecting a content body

@@ -1,4 +1,4 @@
-namespace com.mosso.cloudfiles.utils
+namespace Rackspace.CloudFiles.utils
 {
     /// <summary>
     /// This class initializes the constants which would be utilized all over the application.

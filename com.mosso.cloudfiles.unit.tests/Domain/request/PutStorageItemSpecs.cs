@@ -1,15 +1,15 @@
 using System;
 using System.IO;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.exceptions;
-using com.mosso.cloudfiles.unit.tests.CustomMatchers;
+using Rackspace.CloudFiles.unit.tests.CustomMatchers;
 using Moq;
 using NUnit.Framework;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.exceptions;
 using SpecMaker.Core;
 using SpecMaker.Core.Matchers;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.PutStorageItemSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.PutStorageItemSpecs
 {
     public class PutStorageItemSpec : BaseSpec
     {

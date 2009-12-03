@@ -1,9 +1,9 @@
 using System;
-using com.mosso.cloudfiles.domain.request;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain.request;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.GetContainerInformationSerializedSerializedSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetContainerInformationSerializedSerializedSpecs
 {
     [TestFixture]
     public class when_getting_container_information_and_storage_url_is_null_and_format_is_json

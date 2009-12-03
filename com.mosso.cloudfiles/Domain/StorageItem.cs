@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace com.mosso.cloudfiles.domain
+namespace Rackspace.CloudFiles.domain
 {
     /// <summary>
     /// StorageItem

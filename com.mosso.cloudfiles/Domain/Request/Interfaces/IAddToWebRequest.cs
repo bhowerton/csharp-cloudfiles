@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 
-namespace com.mosso.cloudfiles.domain.request.Interfaces
+namespace Rackspace.CloudFiles.domain.request.Interfaces
 {
     public interface IAddToWebRequest
     {

@@ -1,4 +1,4 @@
-namespace com.mosso.cloudfiles.unit.tests
+namespace Rackspace.CloudFiles.unit.tests
 {
     public static class Constants
     {

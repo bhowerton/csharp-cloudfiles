@@ -5,7 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Mime;
 
-namespace com.mosso.cloudfiles.domain.response.Interfaces
+namespace Rackspace.CloudFiles.domain.response.Interfaces
 {
     public interface ICloudFilesResponse:IResponse
     {

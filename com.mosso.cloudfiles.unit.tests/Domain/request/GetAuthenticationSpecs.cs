@@ -1,13 +1,13 @@
 using System;
 using System.Net;
-using com.mosso.cloudfiles.domain;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.GetAuthenticationSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetAuthenticationSpecs
 {
     [TestFixture]
     public class when_authenticating_against_cloud_files_and_user_credentials_are_null

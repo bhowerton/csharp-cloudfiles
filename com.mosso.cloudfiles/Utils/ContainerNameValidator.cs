@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace com.mosso.cloudfiles.utils
+namespace Rackspace.CloudFiles.utils
 {
     public class ContainerNameValidator
     {

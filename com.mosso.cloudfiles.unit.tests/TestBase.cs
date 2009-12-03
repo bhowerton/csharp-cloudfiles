@@ -1,11 +1,11 @@
 using System;
-using com.mosso.cloudfiles.domain;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.response;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.response;
 
-namespace com.mosso.cloudfiles.unit.tests
+namespace Rackspace.CloudFiles.unit.tests
 {
     public class TestBase
     {

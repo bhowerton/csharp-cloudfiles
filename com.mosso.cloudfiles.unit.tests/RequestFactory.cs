@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace com.mosso.cloudfiles.unit.tests
+namespace Rackspace.CloudFiles.unit.tests
 {
     public interface RequestFactory
     {

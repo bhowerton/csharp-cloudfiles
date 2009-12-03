@@ -1,13 +1,13 @@
 using System;
 using System.Net;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.GetAccountInformationSerializedSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetAccountInformationSerializedSpecs
 {
     public class GetAccountInformationSerializedSpecs: BaseSpec
     {

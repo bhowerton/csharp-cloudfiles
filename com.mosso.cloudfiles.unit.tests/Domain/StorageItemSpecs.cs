@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using com.mosso.cloudfiles.domain;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain;
 
-namespace com.mosso.cloudfiles.unit.tests.domain.StorageItemSpecs
+namespace Rackspace.CloudFiles.unit.tests.domain.StorageItemSpecs
 {
     [TestFixture]
     public class When_creating_a_storage_object

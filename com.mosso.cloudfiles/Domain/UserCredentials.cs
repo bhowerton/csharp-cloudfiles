@@ -3,9 +3,9 @@
 ///
 
 using System;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.domain
+namespace Rackspace.CloudFiles.domain
 {
     /// <summary>
     /// UserCredentials

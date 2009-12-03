@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
-using com.mosso.cloudfiles.domain.response.Interfaces;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.domain.response.Interfaces;
+using Rackspace.CloudFiles.utils;
 
-namespace com.mosso.cloudfiles.domain.response
+namespace Rackspace.CloudFiles.domain.response
 {
     /// <summary>
     /// Represents the response information from a CloudFiles request

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using com.mosso.cloudfiles.domain;
-using com.mosso.cloudfiles.domain.request;
+using Rackspace.CloudFiles.domain;
+using Rackspace.CloudFiles.domain.request;
 
-namespace com.mosso.cloudfiles
+namespace Rackspace.CloudFiles
 {
     public interface IConnection
     {
@@ -41,7 +41,7 @@ namespace com.mosso.cloudfiles
        
         Container GetPublicContainerInformation(string containerName);
         void MakePath(string containerName, string path);
-        IAccount Account { get; }
+      
 
         /// <summary>
         /// The storage url used to interact with cloud files

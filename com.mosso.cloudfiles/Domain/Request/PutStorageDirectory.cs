@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using com.mosso.cloudfiles.domain.request.Interfaces;
-using com.mosso.cloudfiles.utils;
+using Rackspace.CloudFiles.utils;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace com.mosso.cloudfiles.domain.request
+namespace Rackspace.CloudFiles.domain.request
 {
     public class PutStorageDirectory:IAddToWebRequest
     {

@@ -6,7 +6,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace com.mosso.cloudfiles.utils
+namespace Rackspace.CloudFiles.utils
 {
     /// <summary>
     /// 

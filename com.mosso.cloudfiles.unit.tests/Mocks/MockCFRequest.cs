@@ -1,14 +1,15 @@
-
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using System;
 using System.IO;
 using System.Net;
-namespace com.mosso.cloudfiles.unit.tests
+using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.domain.response.Interfaces;
+
+namespace Rackspace.CloudFiles.unit.tests
 {
 class MockCFRequest: ICloudFilesRequest
 	{
 		#region ICloudFilesRequest implementation
-		public com.mosso.cloudfiles.domain.response.Interfaces.ICloudFilesResponse GetResponse ()
+		public ICloudFilesResponse GetResponse ()
 		{
 			throw new System.NotImplementedException();
 		}
@@ -19,7 +20,7 @@ class MockCFRequest: ICloudFilesRequest
 		}
 		private Stream _fakestream;
 		
-		public void SetContent (System.IO.Stream stream, com.mosso.cloudfiles.Connection.ProgressCallback progress)
+		public void SetContent (System.IO.Stream stream, Connection.ProgressCallback progress)
 		{
 			_fakestream = stream;
 		}

@@ -1,11 +1,11 @@
 using System;
-using com.mosso.cloudfiles.domain.request;
-using com.mosso.cloudfiles.domain.request.Interfaces;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.GetAccountInformationSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetAccountInformationSpecs
 {
     [TestFixture]
     public class when_getting_account_information_and_storage_url_is_null

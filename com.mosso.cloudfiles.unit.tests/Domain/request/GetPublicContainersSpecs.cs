@@ -1,9 +1,9 @@
 using System;
-using com.mosso.cloudfiles.domain.request;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain.request;
 
-namespace com.mosso.cloudfiles.unit.tests.Domain.request.GetPublicContainersSpecs
+namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetPublicContainersSpecs
 {
     [TestFixture]
     public class when_getting_list_of_public_containers_and_cdn_management_url_is_null

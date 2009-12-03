@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using com.mosso.cloudfiles.domain;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.domain;
 
-namespace com.mosso.cloudfiles.unit.tests.Services.ConnectionSpecs
+namespace Rackspace.CloudFiles.unit.tests.Services.ConnectionSpecs
 {
     [TestFixture]
     public class When_instantiating_a_connection_object
