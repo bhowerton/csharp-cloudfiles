@@ -3,15 +3,10 @@
 ///
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.domain.response;
 using Rackspace.CloudFiles.domain.response.Interfaces;
@@ -105,7 +100,7 @@ namespace Rackspace.CloudFiles.domain.request
 
 
             _httpWebRequest.Timeout = Constants.CONNECTION_TIMEOUT;
-            _httpWebRequest.UserAgent = System.Security.Cryptography.Constants.USER_AGENT;
+            _httpWebRequest.UserAgent = Constants.USER_AGENT;
 
             //   HandleIsModifiedSinceHeaderRequestFieldFor(_httpWebRequest);
 
@@ -175,8 +170,8 @@ namespace Rackspace.CloudFiles.domain.request
 
         public string ETag
         {
-            get { return Headers[System.Security.Cryptography.Constants.ETAG]; }
-            private set { Headers.Add(System.Security.Cryptography.Constants.ETAG, value); }
+            get { return Headers[Constants.ETAG]; }
+            private set { Headers.Add(Constants.ETAG, value); }
         }
 
         public bool AllowWriteStreamBuffering
@@ -217,7 +212,7 @@ namespace Rackspace.CloudFiles.domain.request
         {
             using (var webstream = request.GetRequestStream())
             {
-                byte[] buffer = new byte[System.Security.Cryptography.Constants.CHUNK_SIZE];
+                byte[] buffer = new byte[Constants.CHUNK_SIZE];
 
                 var amt = 0;
                 while ((amt = ContentStream.Read(buffer, 0, buffer.Length)) != 0)

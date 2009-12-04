@@ -5,7 +5,7 @@ using Rackspace.CloudFiles.domain;
 using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.response;
 
-namespace Rackspace.CloudFiles.unit.tests
+namespace Rackspace.CloudFiles.Specs
 {
     public class TestBase
     {
@@ -15,19 +15,19 @@ namespace Rackspace.CloudFiles.unit.tests
         [SetUp]
         public void SetUpBase()
         {
-            Uri uri = new Uri(Constants.AUTH_URL);
+            Uri uri = new Uri("http://auth");
 
             GetAuthentication request =
                 new GetAuthentication(
                     new UserCredentials(
                         uri,
-                        Constants.CREDENTIALS_USER_NAME,
-                        Constants.CREDENTIALS_PASSWORD,
-                        Constants.CREDENTIALS_CLOUD_VERSION,
-                        Constants.CREDENTIALS_ACCOUNT_NAME));
+                        "username",
+                        "password",
+                        "v1",
+                        "accountname"));
 
             IResponse response = new GenerateRequestByType().Submit(request, authToken);
-                ;
+            ;
 
             storageUrl = response.Headers[utils.Constants.X_STORAGE_URL];
             authToken = response.Headers[utils.Constants.X_AUTH_TOKEN];

@@ -2,7 +2,7 @@ using Rackspace.CloudFiles.utils;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace Rackspace.CloudFiles.unit.tests.Utils.StringHelperSpecs
+namespace Rackspace.CloudFiles.Specs.Utils
 {
     [TestFixture]
     public class when_capitalizing_a_string

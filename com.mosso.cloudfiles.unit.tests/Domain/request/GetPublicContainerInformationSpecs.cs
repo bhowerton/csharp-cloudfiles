@@ -3,7 +3,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.domain.request;
 
-namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetPublicContainerInformationSpecs
+namespace Rackspace.CloudFiles.Specs.Domain.request
 {
     [TestFixture]
     public class when_getting_information_of_a_public_container_and_storage_url_is_null

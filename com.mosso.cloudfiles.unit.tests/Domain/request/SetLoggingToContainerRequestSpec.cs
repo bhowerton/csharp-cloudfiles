@@ -5,7 +5,7 @@ using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 
-namespace Rackspace.CloudFiles.unit.tests.Domain.request
+namespace Rackspace.CloudFiles.Specs.Domain.request
 {
     public class SetLoggingToContainerRequestSpec : BaseSpec
     {

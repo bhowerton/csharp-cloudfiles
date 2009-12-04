@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.Specs;
 
 namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetPublicContainersSpecs
 {

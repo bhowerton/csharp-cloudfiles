@@ -5,13 +5,13 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 
 namespace Rackspace.CloudFiles.domain.request
 {
-    public class PutStorageDirectory:IAddToWebRequest
+    public class CreateStorageObjectAsDirectory:IAddToWebRequest
     {
         private readonly string _storageurl;
         private readonly string _containername;
         private readonly string _objname;
 
-        public PutStorageDirectory(string storageurl, string containername, string objname)
+        public CreateStorageObjectAsDirectory(string storageurl, string containername, string objname)
         {
             _storageurl = storageurl;
             _containername = containername;

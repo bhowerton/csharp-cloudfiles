@@ -15,9 +15,9 @@ using Rackspace.CloudFiles.utils;
 namespace Rackspace.CloudFiles.domain.request
 {
     /// <summary>
-    /// PutStorageItem
+    /// PutStorageObject
     /// </summary>
-    public class PutStorageItem : IAddToWebRequest
+    public class PutStorageObject : IAddToWebRequest
     {
         //  public Stream Stream { get; set; }
         private readonly string _storageUrl;
@@ -32,31 +32,31 @@ namespace Rackspace.CloudFiles.domain.request
         public event Connection.ProgressCallback Progress;
 
         /// <summary>
-        /// PutStorageItem constructor
+        /// PutStorageObject constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
         /// <param name="remoteStorageItemName">the name of the storage item to add meta information too</param>
         /// <param name="localFilePath">the path of the file to put into cloudfiles</param>
-        public PutStorageItem(string storageUrl, string containerName, string remoteStorageItemName, string localFilePath)
+        public PutStorageObject(string storageUrl, string containerName, string remoteStorageItemName, string localFilePath)
             : this(storageUrl, containerName, remoteStorageItemName, localFilePath, null)
         {
         }
 
         /// <summary>
-        /// PutStorageItem constructor
+        /// PutStorageObject constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
         /// <param name="remoteStorageItemName">the name of the storage item to add meta information too</param>
         /// <param name="filestream">the fiel stream of the file to put into cloudfiles</param>
-        public PutStorageItem(string storageUrl, string containerName, string remoteStorageItemName, Stream filestream)
+        public PutStorageObject(string storageUrl, string containerName, string remoteStorageItemName, Stream filestream)
             : this(storageUrl, containerName, remoteStorageItemName, filestream, null)
         {
         }
 
         /// <summary>
-        /// PutStorageItem constructor
+        /// PutStorageObject constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
@@ -66,7 +66,7 @@ namespace Rackspace.CloudFiles.domain.request
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
         /// <exception cref="StorageItemNameException">Thrown when the object name is invalid</exception>
-        public PutStorageItem(string storageUrl, string containerName,
+        public PutStorageObject(string storageUrl, string containerName,
             string remoteStorageItemName,
             Stream filetosend,
             Dictionary<string, string> metadata)
@@ -94,7 +94,7 @@ namespace Rackspace.CloudFiles.domain.request
         }
 
         /// <summary>
-        /// PutStorageItem constructor
+        /// PutStorageObject constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
@@ -104,7 +104,7 @@ namespace Rackspace.CloudFiles.domain.request
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
         /// <exception cref="StorageItemNameException">Thrown when the object name is invalid</exception>
-        public PutStorageItem(string storageUrl, string containerName, string remoteStorageItemName,
+        public PutStorageObject(string storageUrl, string containerName, string remoteStorageItemName,
             string localFilePath,
             Dictionary<string, string> metadata)
         {

@@ -9,9 +9,9 @@ using System.IO;
 namespace Rackspace.CloudFiles.domain
 {
     /// <summary>
-    /// StorageItem
+    /// StorageObject
     /// </summary>
-    public class StorageItem : IDisposable
+    public class StorageObject : IDisposable
     {
         public event Connection.ProgressCallback Progress;
         private readonly string objectName;
@@ -31,7 +31,7 @@ namespace Rackspace.CloudFiles.domain
         /// <param name="objectContentType"></param>
         /// <param name="contentLength"></param>
         /// <param name="lastModified"></param>
-        public StorageItem(string objectName, Dictionary<string, string> metadata, string objectContentType, long contentLength, DateTime lastModified)
+        public StorageObject(string objectName, Dictionary<string, string> metadata, string objectContentType, long contentLength, DateTime lastModified)
         {
             this.objectName = objectName;
             this.lastModified = lastModified;
@@ -49,7 +49,7 @@ namespace Rackspace.CloudFiles.domain
         /// <param name="contentStream"></param>
         /// <param name="contentLength"></param>
         /// <param name="lastModified"></param>
-        public StorageItem(string objectName, Dictionary<string, string> metadata, string objectContentType, Stream contentStream, long contentLength, DateTime lastModified)
+        public StorageObject(string objectName, Dictionary<string, string> metadata, string objectContentType, Stream contentStream, long contentLength, DateTime lastModified)
         {
             this.objectName = objectName;
             this.lastModified = lastModified;

@@ -6,7 +6,7 @@ using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace Rackspace.CloudFiles.unit.tests.Domain.request.SetPublicContainerDetailsSpecs
+namespace Rackspace.CloudFiles.Specs.Domain.request
 {
     [TestFixture]
     public class when_setting_public_container_details_and_cdn_management_url_is_null
@@ -29,7 +29,6 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.SetPublicContainerDetai
             new SetPublicContainerDetails("", "containername", true, false, -1, "", "");
         }
     }
-
 
     [TestFixture]
     public class when_setting_public_container_details_and_container_name_is_null

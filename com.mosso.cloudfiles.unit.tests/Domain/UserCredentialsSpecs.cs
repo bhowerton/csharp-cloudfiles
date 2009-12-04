@@ -15,16 +15,16 @@ namespace Rackspace.CloudFiles.unit.tests.domain.UserCredentialsSpecs
         [SetUp]
         public void SetUp()
         {
-            authUrl = new Uri(Constants.AUTH_URL);
+            authUrl = new Uri("http://authurl");
 
-            proxyCredentials = new ProxyCredentials(Constants.PROXY_ADDRESS, Constants.PROXY_USERNAME, Constants.PROXY_PASSWORD, Constants.PROXY_DOMAIN);
+            proxyCredentials = new ProxyCredentials("192.1.1.2", "proxyname", "proxypass", "foo.com");
 
             userCreds = new UserCredentials(
                 authUrl,
-                Constants.CREDENTIALS_USER_NAME,
-                Constants.CREDENTIALS_PASSWORD,
-                Constants.CREDENTIALS_CLOUD_VERSION,
-                Constants.CREDENTIALS_ACCOUNT_NAME,
+                "loginname",
+                "loginpass",
+               "v1",
+               "myaccount",
                 proxyCredentials
                 );
         }
@@ -32,13 +32,13 @@ namespace Rackspace.CloudFiles.unit.tests.domain.UserCredentialsSpecs
         [Test]
         public void Should_have_username()
         {
-            Assert.That(userCreds.Username, Is.EqualTo(Constants.CREDENTIALS_USER_NAME));
+            Assert.That(userCreds.Username, Is.EqualTo("loginname"));
         }
 
         [Test]
         public void Should_have_password()
         {
-            Assert.That(userCreds.Api_access_key, Is.EqualTo(Constants.CREDENTIALS_PASSWORD));
+            Assert.That(userCreds.Api_access_key, Is.EqualTo("loginpass"));
         }
 
         [Test]
@@ -50,37 +50,37 @@ namespace Rackspace.CloudFiles.unit.tests.domain.UserCredentialsSpecs
         [Test]
         public void Should_have_cloud_version()
         {
-            Assert.That(userCreds.Cloudversion, Is.EqualTo(Constants.CREDENTIALS_CLOUD_VERSION));
+            Assert.That(userCreds.Cloudversion, Is.EqualTo("v1"));
         }
 
         [Test]
         public void Should_have_account_name()
         {
-            Assert.That(userCreds.AccountName, Is.EqualTo(Constants.CREDENTIALS_ACCOUNT_NAME));
+            Assert.That(userCreds.AccountName, Is.EqualTo("loginname"));
         }
 
         [Test]
         public void Should_have_proxy_user_name_when_proxy_information_is_set()
         {
-            Assert.That(userCreds.ProxyCredentials.ProxyUsername, Is.EqualTo(Constants.PROXY_USERNAME));
+            Assert.That(userCreds.ProxyCredentials.ProxyUsername, Is.EqualTo("proxyname"));
         }
 
         [Test]
         public void Should_have_proxy_password_when_proxy_information_is_set()
         {
-            Assert.That(userCreds.ProxyCredentials.ProxyPassword, Is.EqualTo(Constants.PROXY_PASSWORD));
+            Assert.That(userCreds.ProxyCredentials.ProxyPassword, Is.EqualTo("proxypass"));
         }
 
         [Test]
         public void Should_have_proxy_address_when_proxy_information_is_set()
         {
-            Assert.That(userCreds.ProxyCredentials.ProxyAddress, Is.EqualTo(Constants.PROXY_ADDRESS));
+            Assert.That(userCreds.ProxyCredentials.ProxyAddress, Is.EqualTo("foo.com"));
         }
 
         [Test]
         public void Should_have_proxy_domain_when_proxy_information_is_set()
         {
-            Assert.That(userCreds.ProxyCredentials.ProxyDomain, Is.EqualTo(Constants.PROXY_DOMAIN));
+            Assert.That(userCreds.ProxyCredentials.ProxyDomain, Is.EqualTo("proxydomain"));
         }
     }
 
@@ -93,11 +93,14 @@ namespace Rackspace.CloudFiles.unit.tests.domain.UserCredentialsSpecs
         [SetUp]
         public void Setup()
         {
-            proxyCredentials = new ProxyCredentials(Constants.PROXY_ADDRESS, Constants.PROXY_USERNAME, Constants.PROXY_PASSWORD, Constants.PROXY_DOMAIN);
+            proxyCredentials = new ProxyCredentials("myfoo",
+                "myfoo1", 
+                "myfoo2", 
+                "myfoo3");
 
             userCreds = new UserCredentials(
-                Constants.CREDENTIALS_USER_NAME,
-                Constants.CREDENTIALS_PASSWORD,
+                "myfoo4",
+                "myfoo5",
                 proxyCredentials
                 );
         }

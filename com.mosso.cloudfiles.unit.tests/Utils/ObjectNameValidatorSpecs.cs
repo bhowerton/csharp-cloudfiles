@@ -2,7 +2,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.unit.tests.Utils.ObjectNameValidatorSpecs
+namespace Rackspace.CloudFiles.Specs.Utils
 {
     [TestFixture]
     public class When_a_object_name_has_no_invalid_characters

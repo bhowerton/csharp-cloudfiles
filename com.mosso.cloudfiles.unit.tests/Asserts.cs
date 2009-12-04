@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace Rackspace.CloudFiles.unit.tests
+namespace Rackspace.CloudFiles.Specs
 {
     public class Asserts
     {

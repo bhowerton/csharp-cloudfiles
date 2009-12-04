@@ -28,9 +28,9 @@ namespace Rackspace.CloudFiles
         void PutStorageItem(string containerName, Stream storageStream, string remoteStorageItemName);
         void PutStorageItem(string containerName, Stream storageStream, string remoteStorageItemName, Dictionary<string, string> metadata);
         void DeleteStorageItem(string containerName, string storageItemname);
-        StorageItem GetStorageItem(string containerName, string storageItemName);
+        StorageObject GetStorageItem(string containerName, string storageItemName);
         void GetStorageItem(string containerName, string storageItemName, string localFileName);
-        StorageItem GetStorageItem(string containerName, string storageItemName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
+        StorageObject GetStorageItem(string containerName, string storageItemName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
         void GetStorageItem(string containerName, string storageItemName, string localFileName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
         StorageItemInformation GetStorageItemInformation(string containerName, string storageItemName);
         void SetStorageItemMetaInformation(string containerName, string storageItemName, Dictionary<string, string> metadata);

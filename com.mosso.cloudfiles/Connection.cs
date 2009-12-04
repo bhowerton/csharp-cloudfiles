@@ -102,7 +102,7 @@ namespace Rackspace.CloudFiles
             try
             {
 
-                var makedirectory = new PutStorageDirectory(StorageUrl, containerName, remoteobjname);
+                var makedirectory = new CreateStorageObjectAsDirectory(StorageUrl, containerName, remoteobjname);
                 _requestfactory.Submit(makedirectory, AuthToken, _usercreds.ProxyCredentials);
             }
             catch (WebException webException)
@@ -729,7 +729,7 @@ namespace Rackspace.CloudFiles
         /// metadata.Add("key1", "value1");
         /// metadata.Add("key2", "value2");
         /// metadata.Add("key3", "value3");
-        /// connection.PutStorageItem("container name", "C:\Local\File\Path\file.txt", metadata);
+        /// connection.PutStorageObject("container name", "C:\Local\File\Path\file.txt", metadata);
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container to put the storage object in</param>
@@ -747,7 +747,7 @@ namespace Rackspace.CloudFiles
             {
                 var remoteName = Path.GetFileName(localFilePath);
                 var localName = localFilePath.Replace("/", "\\");
-                var putStorageItem = new PutStorageItem(StorageUrl, containerName, remoteName, localName, metadata);
+                var putStorageItem = new PutStorageObject(StorageUrl, containerName, remoteName, localName, metadata);
                 foreach (var callback in callbackFuncs)
                 {
                     putStorageItem.Progress += callback;
@@ -776,7 +776,7 @@ namespace Rackspace.CloudFiles
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
         /// IConnection connection = new Connection(userCredentials);
-        /// connection.PutStorageItem("container name", "C:\Local\File\Path\file.txt");
+        /// connection.PutStorageObject("container name", "C:\Local\File\Path\file.txt");
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container to put the storage object in</param>
@@ -801,7 +801,7 @@ namespace Rackspace.CloudFiles
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
         /// IConnection connection = new Connection(userCredentials);
         /// FileInfo file = new FileInfo("C:\Local\File\Path\file.txt");
-        /// connection.PutStorageItem("container name", file.Open(FileMode.Open), "RemoteFileName.txt");
+        /// connection.PutStorageObject("container name", file.Open(FileMode.Open), "RemoteFileName.txt");
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container to put the storage object in</param>
@@ -1107,7 +1107,7 @@ namespace Rackspace.CloudFiles
         /// metadata.Add("key2", "value2");
         /// metadata.Add("key3", "value3");
         /// FileInfo file = new FileInfo("C:\Local\File\Path\file.txt");
-        /// connection.PutStorageItem("container name", file.Open(FileMode.Open), "RemoteFileName.txt", metadata);
+        /// connection.PutStorageObject("container name", file.Open(FileMode.Open), "RemoteFileName.txt", metadata);
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container to put the storage object in</param>
@@ -1124,7 +1124,7 @@ namespace Rackspace.CloudFiles
            
             try
             {
-                var putStorageItem = new PutStorageItem(StorageUrl, containerName, remoteStorageItemName, storageStream, metadata);
+                var putStorageItem = new PutStorageObject(StorageUrl, containerName, remoteStorageItemName, storageStream, metadata);
                 foreach (var callback in callbackFuncs)
                 {
                     putStorageItem.Progress += callback;
@@ -1194,14 +1194,14 @@ namespace Rackspace.CloudFiles
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
         /// IConnection connection = new Connection(userCredentials);
-        /// StorageItem storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt");
+        /// StorageObject storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt");
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object to retrieve</param>
         /// <param name="storageItemName">The name of the storage object to retrieve</param>
-        /// <returns>An instance of StorageItem with the stream containing the bytes representing the desired storage object</returns>
+        /// <returns>An instance of StorageObject with the stream containing the bytes representing the desired storage object</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public  StorageItem GetStorageItem(string containerName, string storageItemName)
+        public  StorageObject GetStorageItem(string containerName, string storageItemName)
         {
             if (string.IsNullOrEmpty(containerName) ||
                string.IsNullOrEmpty(storageItemName))
@@ -1227,15 +1227,15 @@ namespace Rackspace.CloudFiles
         /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// StorageItem storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt", requestHeaderFields);
+        /// StorageObject storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt", requestHeaderFields);
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object</param>
         /// <param name="storageItemName">The name of the storage object</param>
         /// <param name="requestHeaderFields">A dictionary containing the special headers and their values</param>
-        /// <returns>An instance of StorageItem with the stream containing the bytes representing the desired storage object</returns>
+        /// <returns>An instance of StorageObject with the stream containing the bytes representing the desired storage object</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public  StorageItem GetStorageItem(string containerName, string storageItemName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
+        public  StorageObject GetStorageItem(string containerName, string storageItemName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
         {
             if (string.IsNullOrEmpty(containerName) ||
                string.IsNullOrEmpty(storageItemName))
@@ -1250,7 +1250,7 @@ namespace Rackspace.CloudFiles
 
 
                 var metadata = GetMetadata(getStorageItemResponse);
-                var storageItem = new StorageItem(storageItemName, metadata, getStorageItemResponse.ContentType, getStorageItemResponse.GetResponseStream(), getStorageItemResponse.ContentLength, getStorageItemResponse.LastModified);
+                var storageItem = new StorageObject(storageItemName, metadata, getStorageItemResponse.ContentType, getStorageItemResponse.GetResponseStream(), getStorageItemResponse.ContentLength, getStorageItemResponse.LastModified);
                 //                getStorageItemResponse.Dispose();
                 return storageItem;
             }
@@ -1421,7 +1421,7 @@ namespace Rackspace.CloudFiles
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
         /// IConnection connection = new Connection(userCredentials);
-        /// StorageItem storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt", "C:\Local\File\Path\file.txt");
+        /// StorageObject storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt", "C:\Local\File\Path\file.txt");
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object to retrieve</param>
@@ -1453,7 +1453,7 @@ namespace Rackspace.CloudFiles
         /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// StorageItem storageItem = connection.GetStorageItem("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
+        /// StorageObject storageItem = connection.GetStorageItem("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object to retrieve</param>
@@ -1547,12 +1547,12 @@ namespace Rackspace.CloudFiles
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
         /// IConnection connection = new Connection(userCredentials);
-        /// StorageItem storageItem = connection.GetStorageItemInformation("container name", "RemoteStorageItem.txt");
+        /// StorageObject storageItem = connection.GetStorageItemInformation("container name", "RemoteStorageItem.txt");
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object</param>
         /// <param name="storageItemName">The name of the storage object</param>
-        /// <returns>An instance of StorageItem containing the byte size and meta information associated with the container</returns>
+        /// <returns>An instance of StorageObject containing the byte size and meta information associated with the container</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  StorageItemInformation GetStorageItemInformation(string containerName, string storageItemName)
         {

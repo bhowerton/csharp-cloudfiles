@@ -7,9 +7,9 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 
 
-namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetContainerItemListSpecs
+namespace Rackspace.CloudFiles.Specs.Domain.request
 {
-    public class GentContainerItemListSpec : BaseSpec
+    public class GentContainerStorageObjectListSpec : BaseSpec
     {
         public void when_getting_a_list_of_items_in_a_container_and_storage_url_is_null()
         {
@@ -45,7 +45,7 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetContainerItemListSpe
 
             should("url should have storage url at beginning ", () => uri.StartsWith("http://storageurl"));
             should("url should have container name followed by query string and limit at the end ",
-                () => uri.EndsWith("containername?limit=2"));
+                   () => uri.EndsWith("containername?limit=2"));
             should("use HTTP GET method", () => _mockrequest.VerifySet(x => x.Method = "GET"));
         }
         public void when_getting_a_list_of_items_in_a_container_with_marker_query_parameter()
@@ -56,18 +56,18 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetContainerItemListSpe
 
             should("have url with storage url at beginning ", () => uri.StartsWith("http://storageurl"));
             should("have url with container name followed by query string with marker at the end ",
-                () => uri.EndsWith("containername?marker=abc"));
+                   () => uri.EndsWith("containername?marker=abc"));
             should("use HTTP GET method", () => _mockrequest.VerifySet(x => x.Method = "GET"));
         }
         public void when_getting_a_list_of_items_in_a_container_with_prefix_query_parameter()
         {
-              var parameters = new Dictionary<GetItemListParameters, string> { { GetItemListParameters.Prefix, "a" } };
-              Uri uri;
-              Mock<ICloudFilesRequest> _mockrequest = GetMockrequest(parameters, out uri);
+            var parameters = new Dictionary<GetItemListParameters, string> { { GetItemListParameters.Prefix, "a" } };
+            Uri uri;
+            Mock<ICloudFilesRequest> _mockrequest = GetMockrequest(parameters, out uri);
 
-              should("have url with storage url at beginning ", () => uri.StartsWith("http://storageurl"));
-              should("have url with container name followed by query string with prefix at the end ",
-                  () => uri.EndsWith("containername?prefix=a"));
+            should("have url with storage url at beginning ", () => uri.StartsWith("http://storageurl"));
+            should("have url with container name followed by query string with prefix at the end ",
+                   () => uri.EndsWith("containername?prefix=a"));
             should("use HTTP GET method", () => _mockrequest.VerifySet(x => x.Method = "GET"));
         }
         public void when_getting_a_list_of_items_in_a_container_with_path_query_parameter()
@@ -79,7 +79,7 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetContainerItemListSpe
 
             should("have url with storage url at beginning ", () => uri.StartsWith("http://storageurl"));
             should("have url with container name followed by query string with path at the end ",
-                () => uri.EndsWith("containername?path=dir1/subdir2/"));
+                   () => uri.EndsWith("containername?path=dir1/subdir2/"));
             should("use HTTP GET method", () => _mockrequest.VerifySet(x => x.Method = "GET"));
         }
         public void when_getting_a_list_of_items_in_a_container_with_more_than_one_query_parameter()
@@ -96,7 +96,7 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetContainerItemListSpe
 
             should("have url with storage url at beginning ", () => uri.StartsWith("http://storageurl"));
             should("have url with container name followed by query strings ",
-                () => uri.EndsWith("containername?limit=2&marker=abc&prefix=a&path=dir1/subdir2/"));
+                   () => uri.EndsWith("containername?limit=2&marker=abc&prefix=a&path=dir1/subdir2/"));
             should("use HTTP GET method", () => _mockrequest.VerifySet(x => x.Method = "GET"));
             
         }
@@ -111,6 +111,4 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetContainerItemListSpe
         }
         #endregion
     }
-
-    
 }

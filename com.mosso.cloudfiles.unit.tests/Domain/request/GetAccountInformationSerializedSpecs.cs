@@ -7,7 +7,7 @@ using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 
-namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetAccountInformationSerializedSpecs
+namespace Rackspace.CloudFiles.Specs.Domain.request
 {
     public class GetAccountInformationSerializedSpecs: BaseSpec
     {
@@ -19,7 +19,7 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetAccountInformationSe
      
         
     }
-   
+
     [TestFixture]
     public class when_getting_account_information_in_json_format_and_storage_url_is_emptry_string
     {
@@ -30,7 +30,6 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetAccountInformationSe
             new GetAccountInformationSerialized("", Format.JSON);
         }
     }
-
 
     [TestFixture]
     public class when_getting_account_information_in_json_format
@@ -83,7 +82,6 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetAccountInformationSe
             new GetAccountInformationSerialized("", Format.XML);
         }
     }
-
 
     [TestFixture]
     public class when_getting_account_information_in_xml_format

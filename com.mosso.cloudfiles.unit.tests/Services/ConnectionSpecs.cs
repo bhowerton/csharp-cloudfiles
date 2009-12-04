@@ -4,7 +4,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.domain;
 
-namespace Rackspace.CloudFiles.unit.tests.Services.ConnectionSpecs
+namespace Rackspace.CloudFiles.Specs.Services
 {
     [TestFixture]
     public class When_instantiating_a_connection_object
@@ -12,7 +12,12 @@ namespace Rackspace.CloudFiles.unit.tests.Services.ConnectionSpecs
         [Test]
         public void Should_instantiate_engine_without_throwing_exception_when_authentication_passes()
         {
-            UserCredentials userCreds = new UserCredentials(new Uri(Constants.AUTH_URL), Constants.CREDENTIALS_USER_NAME, Constants.CREDENTIALS_PASSWORD, Constants.CREDENTIALS_CLOUD_VERSION, Constants.CREDENTIALS_ACCOUNT_NAME);
+            UserCredentials userCreds = new UserCredentials(
+                new Uri("http://auth"),
+                "username",
+                "password",
+                "v1", 
+                "accountname");
 
             MockConnection conection = new MockConnection(userCreds);
 

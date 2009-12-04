@@ -5,7 +5,7 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 using SpecMaker.Core.Matchers;
 
-namespace Rackspace.CloudFiles.unit.tests.Domain.request.CreateContainerSpecs
+namespace Rackspace.CloudFiles.Specs.Domain.request
 {
     public class CreateContainerSpecs: BaseSpec
     {
@@ -24,7 +24,7 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.CreateContainerSpecs
         public void  when_creating_a_container_and_container_name_is_empty_string()
         {
             should("throw ArgumentNullException", 
-                ()=> new CreateContainer("http://storageuri", ""), typeof(ArgumentNullException) );
+                   ()=> new CreateContainer("http://storageuri", ""), typeof(ArgumentNullException) );
         }
         public void when_creating_a_container()
         {
@@ -35,9 +35,8 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.CreateContainerSpecs
             
             should("append container name to storage url",()=>createContainer.CreateUri().ToString().Is("http://storageurl/containername"));
             should("use PUT method", () => 
-                mock.VerifySet(x => x.Method = "PUT")
+                                     mock.VerifySet(x => x.Method = "PUT")
                 );
         }
     }
-
 }

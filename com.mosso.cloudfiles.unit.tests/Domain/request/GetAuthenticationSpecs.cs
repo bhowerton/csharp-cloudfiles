@@ -7,7 +7,7 @@ using Rackspace.CloudFiles.domain;
 using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 
-namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetAuthenticationSpecs
+namespace Rackspace.CloudFiles.Specs.Domain.request
 {
     [TestFixture]
     public class when_authenticating_against_cloud_files_and_user_credentials_are_null

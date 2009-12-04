@@ -8,8 +8,8 @@
     <ProjectGuid>{8720F9D5-59B8-49DC-A05A-DAEE3611DA00}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>com.mosso.cloudfiles.unit.tests</RootNamespace>
-    <AssemblyName>com.mosso.cloudfiles.unit.tests</AssemblyName>
+    <RootNamespace>Rackspace.CloudFiles.Specs</RootNamespace>
+    <AssemblyName>Rackspace.CloudFiles.Specs</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -55,7 +55,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CustomMatchers\UriMatchers.cs" />
     <Compile Include="CustomMatchers\WebHeaderMatchers.cs" />
-    <Compile Include="Domain\request\PutStorageDirectorySpecs.cs" />
+    <Compile Include="Domain\request\CreateStorageObjectAsDirectorySpecs.cs" />
     <Compile Include="Domain\request\SetLoggingToContainerRequestSpec.cs" />
     <Compile Include="Utils\ContainerNameValidatorSpecs.cs" />
     <Compile Include="Domain\AccountSpecs.cs" />

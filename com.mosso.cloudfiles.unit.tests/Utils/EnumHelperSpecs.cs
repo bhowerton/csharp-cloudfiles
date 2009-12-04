@@ -3,7 +3,7 @@ using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.utils;
 using DescriptionAtt = System.ComponentModel.DescriptionAttribute;
 
-namespace Rackspace.CloudFiles.unit.tests.Utils.EnumHelperSpecs
+namespace Rackspace.CloudFiles.Specs.Utils
 {
     [TestFixture]
     public class When_accessing_the_description_attribute_of_an_enum
