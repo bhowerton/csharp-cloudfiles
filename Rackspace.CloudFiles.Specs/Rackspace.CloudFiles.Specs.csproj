@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8720F9D5-59B8-49DC-A05A-DAEE3611DA00}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rackspace.CloudFiles.Specs</RootNamespace>
+    <AssemblyName>Rackspace.CloudFiles.Specs</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Moq, Version=3.1.416.3, Culture=neutral, PublicKeyToken=69f491c39445e920">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\moq\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\nunit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="SpecMaker.Core, Version=0.2.0.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\specmaker\SpecMaker.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Asserts.cs" />
+    <Compile Include="CustomMatchers\UriMatchers.cs" />
+    <Compile Include="CustomMatchers\WebHeaderMatchers.cs" />
+    <Compile Include="Domain\request\CreateStorageObjectAsDirectorySpecs.cs" />
+    <Compile Include="Domain\request\SetLoggingToContainerRequestSpec.cs" />
+    <Compile Include="Utils\ContainerNameValidatorSpecs.cs" />
+    <Compile Include="Domain\AccountSpecs.cs" />
+    <Compile Include="Domain\request\CreateContainerSpecs.cs" />
+    <Compile Include="Domain\request\DeleteContainerSpecs.cs" />
+    <Compile Include="Domain\request\DeleteStorageObjectSpecs.cs" />
+    <Compile Include="Domain\request\GetAccountInformationSerializedSpecs.cs" />
+    <Compile Include="Domain\request\GetAccountInformationSpecs.cs" />
+    <Compile Include="Domain\request\GetAuthenticationSpecs.cs" />
+    <Compile Include="Domain\request\GetContainerInformationSerializedSpecs.cs" />
+    <Compile Include="Domain\request\GetContainerInformationSpecs.cs" />
+    <Compile Include="Domain\request\GetContainerStorageObjectListSpecs.cs" />
+    <Compile Include="Domain\request\GetContainersSpecs.cs" />
+    <Compile Include="Domain\request\GetPublicContainerInformationSpecs.cs" />
+    <Compile Include="Domain\request\GetPublicContainersSpecs.cs" />
+    <Compile Include="Domain\request\GetStorageObjectInformationSpecs.cs" />
+    <Compile Include="Domain\request\GetStorageObjectSpecs.cs" />
+    <Compile Include="Domain\request\MarkContainerAsPublicSpecs.cs" />
+    <Compile Include="Domain\request\PutStorageObjectSpecs.cs" />
+    <Compile Include="Domain\request\SetPublicContainerDetailsSpecs.cs" />
+    <Compile Include="Domain\request\SetStorageItemMetaInformationSpecs.cs" />
+    <Compile Include="Utils\ObjectNameValidatorSpecs.cs" />
+    <Compile Include="Services\ConnectionSpecs.cs" />
+    <Compile Include="Domain\ContainerSpecs.cs" />
+    <Compile Include="Domain\StorageObjectSpecs.cs" />
+    <Compile Include="Domain\UserCredentialsSpecs.cs" />
+    <Compile Include="Utils\EnumHelperSpecs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\StringHelperSpecs.cs" />
+    <Compile Include="TestBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="StorageObjectTest.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\com.mosso.cloudfiles\Rackspace.CloudFiles.csproj">
+      <Project>{A4EC4FAB-EE91-4DE7-B21D-CBABFA05B363}</Project>
+      <Name>Rackspace.CloudFiles</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
