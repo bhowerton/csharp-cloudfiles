@@ -14,6 +14,8 @@ using Rackspace.CloudFiles.Domain;
 using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.Interfaces;
+using Rackspace.CloudFiles.Request;
 using Rackspace.CloudFiles.utils;
 
 /// <example>
@@ -51,6 +53,8 @@ namespace Rackspace.CloudFiles
 	
 		
 		#region private fields
+
+        private IEnsure _ensure = new Ensure();
         private bool retry;
         private List<ProgressCallback> callbackFuncs;
         private readonly GenerateRequestByType _requestfactory;
@@ -124,7 +128,7 @@ namespace Rackspace.CloudFiles
         {
 
 		    StartProcess.
-                ByDoing(() => { authenticatesequence(); }).
+                ByDoing(() => { AuthenticateSequence(); }).
 		        AndIfErrorThrownIs<Exception>().
 		        Do(Nothing);
         }
@@ -173,7 +177,7 @@ namespace Rackspace.CloudFiles
         }
 		#endregion
 		#region private methods to REFACTOR into a service
-		private string buildaccountjson()
+		private string BuildAccountJson()
 		{
 			string jsonResponse = "";
 			var getAccountInformationJson = new GetAccountInformationSerialized(StorageUrl, Format.JSON);
@@ -186,7 +190,7 @@ namespace Rackspace.CloudFiles
 			return jsonResponse;
 		}
 		
-		AccountInformation buildaccount()
+		AccountInformation BuildAccount()
 		{
 				
 			var getAccountInformation = new GetAccountInformation(StorageUrl);
@@ -194,7 +198,7 @@ namespace Rackspace.CloudFiles
             return  new AccountInformation(getAccountInformationResponse.Headers[Constants.X_ACCOUNT_CONTAINER_COUNT],    getAccountInformationResponse.Headers[Constants.X_ACCOUNT_BYTES_USED]);	
 			
 		}
-		void authenticatesequence()
+		void AuthenticateSequence()
 		{
 			var getAuthentication = new GetAuthentication(_usercreds);
             var getAuthenticationResponse = _requestfactory.Submit(getAuthentication);
@@ -215,7 +219,7 @@ namespace Rackspace.CloudFiles
                 return;
             }			
 		}
-		XmlDocument buildaccountxml()
+		XmlDocument BuildAccountXml()
 		{
 		  
 			var accountInformationXml = new GetAccountInformationSerialized(StorageUrl, Format.XML);
@@ -244,7 +248,7 @@ namespace Rackspace.CloudFiles
 			 
            
 		}
-		void containercreation(string containername){
+		void ContainerCreation(string containername){
 		
               
 
@@ -254,12 +258,12 @@ namespace Rackspace.CloudFiles
                 if (createContainerResponse.Status == HttpStatusCode.Accepted)
                     throw new ContainerAlreadyExistsException("The container already exists");
 		}
-		void deletecontainer (string containerName)
+		void RemoveContainer (string containerName)
 		{
 			var deleteContainer = new DeleteContainer(StorageUrl, containerName);
                 _requestfactory.Submit(deleteContainer, AuthToken, _usercreds.ProxyCredentials);
 		}
-		List<string> buildcontainerlist ()
+		List<string> BuildContainerList ()
 		{
 			IList<string> containerList = new List<string>();
 			 var getContainers = new GetContainers(StorageUrl);
@@ -271,7 +275,8 @@ namespace Rackspace.CloudFiles
              }
 			return containerList.ToList();
 		}
-		void determineReasonForError(WebException ex, string containername){
+
+        static void DetermineReasonForError(WebException ex, string containername){
 			var response = (HttpWebResponse)ex.Response;
              if (response != null && response.StatusCode == HttpStatusCode.NotFound)
              	throw new ContainerNotFoundException("The requested container " + containername + " does not exist");
@@ -334,7 +339,7 @@ namespace Rackspace.CloudFiles
 		{
 
             return StartProcess.
-                ByDoing<AccountInformation>(buildaccount).
+                ByDoing<AccountInformation>(BuildAccount).
                 AndIfErrorThrownIs<Exception>().
                 Do(Nothing);
         }
@@ -355,7 +360,7 @@ namespace Rackspace.CloudFiles
 
 
             return StartProcess
-                .ByDoing<string>(buildaccountjson)
+                .ByDoing<string>(BuildAccountJson)
                 .AndIfErrorThrownIs<Exception>()
                 .Do(Nothing);
             
@@ -376,7 +381,7 @@ namespace Rackspace.CloudFiles
         public  XmlDocument GetAccountInformationXml()
         {
             return StartProcess
-                .ByDoing<XmlDocument>(buildaccountxml)
+                .ByDoing<XmlDocument>(BuildAccountXml)
                 .AndIfErrorThrownIs<Exception>()
                 .Do(Nothing);
 			
@@ -397,11 +402,10 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  void CreateContainer(string containerName)
         {
-			if (string.IsNullOrEmpty(containerName))
-            		throw new ArgumentNullException();
+			_ensure.NotNullOrEmpty(containerName);
 
             StartProcess
-                .ByDoing(() => containercreation(containerName))
+                .ByDoing(() => ContainerCreation(containerName))
                 .AndIfErrorThrownIs<Exception>()
                 .Do(Nothing);
         }
@@ -420,13 +424,13 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  void DeleteContainer(string containerName)
         {
-            if (string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
+            _ensure.NotNullOrEmpty(containerName);
+            _ensure.ValidContainerName(containerName);
 
             StartProcess
-                .ByDoing(() => deletecontainer(containerName))
+                .ByDoing(() => RemoveContainer(containerName))
                 .AndIfErrorThrownIs<WebException>()
-                .Do(ex => determineReasonForError(ex, containerName));
+                .Do(ex => DetermineReasonForError(ex, containerName));
 		}
 
 		
@@ -449,7 +453,7 @@ namespace Rackspace.CloudFiles
 
 
             return StartProcess
-                .ByDoing<List<string>>(buildcontainerlist)
+                .ByDoing<List<string>>(BuildContainerList)
                 .AndIfErrorThrownIs<Exception>()
                 .Do(Nothing);
 			
@@ -471,9 +475,9 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  List<string> GetContainerItemList(string containerName)
         {
-			
-			if (string.IsNullOrEmpty(containerName))
-            		throw new ArgumentNullException();
+            _ensure.NotNullOrEmpty(containerName);
+            _ensure.ValidContainerName(containerName);
+
             return StartProcess
                 .ByDoing(() => GetContainerItemList(containerName, null))
                 .AndIfErrorThrownIs<Exception>()
@@ -497,6 +501,8 @@ namespace Rackspace.CloudFiles
         /// <param name="path">The path of directory objects to create</param>
         public  void MakePath(string containerName, string path)
         {
+            _ensure.ValidContainerName(containerName);
+
             try
             {
               
@@ -541,9 +547,8 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  List<string> GetContainerItemList(string containerName, Dictionary<GetItemListParameters, string> parameters)
         {
-            if (string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
-
+            _ensure.NotNullOrEmpty(containerName);
+            _ensure.ValidContainerName(containerName);
          
 
             var containerItemList = new List<string>();
@@ -584,8 +589,8 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  Container GetContainerInformation(string containerName)
         {
-            if (string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
+            _ensure.NotNullOrEmpty(containerName);
+            _ensure.ValidContainerName(containerName);
 
          
 
@@ -639,8 +644,9 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  string GetContainerInformationJson(string containerName)
         {
-            if (string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
+            _ensure.NotNullOrEmpty(containerName);
+            _ensure.ValidContainerName(containerName);
+            
 
             
 
@@ -679,9 +685,8 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  XmlDocument GetContainerInformationXml(string containerName)
         {
-            if (string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
-
+            _ensure.NotNullOrEmpty(containerName);
+            _ensure.ValidContainerName(containerName);
           
 
             try
@@ -738,10 +743,8 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  void PutStorageItem(string containerName, string localFilePath, Dictionary<string, string> metadata)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-                string.IsNullOrEmpty(localFilePath))
-                throw new ArgumentNullException();
-
+            _ensure.NotNullOrEmpty(containerName, localFilePath);
+            _ensure.ValidContainerName(containerName);
 
             try
             {
@@ -784,11 +787,8 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  void PutStorageItem(string containerName, string localFilePath)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-                string.IsNullOrEmpty(localFilePath))
-                throw new ArgumentNullException();
-
-           
+            _ensure.NotNullOrEmpty(containerName, localFilePath);
+            _ensure.ValidContainerName(containerName);
 
             PutStorageItem(containerName, localFilePath, new Dictionary<string, string>());
         }
@@ -810,12 +810,8 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  void PutStorageItem(string containerName, Stream storageStream, string remoteStorageItemName)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-                string.IsNullOrEmpty(remoteStorageItemName))
-                throw new ArgumentNullException();
-
-         
-
+            _ensure.NotNullOrEmpty(containerName, remoteStorageItemName);
+            _ensure.ValidContainerName(containerName);
             PutStorageItem(containerName, storageStream, remoteStorageItemName, new Dictionary<string, string>());
         }
 
@@ -1117,10 +1113,8 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  void PutStorageItem(string containerName, Stream storageStream, string remoteStorageItemName, Dictionary<string, string> metadata)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-                string.IsNullOrEmpty(remoteStorageItemName))
-                throw new ArgumentNullException();
-
+            _ensure.NotNullOrEmpty(containerName, remoteStorageItemName);
+            _ensure.ValidContainerName(containerName);
            
             try
             {
@@ -1156,7 +1150,7 @@ namespace Rackspace.CloudFiles
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
         /// IConnection connection = new Connection(userCredentials);
-        /// connection.DeleteStorageItem("container name", "RemoteStorageItem.txt");
+        /// connection.DeleteStorageObject("container name", "RemoteStorageItem.txt");
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object</param>
@@ -1164,15 +1158,12 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  void DeleteStorageItem(string containerName, string storageItemName)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-                string.IsNullOrEmpty(storageItemName))
-                throw new ArgumentNullException();
-
-          
+            _ensure.NotNullOrEmpty(containerName, storageItemName);
+            _ensure.ValidContainerName(containerName);
 
             try
             {
-                var deleteStorageItem = new DeleteStorageItem(StorageUrl, containerName, storageItemName);
+                var deleteStorageItem = new DeleteStorageObject(StorageUrl, containerName, storageItemName);
                 _requestfactory.Submit(deleteStorageItem, AuthToken);
             }
             catch (WebException we)
@@ -1194,14 +1185,14 @@ namespace Rackspace.CloudFiles
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
         /// IConnection connection = new Connection(userCredentials);
-        /// StorageObject storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt");
+        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteStorageItem.txt");
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object to retrieve</param>
         /// <param name="storageItemName">The name of the storage object to retrieve</param>
         /// <returns>An instance of StorageObject with the stream containing the bytes representing the desired storage object</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public  StorageObject GetStorageItem(string containerName, string storageItemName)
+        public  StorageObject GetStorageObject(string containerName, string storageItemName)
         {
             if (string.IsNullOrEmpty(containerName) ||
                string.IsNullOrEmpty(storageItemName))
@@ -1210,7 +1201,7 @@ namespace Rackspace.CloudFiles
          
 
 
-            return GetStorageItem(containerName, storageItemName, new Dictionary<RequestHeaderFields, string>());
+            return GetStorageObject(containerName, storageItemName, new Dictionary<RequestHeaderFields, string>());
         }
 
         /// <summary>
@@ -1227,30 +1218,27 @@ namespace Rackspace.CloudFiles
         /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// StorageObject storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt", requestHeaderFields);
+        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteStorageItem.txt", requestHeaderFields);
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object</param>
-        /// <param name="storageItemName">The name of the storage object</param>
+        /// <param name="storageObjectName">The name of the storage object</param>
         /// <param name="requestHeaderFields">A dictionary containing the special headers and their values</param>
         /// <returns>An instance of StorageObject with the stream containing the bytes representing the desired storage object</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public  StorageObject GetStorageItem(string containerName, string storageItemName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
+        public  StorageObject GetStorageObject(string containerName, string storageObjectName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-               string.IsNullOrEmpty(storageItemName))
-                throw new ArgumentNullException();
-
-           
-
+            _ensure.NotNullOrEmpty(containerName, storageObjectName);
+            _ensure.ValidContainerName(containerName);
+            _ensure.ValidStorageObjectName(storageObjectName);
             try
             {
-                var getStorageItem = new GetStorageItem(StorageUrl, containerName, storageItemName, requestHeaderFields);
+                var getStorageItem = new GetStorageObject(StorageUrl, containerName, storageObjectName, requestHeaderFields);
                 var getStorageItemResponse = _requestfactory.Submit(getStorageItem, AuthToken, _usercreds.ProxyCredentials);
 
 
                 var metadata = GetMetadata(getStorageItemResponse);
-                var storageItem = new StorageObject(storageItemName, metadata, getStorageItemResponse.ContentType, getStorageItemResponse.GetResponseStream(), getStorageItemResponse.ContentLength, getStorageItemResponse.LastModified);
+                var storageItem = new StorageObject(storageObjectName, metadata, getStorageItemResponse.ContentType, getStorageItemResponse.GetResponseStream(), getStorageItemResponse.ContentLength, getStorageItemResponse.LastModified);
                 //                getStorageItemResponse.Dispose();
                 return storageItem;
             }
@@ -1323,7 +1311,7 @@ namespace Rackspace.CloudFiles
                  {
                      try
                      {
-                         GetStorageItem(containerName, storageItemName, localFileName);
+                         GetStorageObject(containerName, storageItemName, localFileName);
                      }
                     finally //Always fire the completed event
                      {
@@ -1399,7 +1387,7 @@ namespace Rackspace.CloudFiles
                  {
                      try
                      {
-                         GetStorageItem(containerName, storageItemName, localFileName, requestHeaderFields);
+                         GetStorageObject(containerName, storageItemName, localFileName, requestHeaderFields);
                      }
                     finally //Always fire the completed event
                      {
@@ -1421,22 +1409,20 @@ namespace Rackspace.CloudFiles
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
         /// IConnection connection = new Connection(userCredentials);
-        /// StorageObject storageItem = connection.GetStorageItem("container name", "RemoteStorageItem.txt", "C:\Local\File\Path\file.txt");
+        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteStorageItem.txt", "C:\Local\File\Path\file.txt");
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object to retrieve</param>
-        /// <param name="storageItemName">The name of the storage object to retrieve</param>
+        /// <param name="storageContainerName">The name of the storage object to retrieve</param>
         /// <param name="localFileName">The file name to save the storage object into on disk</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public  void GetStorageItem(string containerName, string storageItemName, string localFileName)
+        public  void GetStorageObject(string containerName, string storageContainerName, string localFileName)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-               string.IsNullOrEmpty(storageItemName) ||
-                string.IsNullOrEmpty(localFileName))
-                throw new ArgumentNullException();
+            _ensure.NotNullOrEmpty(containerName, storageContainerName, localFileName);
+            _ensure.ValidContainerName(containerName);
+            _ensure.ValidStorageObjectName(storageContainerName);
 
-
-            GetStorageItem(containerName, storageItemName, localFileName, new Dictionary<RequestHeaderFields, string>());
+            GetStorageObject(containerName, storageContainerName, localFileName, new Dictionary<RequestHeaderFields, string>());
         }
 
         /// <summary>
@@ -1453,23 +1439,22 @@ namespace Rackspace.CloudFiles
         /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// StorageObject storageItem = connection.GetStorageItem("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
+        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object to retrieve</param>
-        /// <param name="storageItemName">The name of the storage object to retrieve</param>
+        /// <param name="storageObjectName">The name of the storage object to retrieve</param>
         /// <param name="localFileName">The file name to save the storage object into on disk</param>
         /// <param name="requestHeaderFields">A dictionary containing the special headers and their values</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public  void GetStorageItem(string containerName, string storageItemName, string localFileName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
+        public  void GetStorageObject(string containerName, string storageObjectName, string localFileName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-               string.IsNullOrEmpty(storageItemName) ||
-                string.IsNullOrEmpty(localFileName))
-                throw new ArgumentNullException();
 
+            _ensure.NotNullOrEmpty(containerName, storageObjectName, localFileName);
+            _ensure.ValidContainerName(containerName);
+            _ensure.ValidStorageObjectName(storageObjectName);
 
-            var getStorageItem = new GetStorageItem(StorageUrl, containerName, storageItemName, requestHeaderFields);
+            var getStorageItem = new GetStorageObject(StorageUrl, containerName, storageObjectName, requestHeaderFields);
 
             try
             {
@@ -1494,7 +1479,7 @@ namespace Rackspace.CloudFiles
             }
         }
 
-        //    private event ProgressCallback Progress;
+      
 
 
         /// <summary>
@@ -1508,24 +1493,22 @@ namespace Rackspace.CloudFiles
         /// metadata.Add("key1", "value1");
         /// metadata.Add("key2", "value2");
         /// metadata.Add("key3", "value3");
-        /// connection.SetStorageItemMetaInformation("container name", "C:\Local\File\Path\file.txt", metadata);
+        /// connection.SetStorageObjectMetaInformation("container name", "C:\Local\File\Path\file.txt", metadata);
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container containing the storage object</param>
-        /// <param name="storageItemName">The name of the storage object</param>
+        /// <param name="storageObjectName">The name of the storage object</param>
         /// <param name="metadata">A dictionary containiner key/value pairs representing the meta data for this storage object</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public  void SetStorageItemMetaInformation(string containerName, string storageItemName, Dictionary<string, string> metadata)
+        public  void SetStorageObjectMetaInformation(string containerName, string storageObjectName, Dictionary<string, string> metadata)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-               string.IsNullOrEmpty(storageItemName))
-                throw new ArgumentNullException();
-
+            _ensure.NotNullOrEmpty(containerName, storageObjectName);
+            _ensure.ValidStorageObjectName(storageObjectName);
             
 
             try
             {
-                var setStorageItemInformation = new SetStorageItemMetaInformation(StorageUrl, containerName, storageItemName, metadata);
+                var setStorageItemInformation = new SetStorageItemMetaInformation(StorageUrl, containerName, storageObjectName, metadata);
                 _requestfactory.Submit(setStorageItemInformation, AuthToken, _usercreds.ProxyCredentials);
             }
             catch (WebException we)
@@ -1551,24 +1534,19 @@ namespace Rackspace.CloudFiles
         /// </code>
         /// </example>
         /// <param name="containerName">The name of the container that contains the storage object</param>
-        /// <param name="storageItemName">The name of the storage object</param>
+        /// <param name="storageObjectName">The name of the storage object</param>
         /// <returns>An instance of StorageObject containing the byte size and meta information associated with the container</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public  StorageItemInformation GetStorageItemInformation(string containerName, string storageItemName)
+        public  StorageObjectInformation GetStorageItemInformation(string containerName, string storageObjectName)
         {
-            if (string.IsNullOrEmpty(containerName) ||
-               string.IsNullOrEmpty(storageItemName))
-                throw new ArgumentNullException();
-
-           
-
+            _ensure.NotNullOrEmpty(containerName, storageObjectName);
             try
             {
-                var getStorageItemInformation = new GetStorageItemInformation(StorageUrl, containerName, storageItemName);
+                var getStorageItemInformation = new GetStorageItemInformation(StorageUrl, containerName, storageObjectName);
                 var getStorageItemInformationResponse = _requestfactory.Submit(getStorageItemInformation, AuthToken, _usercreds.ProxyCredentials);
 
 
-                var storageItemInformation = new StorageItemInformation(getStorageItemInformationResponse.Headers);
+                var storageItemInformation = new StorageObjectInformation(getStorageItemInformationResponse.Headers);
 
                 return storageItemInformation;
             }
@@ -1633,8 +1611,7 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public  Uri MarkContainerAsPublic(string containerName, int timeToLiveInSeconds)
         {
-            if (string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
+            _ensure.NotNullOrEmpty(containerName);
 
          
 
@@ -1758,8 +1735,8 @@ namespace Rackspace.CloudFiles
        
        public  void SetDetailsOnPublicContainer(string publiccontainer, bool loggingenabled, int ttl, string referreracl, string useragentacl )
        {
-           if (string.IsNullOrEmpty(publiccontainer))
-               throw new ArgumentNullException();
+           _ensure.NotNullOrEmpty(publiccontainer);
+           _ensure.ValidContainerName(publiccontainer);
 
            try
            {
@@ -1786,7 +1763,7 @@ namespace Rackspace.CloudFiles
         public  XmlDocument GetPublicAccountInformationXML()
         {
             return StartProcess.
-                ByDoing<XmlDocument>(() =>
+                ByDoing(() =>
                                          {
                                              var request = new GetPublicContainersInformationSerialized(
                                                  CdnManagementUrl, Format.XML);
@@ -1827,7 +1804,7 @@ namespace Rackspace.CloudFiles
         
         public  string GetPublicAccountInformationJSON()
         {
-            return StartProcess.ByDoing<string>(() =>
+            return StartProcess.ByDoing(() =>
                                                     {
                                                         var request =
                                                             new GetPublicContainersInformationSerialized(

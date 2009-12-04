@@ -1,8 +1,7 @@
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using Rackspace.CloudFiles.domain;
 
-namespace Rackspace.CloudFiles.unit.tests.domain.StorageObjectSpecs.ContainerSpecs
+namespace Rackspace.CloudFiles.Specs.Domain
 {
     [TestFixture]
     public class When_creating_a_container

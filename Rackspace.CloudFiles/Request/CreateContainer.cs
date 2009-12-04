@@ -7,7 +7,7 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
     /// CreateContainer
@@ -23,18 +23,12 @@ namespace Rackspace.CloudFiles.domain.request
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference arguments are null</exception>
-        /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
-        /// <exception cref="StorageItemNameException">Thrown when the object name is invalid</exception>
+        /// <exception cref="InvalidStorageObjectNameException">Thrown when the container name is invalid</exception>
+        /// <exception cref="InvalidContainerNameException">Thrown when the object name is invalid</exception>
         public CreateContainer(string storageUrl, string containerName)
         {
-       
-            if (string.IsNullOrEmpty(storageUrl)
-                || string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
 
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
-
-                _storageUrl = storageUrl;
+            _storageUrl = storageUrl;
             _containerName = containerName;
         }
 

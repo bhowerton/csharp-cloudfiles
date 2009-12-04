@@ -1,8 +1,8 @@
 using System;
 using System.Net;
 using Moq;
-using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.Request;
 using SpecMaker.Core.Matchers;
 using SpecMaker.Core;
 
@@ -12,33 +12,33 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
     {
         public void when_deleting_a_storage_item_and_storage_url_is_null()
         {
-            should("throw ArgumentNullException",()=>new DeleteStorageItem(null, "containername", "storageitemname"), typeof(ArgumentNullException));
+            should("throw ArgumentNullException",()=>new DeleteStorageObject(null, "containername", "storageitemname"), typeof(ArgumentNullException));
         }
         public void when_deleting_a_storage_item_and_storage_url_is_emptry_string()
         {
             
-            should("throw ArgumentNullException",()=>new DeleteStorageItem("", "containername", "storageitemname"), typeof(ArgumentNullException));
+            should("throw ArgumentNullException",()=>new DeleteStorageObject("", "containername", "storageitemname"), typeof(ArgumentNullException));
         }
         public void when_deleting_a_storage_item_and_storage_item_name_is_null()
         {
-            should("throw ArgumentNullException", () =>new DeleteStorageItem("http://storageurl", "containername", null),typeof(ArgumentNullException));
+            should("throw ArgumentNullException", () =>new DeleteStorageObject("http://storageurl", "containername", null),typeof(ArgumentNullException));
         }
         public void when_deleting_a_storage_item_and_storage_item_name_is_emptry_string()
         {
-            should("throw ArgumentNullException", () =>new DeleteStorageItem("http://storageurl", "containername", ""),typeof(ArgumentNullException));
+            should("throw ArgumentNullException", () =>new DeleteStorageObject("http://storageurl", "containername", ""),typeof(ArgumentNullException));
         }
         public void when_deleting_a_storage_item_and_container_name_is_null()
         {
-            should("throw ArgumentNullException", () =>new DeleteStorageItem("http://storageurl", null, "storageitemname"),typeof(ArgumentNullException));
+            should("throw ArgumentNullException", () =>new DeleteStorageObject("http://storageurl", null, "storageitemname"),typeof(ArgumentNullException));
         }
 
         public void when_deleting_a_storage_item_and_container_name_is_emptry_string()
         {
-            should("throw ArgumentNullException", () =>new DeleteStorageItem("http://storageurl", "", "storageitemname"),typeof(ArgumentNullException));
+            should("throw ArgumentNullException", () =>new DeleteStorageObject("http://storageurl", "", "storageitemname"),typeof(ArgumentNullException));
         }
         public void when_deleting_a_storage_item()
         {
-            var deleteStorageItem = new DeleteStorageItem("http://storageurl", "containername", "storageitemname");
+            var deleteStorageItem = new DeleteStorageObject("http://storageurl", "containername", "storageitemname");
             var _mockrequest = new Mock<ICloudFilesRequest>();
             _mockrequest.SetupGet(x => x.Headers).Returns(new WebHeaderCollection());
             deleteStorageItem.Apply(_mockrequest.Object);

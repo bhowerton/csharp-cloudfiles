@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Moq;
 using NUnit.Framework;
@@ -5,7 +6,7 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 
 namespace Rackspace.CloudFiles.Specs
 {
-    public class Asserts
+    public static class Asserts
     {
         public static void AssertMethod(IAddToWebRequest addtowebrequest, string method)
         {
@@ -28,6 +29,19 @@ namespace Rackspace.CloudFiles.Specs
             _mockrequest.SetupGet(x => x.Headers).Returns(webresponse);
             addtowebrequest.Apply(_mockrequest.Object);
             return _mockrequest;
+        }
+        public static void Throws<T>(Action action)where T:Exception
+        {
+            try
+            {
+                action.Invoke();
+            }
+            catch(Exception ex)
+            {
+                if (ex.GetType() == typeof(T))
+                    return;
+                throw;
+            }
         }
     }
 }

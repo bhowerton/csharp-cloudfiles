@@ -1,13 +1,11 @@
-///
-/// See COPYING file for licensing information
-/// 
+using Rackspace.CloudFiles.Interfaces;
 
-namespace Rackspace.CloudFiles.domain
+namespace Rackspace.CloudFiles
 {
     /// <summary>
     /// Container
     /// </summary>
-    public class Container
+    public class Container 
     {
         /// <summary>
         /// Constructor

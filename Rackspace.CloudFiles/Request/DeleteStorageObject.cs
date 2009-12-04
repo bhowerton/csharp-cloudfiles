@@ -3,18 +3,16 @@
 ///
 
 using System;
-using System.Collections.Specialized;
-using System.Web;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
-    /// DeleteStorageItem
+    /// DeleteStorageObject
     /// </summary>
-    public class DeleteStorageItem : IAddToWebRequest
+    public class DeleteStorageObject : IAddToWebRequest
     {
         private readonly string _storageUrl;
         
@@ -22,24 +20,16 @@ namespace Rackspace.CloudFiles.domain.request
         private readonly string _storageItemName;
 
         /// <summary>
-        /// DeleteStorageItem constructor
+        /// DeleteStorageObject constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
         /// <param name="storageItemName">the name of the storage item to add meta information too</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
-        /// <exception cref="StorageItemNameException">Thrown when the object name is invalid</exception>
-        public DeleteStorageItem(string storageUrl,  string containerName, string storageItemName)
+        /// <exception cref="InvalidContainerNameException">Thrown when the container name is invalid</exception>
+        /// <exception cref="InvalidStorageObjectNameException">Thrown when the object name is invalid</exception>
+        public DeleteStorageObject(string storageUrl,  string containerName, string storageItemName)
         {
-            if (string.IsNullOrEmpty(storageUrl)
-            || string.IsNullOrEmpty(containerName)
-            || string.IsNullOrEmpty(storageItemName))
-                throw new ArgumentNullException();
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
-            if (!ObjectNameValidator.Validate(storageItemName)) throw new StorageItemNameException();
-
             _storageUrl = storageUrl;
          
             _containerName = containerName;

@@ -8,17 +8,17 @@ using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.domain
 {
-    public class StorageItemInformation
+    public class StorageObjectInformation
     {
-        private readonly WebHeaderCollection headers;
+        private readonly WebHeaderCollection _headers;
 
         /// <summary>
         /// constructor
         /// </summary>
         /// <param name="headers">collection of headers assigned to this storage item</param>
-        public StorageItemInformation(WebHeaderCollection headers)
+        public StorageObjectInformation(WebHeaderCollection headers)
         {
-            this.headers = headers;
+            this._headers = headers;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Rackspace.CloudFiles.domain
         /// </summary>
         public string ETag
         {
-            get { return headers[Constants.ETAG]; }
+            get { return _headers[Constants.ETAG]; }
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Rackspace.CloudFiles.domain
         /// </summary>
         public string ContentType
         {
-            get { return headers[Constants.CONTENT_TYPE_HEADER]; }
+            get { return _headers[Constants.CONTENT_TYPE_HEADER]; }
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Rackspace.CloudFiles.domain
         /// </summary>
         public string ContentLength
         {
-            get { return headers[Constants.CONTENT_LENGTH_HEADER]; }
+            get { return _headers[Constants.CONTENT_LENGTH_HEADER]; }
         }
 
         /// <summary>
@@ -52,13 +52,13 @@ namespace Rackspace.CloudFiles.domain
         {
             get
             {
-                Dictionary<string, string> tags = new Dictionary<string, string>();
-                foreach (string s in headers.Keys)
+                var tags = new Dictionary<string, string>();
+                foreach (string s in _headers.Keys)
                 {
                     if (s.IndexOf(Constants.META_DATA_HEADER) != -1)
                     {
                         int metaKeyStart = s.LastIndexOf("-");
-                        tags.Add(s.Substring(metaKeyStart + 1), headers[s]);
+                        tags.Add(s.Substring(metaKeyStart + 1), _headers[s]);
                     }
                 }
                 return tags;

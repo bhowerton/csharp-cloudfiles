@@ -8,10 +8,10 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
-    /// SetStorageItemMetaInformation
+    /// SetStorageObjectMetaInformation
     /// </summary>
     public class SetStorageItemMetaInformation : IAddToWebRequest
     {
@@ -21,7 +21,7 @@ namespace Rackspace.CloudFiles.domain.request
         private readonly Dictionary<string, string> metadata;
 
         /// <summary>
-        /// SetStorageItemMetaInformation constructor
+        /// SetStorageObjectMetaInformation constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
@@ -29,17 +29,8 @@ namespace Rackspace.CloudFiles.domain.request
         /// <param name="metadata">dictionary containing the meta tags on the storage item</param>
         /// <exception cref="System.ArgumentNullException">Thrown when any of the arguments are null</exception>
         public SetStorageItemMetaInformation(string storageUrl,  string containerName, string storageItemName,
-            Dictionary<string, string> metadata)
+                                             Dictionary<string, string> metadata)
         {
-            if (string.IsNullOrEmpty(storageUrl)
-                || string.IsNullOrEmpty(containerName)
-                || string.IsNullOrEmpty(storageItemName))
-                throw new ArgumentNullException();
-
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
-            if (!ObjectNameValidator.Validate(storageItemName)) throw new StorageItemNameException();
-
             _storageUrl = storageUrl;
             _containerName = containerName;
             _storageItemName = storageItemName;

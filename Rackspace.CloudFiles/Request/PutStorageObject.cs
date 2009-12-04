@@ -4,15 +4,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
-using System.Text;
-using System.Web;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
     /// PutStorageObject
@@ -64,24 +61,13 @@ namespace Rackspace.CloudFiles.domain.request
         /// <param name="filetosend">the file stream of the file to put into cloudfiles</param>
         /// <param name="metadata">dictionary of meta tags to apply to the storage item</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
-        /// <exception cref="StorageItemNameException">Thrown when the object name is invalid</exception>
+        /// <exception cref="InvalidContainerNameException">Thrown when the container name is invalid</exception>
+        /// <exception cref="InvalidStorageObjectNameException">Thrown when the object name is invalid</exception>
         public PutStorageObject(string storageUrl, string containerName,
-            string remoteStorageItemName,
-            Stream filetosend,
-            Dictionary<string, string> metadata)
+                                string remoteStorageItemName,
+                                Stream filetosend,
+                                Dictionary<string, string> metadata)
         {
-            // Stream = filetosend;
-            if (string.IsNullOrEmpty(storageUrl)
-                || string.IsNullOrEmpty(containerName)
-                || filetosend == null
-                || string.IsNullOrEmpty(remoteStorageItemName))
-                throw new ArgumentNullException();
-
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
-            if (!ObjectNameValidator.Validate(remoteStorageItemName)) throw new StorageItemNameException();
-
             _fileUrl = CleanUpFilePath(remoteStorageItemName);
             _storageUrl = storageUrl;
             _containerName = containerName;
@@ -102,25 +88,16 @@ namespace Rackspace.CloudFiles.domain.request
         /// <param name="localFilePath">the path of the file to put into cloudfiles</param>
         /// <param name="metadata">dictionary of meta tags to apply to the storage item</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
-        /// <exception cref="StorageItemNameException">Thrown when the object name is invalid</exception>
+        /// <exception cref="InvalidContainerNameException">Thrown when the container name is invalid</exception>
+        /// <exception cref="InvalidStorageObjectNameException">Thrown when the object name is invalid</exception>
         public PutStorageObject(string storageUrl, string containerName, string remoteStorageItemName,
-            string localFilePath,
-            Dictionary<string, string> metadata)
+                                string localFilePath,
+                                Dictionary<string, string> metadata)
         {
             _storageUrl = storageUrl;
             _containerName = containerName;
             _remoteStorageItemName = remoteStorageItemName;
             _metadata = metadata;
-            if (string.IsNullOrEmpty(storageUrl)
-                || string.IsNullOrEmpty(containerName)
-                || string.IsNullOrEmpty(localFilePath)
-                || string.IsNullOrEmpty(remoteStorageItemName))
-                throw new ArgumentNullException();
-
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
-            if (!ObjectNameValidator.Validate(remoteStorageItemName)) throw new StorageItemNameException();
 
             _fileUrl = CleanUpFilePath(localFilePath);
             this.filetosend = new FileStream(_fileUrl, FileMode.Open); //added by ryan as stop gap

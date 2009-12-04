@@ -1,10 +1,9 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using Rackspace.CloudFiles.domain.request;
-using Rackspace.CloudFiles.Specs;
+using Rackspace.CloudFiles.Request;
 
-namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetStorageItemInformationSpecs
+namespace Rackspace.CloudFiles.Specs.Domain.request
 {
     [TestFixture]
     public class when_getting_information_of_a_storage_item_and_storage_url_is_null
@@ -98,5 +97,4 @@ namespace Rackspace.CloudFiles.unit.tests.Domain.request.GetStorageItemInformati
 
        
     }
-
 }

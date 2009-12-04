@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using Rackspace.CloudFiles.domain;
 
 namespace Rackspace.CloudFiles.unit.tests.domain.StorageItemSpecs
 {

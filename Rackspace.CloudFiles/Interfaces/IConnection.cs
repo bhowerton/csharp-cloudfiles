@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Rackspace.CloudFiles.domain;
-using Rackspace.CloudFiles.domain.request;
+using Rackspace.CloudFiles.Request;
 
-namespace Rackspace.CloudFiles
+namespace Rackspace.CloudFiles.Interfaces
 {
     public interface IConnection
     {
@@ -28,12 +28,12 @@ namespace Rackspace.CloudFiles
         void PutStorageItem(string containerName, Stream storageStream, string remoteStorageItemName);
         void PutStorageItem(string containerName, Stream storageStream, string remoteStorageItemName, Dictionary<string, string> metadata);
         void DeleteStorageItem(string containerName, string storageItemname);
-        StorageObject GetStorageItem(string containerName, string storageItemName);
-        void GetStorageItem(string containerName, string storageItemName, string localFileName);
-        StorageObject GetStorageItem(string containerName, string storageItemName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
-        void GetStorageItem(string containerName, string storageItemName, string localFileName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
-        StorageItemInformation GetStorageItemInformation(string containerName, string storageItemName);
-        void SetStorageItemMetaInformation(string containerName, string storageItemName, Dictionary<string, string> metadata);
+        StorageObject GetStorageObject(string containerName, string storageItemName);
+        void GetStorageObject(string containerName, string storageContainerName, string localFileName);
+        StorageObject GetStorageObject(string containerName, string storageObjectName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
+        void GetStorageObject(string containerName, string storageObjectName, string localFileName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
+        StorageObjectInformation GetStorageItemInformation(string containerName, string storageObjectName);
+        void SetStorageObjectMetaInformation(string containerName, string storageObjectName, Dictionary<string, string> metadata);
         List<string> GetPublicContainers();
         Uri MarkContainerAsPublic(string containerName);
         Uri MarkContainerAsPublic(string containerName, int timeToLiveInSeconds);

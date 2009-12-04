@@ -7,7 +7,7 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
     /// GetStorageItemInformation
@@ -25,21 +25,11 @@ namespace Rackspace.CloudFiles.domain.request
         /// <param name="containerName">the name of the container where the storage item is located</param>
         /// <param name="storageItemName">the name of the storage item to add meta information too</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
-        /// <exception cref="StorageItemNameException">Thrown when the object name is invalid</exception>
+        /// <exception cref="InvalidContainerNameException">Thrown when the container name is invalid</exception>
+        /// <exception cref="InvalidStorageObjectNameException">Thrown when the object name is invalid</exception>
         public GetStorageItemInformation(string storageUrl, string containerName, string storageItemName)
         {
-           
-            if (string.IsNullOrEmpty(storageUrl)
-                || string.IsNullOrEmpty(containerName)
-                || string.IsNullOrEmpty(storageItemName))
-                throw new ArgumentNullException();
-
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
-            if (!ObjectNameValidator.Validate(storageItemName)) throw new StorageItemNameException();
-            
-             _storageUrl = storageUrl;
+            _storageUrl = storageUrl;
             _containerName = containerName;
             _storageItemName = storageItemName;
         }

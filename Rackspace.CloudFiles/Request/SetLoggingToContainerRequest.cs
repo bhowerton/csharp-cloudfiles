@@ -1,9 +1,8 @@
 using System;
 using Rackspace.CloudFiles.domain.request.Interfaces;
-using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     public class SetLoggingToContainerRequest : IAddToWebRequest
     {
@@ -16,10 +15,6 @@ namespace Rackspace.CloudFiles.domain.request
             _publiccontainer = publiccontainer;
             _cdnManagmentUrl = cdnManagmentUrl;
             _loggingenabled = loggingenabled;
-            if (String.IsNullOrEmpty(publiccontainer))
-                throw new ArgumentNullException();
-
-            if (!ContainerNameValidator.Validate(publiccontainer)) throw new ContainerNameException();
            
         }
 

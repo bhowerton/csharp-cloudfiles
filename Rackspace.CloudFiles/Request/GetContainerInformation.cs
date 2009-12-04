@@ -3,11 +3,12 @@
 ///
 
 using System;
+using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
     /// GetContainerInformation
@@ -23,15 +24,9 @@ namespace Rackspace.CloudFiles.domain.request
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
+        /// <exception cref="InvalidContainerNameException">Thrown when the container name is invalid</exception>
         public GetContainerInformation(string storageUrl,  string containerName)
         {
-           
-            if (string.IsNullOrEmpty(storageUrl)
-                || string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
 
             _storageUrl = storageUrl;
             _containerName = containerName;
@@ -62,17 +57,9 @@ namespace Rackspace.CloudFiles.domain.request
         /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null</exception>
         public GetContainerInformationSerialized(string storageUrl, string containerName, Format format)
         {  
-            if (string.IsNullOrEmpty(storageUrl)
-                || string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
             _storageUrl = storageUrl;
             _containerName = containerName;
             _format = format;
-          
-           
-           
         }
 
         public Uri CreateUri()
@@ -82,7 +69,7 @@ namespace Rackspace.CloudFiles.domain.request
 
         public void Apply(ICloudFilesRequest request)
         {
-             request.Method = "GET";
+            request.Method = "GET";
         }
     }
 }

@@ -10,13 +10,13 @@ namespace Rackspace.CloudFiles.exceptions
     /// <summary>
     /// Thrown when the name of the object is invalid
     /// </summary>
-    public class StorageItemNameException : Exception
+    public class InvalidStorageObjectNameException : Exception
     {
         /// <summary>
         /// The default constructor
         /// </summary>
-        public StorageItemNameException()
-            : this("Either the object name exceeds the maximum length of " + ObjectNameValidator.MAX_OBJECT_NAME_LENGTH + " or it has invalid characters (?)")
+        public InvalidStorageObjectNameException()
+            : this("Either the object name exceeds the maximum length of " + Constants.MAX_STORAGE_OBJECT_NAME_LENGTH + " or it has invalid characters (?)")
         {
         }
 
@@ -24,7 +24,7 @@ namespace Rackspace.CloudFiles.exceptions
         /// A constructor for describing the explicit issue with the object name
         /// </summary>
         /// <param name="message">A message indicating the explicit issue with the container name.</param>
-        public StorageItemNameException(String message) : base(message)
+        public InvalidStorageObjectNameException(String message) : base(message)
         {
         }
     }

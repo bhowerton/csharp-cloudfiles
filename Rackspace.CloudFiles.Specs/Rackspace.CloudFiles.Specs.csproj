@@ -76,6 +76,7 @@
     <Compile Include="Domain\request\PutStorageObjectSpecs.cs" />
     <Compile Include="Domain\request\SetPublicContainerDetailsSpecs.cs" />
     <Compile Include="Domain\request\SetStorageItemMetaInformationSpecs.cs" />
+    <Compile Include="Utils\EnsureSpecs.cs" />
     <Compile Include="Utils\ObjectNameValidatorSpecs.cs" />
     <Compile Include="Services\ConnectionSpecs.cs" />
     <Compile Include="Domain\ContainerSpecs.cs" />

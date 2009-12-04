@@ -11,7 +11,7 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
     /// possible http comparison header fields to apply to this request
@@ -30,27 +30,10 @@ namespace Rackspace.CloudFiles.domain.request
         Range
     }
 
-//    /// <summary>
-//    /// interface to allow assignment of from and to values for range comparison header field request
-//    /// </summary>
-//    public interface IRangedRequest
-//    {
-//        int RangeFrom { get; }
-//        int RangeTo { get; }
-//    }
-
-//    /// <summary>
-//    /// interface to allow assignment of If-Modified-Since comparison header field request
-//    /// </summary>
-//    public interface IModifiedSinceRequest
-//    {
-//        DateTime ModifiedSince { get; }
-//    }
-
     /// <summary>
-    /// GetStorageItem
+    /// GetStorageObject
     /// </summary>
-    public class GetStorageItem : IAddToWebRequest
+    public class GetStorageObject : IAddToWebRequest
     {
         private readonly string _storageUrl;
         private readonly string _containerName;
@@ -59,47 +42,38 @@ namespace Rackspace.CloudFiles.domain.request
          
 
         /// <summary>
-        /// GetStorageItem constructor
+        /// GetStorageObject constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
         /// <param name="storageItemName">the name of the storage item to add meta information too</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        /// <exception cref="ContainerNameException">Thrown when the container name length exceeds the maximum container length allowed</exception>
-        public GetStorageItem(string storageUrl, string containerName, string storageItemName) :
+        /// <exception cref="InvalidContainerNameException">Thrown when the container name length exceeds the maximum container length allowed</exception>
+        public GetStorageObject(string storageUrl, string containerName, string storageItemName) :
             this(storageUrl, containerName, storageItemName, (Dictionary<RequestHeaderFields, string>) null)
         {
         }
 
         /// <summary>
-        /// GetStorageItem constructor with http comparison header fields
+        /// GetStorageObject constructor with http comparison header fields
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
-        /// <param name="storageItemName">the name of the storage item to add meta information too</param>
+        /// <param name="storageObjectName">the name of the storage item to add meta information too</param>
         /// <param name="requestHeaderFields">dictionary of request header fields to apply to the request</param>
-        /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
-        /// <exception cref="StorageItemNameException">Thrown when the object name is invalid</exception>
-        public GetStorageItem(string storageUrl, string containerName, string storageItemName, 
-            Dictionary<RequestHeaderFields, string> requestHeaderFields)
+        /// <exception cref="InvalidContainerNameException">Thrown when the container name is invalid</exception>
+        /// <exception cref="InvalidStorageObjectNameException">Thrown when the object name is invalid</exception>
+        public GetStorageObject(string storageUrl, string containerName, string storageObjectName, 
+                                Dictionary<RequestHeaderFields, string> requestHeaderFields)
         {
             _storageUrl = storageUrl;
             _containerName = containerName;
-            _storageItemName = storageItemName;
+            _storageItemName = storageObjectName;
             _requestHeaderFields = requestHeaderFields;
-            if (string.IsNullOrEmpty(storageUrl)
-                || string.IsNullOrEmpty(containerName)
-                || string.IsNullOrEmpty(storageItemName))
-                throw new ArgumentNullException();
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
-            if (!ObjectNameValidator.Validate(storageItemName)) throw new StorageItemNameException();
-
-          
         }
 
-        private void AddRequestFieldHeadersToRequestHeaders(Dictionary<RequestHeaderFields, string> requestHeaderFields,
-            ICloudFilesRequest request)
+        private void AddRequestFieldHeadersToRequestHeaders(ICollection<KeyValuePair<RequestHeaderFields, string>> requestHeaderFields,
+                                                            ICloudFilesRequest request)
         {
             if (requestHeaderFields == null || requestHeaderFields.Count == 0) return;
 
@@ -182,9 +156,9 @@ namespace Rackspace.CloudFiles.domain.request
         public Uri CreateUri()
         {
             return new Uri(string.Format("{0}/{1}/{2}",
-                    _storageUrl,
-                    _containerName.Encode(),
-                    _storageItemName.Encode()));
+                                         _storageUrl,
+                                         _containerName.Encode(),
+                                         _storageItemName.Encode()));
         }
 
         

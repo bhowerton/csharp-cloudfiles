@@ -26,6 +26,8 @@ namespace Rackspace.CloudFiles.utils
         public const string ETAG = "ETag";
         public const int MAXIMUM_META_KEY_LENGTH = 128;
         public const int MAXIMUM_META_VALUE_LENGTH = 256;
+        public const int MAX_STORAGE_OBJECT_NAME_LENGTH = 1024;
+        public const int MAX_CONTAINER_NAME_LENGTH = 256;
         public const string CONTENT_LENGTH_HEADER = "Content-Length";
         public const string CONTENT_TYPE_HEADER = "Content-Type";
         public const string MOSSO_AUTH_URL = "https://api.mosso.com/auth";

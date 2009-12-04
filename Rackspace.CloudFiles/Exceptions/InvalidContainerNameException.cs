@@ -10,12 +10,12 @@ namespace Rackspace.CloudFiles.exceptions
     /// <summary>
     /// Thrown when the name of the container is invalid
     /// </summary>
-    public class ContainerNameException : Exception
+    public class InvalidContainerNameException : Exception
     {
         /// <summary>
         /// The default constructor
         /// </summary>
-        public ContainerNameException() : this("Either the container name exceeds the maximum length of " + ContainerNameValidator.MAX_CONTAINER_NAME_LENGTH + " or it has invalid characters (/ or ?)")
+        public InvalidContainerNameException() : this("Either the container name exceeds the maximum length of " + Constants.MAX_CONTAINER_NAME_LENGTH + " or it has invalid characters (/ or ?)")
         {
         }
 
@@ -23,7 +23,7 @@ namespace Rackspace.CloudFiles.exceptions
         /// A constructor for describing the explicit issue with the container name
         /// </summary>
         /// <param name="message">A message indicating the explicit issue with the container name.</param>
-        public ContainerNameException(String message) : base(message)
+        public InvalidContainerNameException(String message) : base(message)
         {
         }
     }

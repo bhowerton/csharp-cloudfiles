@@ -8,7 +8,7 @@
     <ProjectGuid>{A4EC4FAB-EE91-4DE7-B21D-CBABFA05B363}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rackspace.Cloudfiles</RootNamespace>
+    <RootNamespace>Rackspace.CloudFiles</RootNamespace>
     <AssemblyName>Rackspace.Cloudfiles</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -70,49 +70,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Request\GetPublicContainerInformationSerialized.cs" />
-    <Compile Include="Domain\Request\CreateStorageObjectAsDirectory.cs" />
-    <Compile Include="Domain\Request\SetAclOnPublicContainer.cs" />
-    <Compile Include="Domain\Request\SetLoggingToContainerRequest.cs" />
-    <Compile Include="Domain\Request\Interfaces\IAddToWebRequest.cs" />
-    <Compile Include="Domain\Request\Interfaces\ICloudFilesRequest.cs" />
+    <Compile Include="Interfaces\IContainerRepository.cs" />
+    <Compile Include="Interfaces\IObjectRepository.cs" />
+    <Compile Include="Request\GetPublicContainerInformationSerialized.cs" />
+    <Compile Include="Request\CreateStorageObjectAsDirectory.cs" />
+    <Compile Include="Request\SetAclOnPublicContainer.cs" />
+    <Compile Include="Request\SetLoggingToContainerRequest.cs" />
+    <Compile Include="Request\Interfaces\IAddToWebRequest.cs" />
+    <Compile Include="Request\Interfaces\ICloudFilesRequest.cs" />
     <Compile Include="Domain\RequestFactory.cs" />
     <Compile Include="Domain\GenerateRequestByType.cs" />
-    <Compile Include="Domain\WebRequestEngine.cs" />
-    <Compile Include="Domain\Response\Interfaces\ICloudFilesResponse.cs" />
-    <Compile Include="IConnection.cs" />
+    <Compile Include="Response\Interfaces\ICloudFilesResponse.cs" />
+    <Compile Include="Interfaces\IConnection.cs" />
     <Compile Include="Utils\ContainerNameValidator.cs" />
     <Compile Include="Domain\AccountInformation.cs" />
-    <Compile Include="Domain\Request\GetAccountInformation.cs" />
-    <Compile Include="Domain\Request\GetPublicContainerInformation.cs" />
-    <Compile Include="Domain\Request\GetPublicContainers.cs" />
-    <Compile Include="Domain\Request\MarkContainerAsPublic.cs" />
-    <Compile Include="Domain\Request\SetPublicContainerDetails.cs" />
-    <Compile Include="Domain\Response\CloudFilesResponse.cs" />
-    <Compile Include="Domain\Response\CloudFilesResponseWithContentBody.cs" />
-    <Compile Include="Domain\StorageItemInformation.cs" />
+    <Compile Include="Request\GetAccountInformation.cs" />
+    <Compile Include="Request\GetPublicContainerInformation.cs" />
+    <Compile Include="Request\GetPublicContainers.cs" />
+    <Compile Include="Request\MarkContainerAsPublic.cs" />
+    <Compile Include="Request\SetPublicContainerDetails.cs" />
+    <Compile Include="Response\CloudFilesResponse.cs" />
+    <Compile Include="Response\CloudFilesResponseWithContentBody.cs" />
+    <Compile Include="Domain\StorageObjectInformation.cs" />
+    <Compile Include="Utils\Ensure.cs" />
     <Compile Include="Utils\EnumHelper.cs" />
     <Compile Include="Exceptions\ContainerNotEmptyException.cs" />
     <Compile Include="Exceptions\InvalidRangeHeaderException.cs" />
     <Compile Include="Exceptions\DateTimeHttpHeaderFormatException.cs" />
     <Compile Include="Exceptions\NoContainersFoundException.cs" />
-    <Compile Include="Domain\Container.cs" />
-    <Compile Include="Domain\Request\DeleteContainer.cs" />
-    <Compile Include="Domain\Request\DeleteStorageItem.cs" />
-    <Compile Include="Domain\Request\GetAuthentication.cs" />
-    <Compile Include="Domain\Request\GetContainerItemList.cs" />
-    <Compile Include="Domain\Request\GetStorageItem.cs" />
-    <Compile Include="Domain\Response\GetStorageItemResponse.cs" />
-    <Compile Include="Domain\Request\GetContainerInformation.cs" />
-    <Compile Include="Domain\Request\GetStorageItemInformation.cs" />
-    <Compile Include="Domain\Response\IResponse.cs" />
-    <Compile Include="Domain\Request\GetContainers.cs" />
-    <Compile Include="Domain\Response\IResponseWithContentBody.cs" />
-    <Compile Include="Domain\Request\CloudFilesRequest.cs" />
-    <Compile Include="Domain\Request\SetStorageItemMetaInformation.cs" />
+    <Compile Include="Container.cs" />
+    <Compile Include="Request\DeleteContainer.cs" />
+    <Compile Include="Request\DeleteStorageItem.cs" />
+    <Compile Include="Request\GetAuthentication.cs" />
+    <Compile Include="Request\GetContainerItemList.cs" />
+    <Compile Include="Request\GetStorageItem.cs" />
+    <Compile Include="Response\GetStorageItemResponse.cs" />
+    <Compile Include="Request\GetContainerInformation.cs" />
+    <Compile Include="Request\GetStorageItemInformation.cs" />
+    <Compile Include="Response\IResponse.cs" />
+    <Compile Include="Request\GetContainers.cs" />
+    <Compile Include="Response\IResponseWithContentBody.cs" />
+    <Compile Include="Request\CloudFilesRequest.cs" />
+    <Compile Include="Request\SetStorageItemMetaInformation.cs" />
     <Compile Include="Domain\ProxyCredentials.cs" />
-    <Compile Include="Domain\Request\CreateContainer.cs" />
-    <Compile Include="Domain\Request\PutStorageObject.cs" />
+    <Compile Include="Request\CreateContainer.cs" />
+    <Compile Include="Request\PutStorageObject.cs" />
     <Compile Include="Domain\ResponseFactory.cs" />
     <Compile Include="Domain\ResponseFactoryWithContentBody.cs" />
     <Compile Include="Exceptions\ContainerAlreadyExistsException.cs" />
@@ -123,7 +125,7 @@
     <Compile Include="Exceptions\StorageItemNotFoundException.cs" />
     <Compile Include="Utils\ObjectNameValidator.cs" />
     <Compile Include="Connection.cs" />
-    <Compile Include="Domain\StorageObject.cs" />
+    <Compile Include="StorageObject.cs" />
     <Compile Include="Domain\UserCredentials.cs" />
     <Compile Include="Exceptions\ContainerNameException.cs" />
     <Compile Include="Exceptions\InvalidResponseTypeException.cs" />
@@ -136,11 +138,6 @@
     <Compile Include="Utils\StringHelper.cs" />
     <Compile Include="Utils\Writer.cs" />
     <Compile Include="Domain\Execution.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Log4Net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

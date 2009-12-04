@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.Request;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request
@@ -16,21 +16,21 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         [ExpectedException(typeof(ArgumentNullException))]
         public void Should_throw_an_exception_when_the_storage_url_is_null()
         {
-            new GetStorageItem(null, "a", "a");
+            new GetStorageObject(null, "a", "a");
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Should_throw_an_exception_when_the_container_bame_is_null()
         {
-            new GetStorageItem("a", null, "a");
+            new GetStorageObject("a", null, "a");
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Should_throw_an_exception_when_the_storage_object_name_is_null()
         {
-            new GetStorageItem("a", "a", null);
+            new GetStorageObject("a", "a", null);
         }
 
      
@@ -52,8 +52,8 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         [Test]
         public void Should_add_if_match_request_field_header_to_request_successfully()
         {
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "NotEmptyString", "fooitem", requestHeaderFields);
-            Asserts.AssertHeaders(getStorageItem, EnumHelper.GetDescription(RequestHeaderFields.IfMatch), DUMMY_ETAG);
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "NotEmptyString", "fooitem", requestHeaderFields);
+            Asserts.AssertHeaders(getStorageObject, EnumHelper.GetDescription(RequestHeaderFields.IfMatch), DUMMY_ETAG);
 
         }
     }
@@ -74,8 +74,8 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         [Test]
         public void Should_add_if_none_match_request_field_header_to_request_successfully()
         {
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "NotEmptyString","fooitem.txt", requestHeaderFields);
-            Asserts.AssertHeaders(getStorageItem, EnumHelper.GetDescription(RequestHeaderFields.IfNoneMatch), DUMMY_ETAG);
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "NotEmptyString","fooitem.txt", requestHeaderFields);
+            Asserts.AssertHeaders(getStorageObject, EnumHelper.GetDescription(RequestHeaderFields.IfNoneMatch), DUMMY_ETAG);
             
             
         }
@@ -100,8 +100,8 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         {
             requestHeaderFields[RequestHeaderFields.IfModifiedSince] = "test_jibberish";
 
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "containername", "fooitem.txt", requestHeaderFields);
-            Asserts.AssertHeaders(getStorageItem, EnumHelper.GetDescription(RequestHeaderFields.IfModifiedSince), modifiedDateTime);
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "containername", "fooitem.txt", requestHeaderFields);
+            Asserts.AssertHeaders(getStorageObject, EnumHelper.GetDescription(RequestHeaderFields.IfModifiedSince), modifiedDateTime);
            
         }
 
@@ -109,8 +109,8 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         [Ignore("should write hand rolled mock")]
         public void Should_add_if_modified_since_request_field_to_request_ifmodifiedsince_property_successfully()
         {
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "containername", "fooitem", requestHeaderFields);
-            var request = Asserts.GetMock(getStorageItem);
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "containername", "fooitem", requestHeaderFields);
+            var request = Asserts.GetMock(getStorageObject);
 
             request.VerifySet(x=>x.IfModifiedSince= modifiedDateTime);
             // Assert.That(request.ModifiedSince.ToShortDateString(), Is.EqualTo(modifiedDateTime.ToShortDateString()));
@@ -137,17 +137,17 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         {
             requestHeaderFields[RequestHeaderFields.IfModifiedSince] = "test_jibberish";
 
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "containername", "fooitem.txt", requestHeaderFields);
-            Asserts.AssertHeaders(getStorageItem, EnumHelper.GetDescription(RequestHeaderFields.IfUnmodifiedSince), modifiedDateTime);
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "containername", "fooitem.txt", requestHeaderFields);
+            Asserts.AssertHeaders(getStorageObject, EnumHelper.GetDescription(RequestHeaderFields.IfUnmodifiedSince), modifiedDateTime);
 
         }
 
         [Test]
         public void Should_add_if_unmodified_since_request_field_to_request_ifmodifiedsince_property_successfully()
         {
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "containername", "fooitem.txt", requestHeaderFields);
-            Asserts.AssertHeaders(getStorageItem, EnumHelper.GetDescription(RequestHeaderFields.IfUnmodifiedSince), String.Format("{0:r}", modifiedDateTime));
-            //  Assert.That(getStorageItem.Headers[EnumHelper.GetDescription(RequestHeaderFields.IfUnmodifiedSince)], Is.EqualTo(String.Format("{0:r}", modifiedDateTime)));
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "containername", "fooitem.txt", requestHeaderFields);
+            Asserts.AssertHeaders(getStorageObject, EnumHelper.GetDescription(RequestHeaderFields.IfUnmodifiedSince), String.Format("{0:r}", modifiedDateTime));
+            //  Assert.That(getStorageObject.Headers[EnumHelper.GetDescription(RequestHeaderFields.IfUnmodifiedSince)], Is.EqualTo(String.Format("{0:r}", modifiedDateTime)));
         }
     }
 
@@ -168,15 +168,15 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         {
             requestHeaderFields[RequestHeaderFields.Range] = "a-5";
 
-            new GetStorageItem("http://storageurl", "containername","fooite.txt", requestHeaderFields).Apply(new Mock<ICloudFilesRequest>().Object);
+            new GetStorageObject("http://storageurl", "containername","fooite.txt", requestHeaderFields).Apply(new Mock<ICloudFilesRequest>().Object);
         }
 
         [Test]
         public void Should_have_a_range_from_property_if_the_range_from_property_is_set_correctly()
         {
             requestHeaderFields[RequestHeaderFields.Range] = "10-";
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "containername", "fooitem.txt", requestHeaderFields);
-            var request = Asserts.GetMock(getStorageItem);
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "containername", "fooitem.txt", requestHeaderFields);
+            var request = Asserts.GetMock(getStorageObject);
             request.VerifySet(x=>x.RangeFrom=10);
             // Assert.That(request.RangeFrom, Is.EqualTo(10));
         }
@@ -185,22 +185,22 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         public void Should_have_a_negative_range_to_property_if_the_range_to_property_is_set_correctly_and_no_range_from_is_specified()
         {
             requestHeaderFields[RequestHeaderFields.Range] = "-10";
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "containername","fooitem.txt", requestHeaderFields);
-            var request = Asserts.GetMock(getStorageItem);
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "containername","fooitem.txt", requestHeaderFields);
+            var request = Asserts.GetMock(getStorageObject);
             request.VerifySet(x => x.RangeTo = -10);
-            // Assert.That(getStorageItem.RangeTo, Is.EqualTo(-10));
+            // Assert.That(getStorageObject.RangeTo, Is.EqualTo(-10));
         }
 
         [Test]
         public void Should_have_range_from_and_range_to_if_both_are_set_and_are_valid_integers()
         {
             requestHeaderFields[RequestHeaderFields.Range] = "1-10";
-            GetStorageItem getStorageItem = new GetStorageItem("http://storageurl", "containername", "", requestHeaderFields);
-            var request = Asserts.GetMock(getStorageItem);
+            GetStorageObject getStorageObject = new GetStorageObject("http://storageurl", "containername", "", requestHeaderFields);
+            var request = Asserts.GetMock(getStorageObject);
             request.VerifySet(x => x.RangeFrom = 1);
             request.VerifySet(x => x.RangeTo = 10);
-            //Assert.That(getStorageItem.RangeFrom, Is.EqualTo(1));   
-            // Assert.That(getStorageItem.RangeTo, Is.EqualTo(10));
+            //Assert.That(getStorageObject.RangeFrom, Is.EqualTo(1));   
+            // Assert.That(getStorageObject.RangeTo, Is.EqualTo(10));
         }
     }
 }

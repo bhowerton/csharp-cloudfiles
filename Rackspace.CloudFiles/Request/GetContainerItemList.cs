@@ -9,7 +9,7 @@ using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
     /// GetContainerItemList
@@ -27,19 +27,12 @@ namespace Rackspace.CloudFiles.domain.request
         /// <param name="containerName">the name of the container where the storage item is located</param>
         /// <param name="requestParameters">dictionary of parameter filters to place on the request url</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        /// <exception cref="ContainerNameException">Thrown when the container name is invalid</exception>
+        /// <exception cref="InvalidContainerNameException">Thrown when the container name is invalid</exception>
         public GetContainerItemList(string storageUrl,  string containerName, 
-            Dictionary<GetItemListParameters, string> requestParameters)
+                                    Dictionary<GetItemListParameters, string> requestParameters)
         {
             _storageUrl = storageUrl;
             _containerName = containerName;
-            if (string.IsNullOrEmpty(storageUrl)
-             
-                || string.IsNullOrEmpty(containerName))
-                throw new ArgumentNullException();
-
-            if (!ContainerNameValidator.Validate(containerName)) throw new ContainerNameException();
-
             _stringBuilder = new StringBuilder();
 
 
@@ -70,12 +63,12 @@ namespace Rackspace.CloudFiles.domain.request
 
         public Uri CreateUri()
         {
-           return  new Uri(_storageUrl + "/" + _containerName.Encode() + _stringBuilder);
+            return  new Uri(_storageUrl + "/" + _containerName.Encode() + _stringBuilder);
         }
 
         public void Apply(ICloudFilesRequest request)
         {
             request.Method = "GET";
         }
-    }
+   }
 }
