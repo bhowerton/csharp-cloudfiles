@@ -92,7 +92,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\com.mosso.cloudfiles\Rackspace.CloudFiles.csproj">
+    <ProjectReference Include="..\Rackspace.CloudFiles\Rackspace.CloudFiles.csproj">
       <Project>{A4EC4FAB-EE91-4DE7-B21D-CBABFA05B363}</Project>
       <Name>Rackspace.CloudFiles</Name>
     </ProjectReference>
