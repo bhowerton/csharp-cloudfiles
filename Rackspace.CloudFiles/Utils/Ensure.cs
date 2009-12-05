@@ -10,20 +10,17 @@ namespace Rackspace.CloudFiles.utils
         void ValidContainerName(string name);
     }
 
-    public class Ensure : IEnsure
+    public static class Ensure
     {
-        public void NotNullOrEmpty(params string[] args)
+        public static void NotNullOrEmpty(params string[] args)
         {
             Array.ForEach(args, s =>
                                     {
                                         if (String.IsNullOrEmpty(s))
                                             throw new ArgumentNullException();
                                     });
-                   
-                                             
-                                  
         }
-        public void ValidStorageObjectName(string name)
+        public static void ValidStorageObjectName(string name)
         {
              
             if (   
@@ -32,7 +29,7 @@ namespace Rackspace.CloudFiles.utils
                 return;
             throw new InvalidStorageObjectNameException();
         }
-        public  void ValidContainerName(string name)
+        public static void ValidContainerName(string name)
         {
             if(
                 name.IndexOf("?") < 0 &&

@@ -7,12 +7,13 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.domain;
 using Rackspace.CloudFiles.domain.response;
 using Rackspace.CloudFiles.domain.response.Interfaces;
+using Rackspace.CloudFiles.Request.Interfaces;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.request
+namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
     /// Wraps requests to optionally handle proxy credentials and ssl
@@ -20,10 +21,10 @@ namespace Rackspace.CloudFiles.domain.request
     public class CloudFilesRequest : ICloudFilesRequest
     {
         private readonly HttpWebRequest _httpWebRequest;
-        private readonly ProxyCredentials _proxyCredentials;
-        private event Connection.ProgressCallback Progress;
+        private readonly HttpProxy _httpProxy;
+        private event StorageObject.ProgressCallback Progress;
 
-        public void SetContent(Stream stream, Connection.ProgressCallback progress)
+        public void SetContent(Stream stream, StorageObject.ProgressCallback progress)
         {
             this.ContentStream = stream;
             this.ContentLength = stream.Length;
@@ -59,14 +60,14 @@ namespace Rackspace.CloudFiles.domain.request
         /// Constructor with proxy credentials provided
         /// </summary>
         /// <param name="request">The request being sent to the server</param>
-        /// <param name="proxyCredentials">Proxy credentials</param>
+        /// <param name="httpProxy">Proxy credentials</param>
         /// <exception cref="System.ArgumentNullException">Thrown when any of the reference arguments are null</exception>
-        public CloudFilesRequest(HttpWebRequest request, ProxyCredentials proxyCredentials)
+        public CloudFilesRequest(HttpWebRequest request, HttpProxy httpProxy)
         {
             if (request == null) throw new ArgumentNullException();
 
             this._httpWebRequest = request;
-            this._proxyCredentials = proxyCredentials;
+            this._httpProxy = httpProxy;
         }
 
         /// <summary>
@@ -200,12 +201,12 @@ namespace Rackspace.CloudFiles.domain.request
 
         private void HandleProxyCredentialsFor(HttpWebRequest httpWebRequest)
         {
-            if (_proxyCredentials == null) return;
+            if (_httpProxy == null) return;
 
-            var loProxy = new WebProxy(_proxyCredentials.ProxyAddress, true);
+            var loProxy = new System.Net.WebProxy(_httpProxy.ProxyAddress, true);
 
-            if (_proxyCredentials.ProxyUsername.Length > 0)
-                loProxy.Credentials = new NetworkCredential(_proxyCredentials.ProxyUsername, _proxyCredentials.ProxyPassword, _proxyCredentials.ProxyDomain);
+            if (_httpProxy.ProxyUsername.Length > 0)
+                loProxy.Credentials = new NetworkCredential(_httpProxy.ProxyUsername, _httpProxy.ProxyPassword, _httpProxy.ProxyDomain);
             httpWebRequest.Proxy = loProxy;
         }
         private void AttachBodyToWebRequest(HttpWebRequest request)

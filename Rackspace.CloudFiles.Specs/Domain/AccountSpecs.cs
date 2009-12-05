@@ -3,7 +3,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.domain;
 
-namespace Rackspace.CloudFiles.unit.tests.domain
+namespace Rackspace.CloudFiles.domain
 {
     
     [TestFixture]

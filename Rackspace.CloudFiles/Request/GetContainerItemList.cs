@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Text;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.Request.Interfaces;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.Request
 {
     /// <summary>
-    /// GetContainerItemList
+    /// GetContainerStorageObjectList
     /// </summary>
     public class GetContainerItemList : IAddToWebRequest
     {
@@ -21,7 +22,7 @@ namespace Rackspace.CloudFiles.Request
         private readonly StringBuilder _stringBuilder;
 
         /// <summary>
-        /// GetContainerItemList constructor
+        /// GetContainerStorageObjectList constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>
@@ -36,23 +37,11 @@ namespace Rackspace.CloudFiles.Request
             _stringBuilder = new StringBuilder();
 
 
-            if (requestParameters == null || requestParameters.Count <= 0) return;
-            foreach (GetItemListParameters param in requestParameters.Keys)
-            {
-                var paramName = param.ToString().ToLower();
-                if (param == GetItemListParameters.Limit)
-                    int.Parse(requestParameters[param]);
-
-                if (_stringBuilder.Length > 0)
-                    _stringBuilder.Append("&");
-                else
-                    _stringBuilder.AppendFormat("?");
-                _stringBuilder.Append(paramName + "=" + requestParameters[param].Encode());
-            }
+           
         }
 
         /// <summary>
-        /// GetContainerItemList constructor
+        /// GetContainerStorageObjectList constructor
         /// </summary>
         /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
         /// <param name="containerName">the name of the container where the storage item is located</param>

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Request;
+using Rackspace.CloudFiles.Request.Interfaces;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request

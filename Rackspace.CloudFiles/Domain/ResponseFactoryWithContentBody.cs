@@ -7,9 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using Rackspace.CloudFiles.domain.request;
-using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.domain.response;
 using Rackspace.CloudFiles.domain.response.Interfaces;
+using Rackspace.CloudFiles.Request.Interfaces;
+using Rackspace.Cloudfiles.Response;
 
 namespace Rackspace.CloudFiles.domain
 {

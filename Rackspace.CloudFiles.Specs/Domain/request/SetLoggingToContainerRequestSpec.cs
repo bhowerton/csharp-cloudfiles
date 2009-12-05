@@ -1,8 +1,8 @@
 using System.Net;
 using Rackspace.CloudFiles.Request;
-using Rackspace.CloudFiles.unit.tests.CustomMatchers;
+using Rackspace.CloudFiles.Request.Interfaces;
+using Rackspace.CloudFiles.CustomMatchers;
 using Moq;
-using Rackspace.CloudFiles.domain.request.Interfaces;
 using SpecMaker.Core;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request

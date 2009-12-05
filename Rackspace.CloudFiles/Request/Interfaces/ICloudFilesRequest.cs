@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using Rackspace.CloudFiles.domain.response.Interfaces;
 
-namespace Rackspace.CloudFiles.domain.request.Interfaces
+namespace Rackspace.CloudFiles.Request.Interfaces
 {
     public interface ICloudFilesRequest
     {
@@ -22,6 +22,6 @@ namespace Rackspace.CloudFiles.domain.request.Interfaces
         bool SendChunked { get; set; }
         Stream ContentStream { get; }
         Stream GetRequestStream();
-        void SetContent(Stream stream, Connection.ProgressCallback progress);
+        void SetContent(Stream stream, StorageObject.ProgressCallback progress);
     }
 }

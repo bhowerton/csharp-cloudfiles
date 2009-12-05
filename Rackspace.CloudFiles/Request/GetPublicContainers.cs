@@ -4,6 +4,7 @@
 
 using System;
 using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.Request.Interfaces;
 
 namespace Rackspace.CloudFiles.domain.request
 {

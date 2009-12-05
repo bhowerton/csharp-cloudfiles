@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.domain.request;
-using Rackspace.CloudFiles.domain.request.Interfaces;
+using Rackspace.CloudFiles.Request.Interfaces;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request
 {

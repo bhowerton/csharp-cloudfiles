@@ -169,6 +169,6 @@ namespace Rackspace.CloudFiles.domain.response
             _webResponse.Close();
         }
 
-        public event Connection.ProgressCallback Progress;
+        public event StorageObject.ProgressCallback Progress;
     }
 }

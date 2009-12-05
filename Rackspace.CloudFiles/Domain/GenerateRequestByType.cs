@@ -4,6 +4,7 @@ using System.Net;
 using System.Web;
 using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.domain.response.Interfaces;
+using Rackspace.CloudFiles.Request.Interfaces;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.domain.request
@@ -46,7 +47,7 @@ namespace Rackspace.CloudFiles.domain.request
         {
 			return commonSubmit(requesttype,()=> _requestfactory.Create(requesttype.CreateUri()), "");
         }
-        public ICloudFilesResponse Submit(IAddToWebRequest requesttype, string authtoken, ProxyCredentials credentials)
+        public ICloudFilesResponse Submit(IAddToWebRequest requesttype, string authtoken, HttpProxy credentials)
         {
            return commonSubmit(requesttype, ()=> _requestfactory.Create(requesttype.CreateUri(),credentials),authtoken );   
         }

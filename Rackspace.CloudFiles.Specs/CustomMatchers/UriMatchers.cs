@@ -1,7 +1,7 @@
 using System;
 using SpecMaker.Core.Exceptions;
 
-namespace Rackspace.CloudFiles.unit.tests.CustomMatchers
+namespace Rackspace.CloudFiles.CustomMatchers
 {
     public static class UriMatchers
     {

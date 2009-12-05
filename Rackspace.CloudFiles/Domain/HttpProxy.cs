@@ -5,9 +5,9 @@
 namespace Rackspace.CloudFiles.domain
 {
     /// <summary>
-    /// ProxyCredentials
+    /// HttpProxy
     /// </summary>
-    public class ProxyCredentials
+    public class HttpProxy
     {
         private readonly string proxyAddress;
         private readonly string proxyUsername;
@@ -21,7 +21,7 @@ namespace Rackspace.CloudFiles.domain
         /// <param name="proxyUsername"></param>
         /// <param name="proxyPassword"></param>
         /// <param name="proxyDomain"></param>
-        public ProxyCredentials(string proxyAddress, string proxyUsername, string proxyPassword, string proxyDomain)
+        public HttpProxy(string proxyAddress, string proxyUsername, string proxyPassword, string proxyDomain)
         {
             this.proxyAddress = proxyAddress;
             this.proxyDomain = proxyDomain;

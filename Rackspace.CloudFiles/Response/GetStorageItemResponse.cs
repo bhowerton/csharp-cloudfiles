@@ -5,9 +5,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using Rackspace.CloudFiles;
+using Rackspace.CloudFiles.domain.response;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.response
+namespace Rackspace.Cloudfiles.Response
 {
     /// <summary>
     /// This class wraps the response from the get storage item request
@@ -15,7 +17,7 @@ namespace Rackspace.CloudFiles.domain.response
     public class GetStorageItemResponse : IResponseWithContentBody
     {
         private readonly List<string> contentBody;
-        public event Connection.ProgressCallback Progress;
+        public event StorageObject.ProgressCallback Progress;
         private Stream contentStream;
 
         /// <summary>

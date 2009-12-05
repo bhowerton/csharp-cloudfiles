@@ -1,5 +1,7 @@
+using Moq;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using Rackspace.CloudFiles.Interfaces;
 
 namespace Rackspace.CloudFiles.Specs.Domain
 {
@@ -12,7 +14,7 @@ namespace Rackspace.CloudFiles.Specs.Domain
         public void SetUp()
         {
             containerName = "foocontainer";
-            container = new Container(containerName);
+            container = new Container(containerName, new Mock<IAuthenticatedRequestFactory>().Object);
         }
 
         [Test]

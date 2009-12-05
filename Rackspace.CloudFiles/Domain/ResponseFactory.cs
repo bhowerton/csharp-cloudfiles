@@ -8,8 +8,8 @@ using System.Text;
 using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.response;
 using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.Request.Interfaces;
 using Rackspace.CloudFiles.utils;
-using Rackspace.CloudFiles.domain.request.Interfaces;
 using Rackspace.CloudFiles.domain.response.Interfaces;
 
 namespace Rackspace.CloudFiles.domain

@@ -14,7 +14,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         {
             string foo = null;
             string foobar = null;
-           Asserts.Throws<ArgumentNullException>(()=>new Ensure().NotNullOrEmpty(foo, foobar));
+           Asserts.Throws<ArgumentNullException>(()=>Ensure.NotNullOrEmpty(foo, foobar));
         }
     }
     [TestFixture]
@@ -24,7 +24,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_valid()
         {
             var containerName = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()-+={}[]|\'\":;,.<>~`";
-            new Ensure().ValidContainerName(containerName);
+            Ensure.ValidContainerName(containerName);
 
         }
     }
@@ -36,7 +36,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_invalid()
         {
             var containerName = "containerName/withSlash";
-           Asserts.Throws<InvalidContainerNameException>( ()=>new Ensure().ValidContainerName(containerName));
+           Asserts.Throws<InvalidContainerNameException>( ()=>Ensure.ValidContainerName(containerName));
 
         }
     }
@@ -48,7 +48,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_invalid()
         {
             var containerName = "containerName?withQuestionMark";
-            Asserts.Throws<InvalidContainerNameException>(() => new Ensure().ValidContainerName(containerName));
+            Asserts.Throws<InvalidContainerNameException>(() =>  Ensure.ValidContainerName(containerName));
 
         }
     }
@@ -60,7 +60,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_valid()
         {
             var containerName = CreateString.WithLength(256);
-            new Ensure().ValidContainerName(containerName);
+            Ensure.ValidContainerName(containerName);
 
         }
     }
@@ -72,7 +72,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_invalid()
         {
             var containerName = CreateString.WithLength(257);
-            Asserts.Throws<InvalidContainerNameException>(()=>new Ensure().ValidContainerName(containerName));
+            Asserts.Throws<InvalidContainerNameException>(()=> Ensure.ValidContainerName(containerName));
 
         }
     }
@@ -83,7 +83,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_valid()
         {
             var objectName = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()-+={}[]|\'\":;,.<>~`/";
-            new Ensure().ValidStorageObjectName(objectName);
+             Ensure.ValidStorageObjectName(objectName);
 
         }
     }
@@ -95,7 +95,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_invalid()
         {
             var objectName = "objectName?withQuestionMark";
-            Asserts.Throws<InvalidStorageObjectNameException>(() => new Ensure().ValidStorageObjectName(objectName));
+            Asserts.Throws<InvalidStorageObjectNameException>(() =>  Ensure.ValidStorageObjectName(objectName));
 
 
         }
@@ -108,7 +108,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_valid()
         {
             var objectName = CreateString.WithLength(1024);
-            new Ensure().ValidStorageObjectName(objectName);
+             Ensure.ValidStorageObjectName(objectName);
 
         }
     }
@@ -120,7 +120,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         public void should_be_invalid()
         {
             var objectName = CreateString.WithLength(1025);
-            Asserts.Throws<InvalidStorageObjectNameException>(() => new Ensure().ValidStorageObjectName(objectName));
+            Asserts.Throws<InvalidStorageObjectNameException>(() => Ensure.ValidStorageObjectName(objectName));
 
         }
     }

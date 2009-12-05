@@ -17,7 +17,7 @@ namespace Rackspace.CloudFiles.domain
         private readonly string api_access_key;
         private readonly string cloudversion;
         private readonly string accountName;
-        private readonly ProxyCredentials proxyCredentials;
+        private readonly HttpProxy httpProxy;
 
         /// <summary>
         /// Constructor - defaults Auth Url to https://api.mosso.com/auth without proxy credentials
@@ -25,7 +25,7 @@ namespace Rackspace.CloudFiles.domain
         /// <param name="username">client username to use during authentication</param>
         /// <param name="api_access_key">client api access key to use during authentication</param>
         public UserCredentials(string username, string api_access_key) :
-            this(new Uri(Constants.MOSSO_AUTH_URL), username, api_access_key, null, null)
+            this(new Uri(Constants.AUTH_URL), username, api_access_key, null, null)
         {
         }
 
@@ -34,9 +34,9 @@ namespace Rackspace.CloudFiles.domain
         /// </summary>
         /// <param name="username">client username to use during authentication</param>
         /// <param name="api_access_key">client api access key to use during authentication</param>
-        /// <param name="proxyCredentials">credentials to use to obtain access via proxy</param>
-        public UserCredentials(string username, string api_access_key, ProxyCredentials proxyCredentials) :
-            this(new Uri(Constants.MOSSO_AUTH_URL), username, api_access_key, null, null, proxyCredentials)
+        /// <param name="httpProxy">credentials to use to obtain access via proxy</param>
+        public UserCredentials(string username, string api_access_key, HttpProxy httpProxy) :
+            this(new Uri(Constants.AUTH_URL), username, api_access_key, null, null, httpProxy)
         {
         }
 
@@ -48,16 +48,16 @@ namespace Rackspace.CloudFiles.domain
         /// <param name="api_access_key">client api access key to use during authentication</param>
         /// <param name="cloudversion">version of the cloudfiles system to access</param>
         /// <param name="accountName">client account name</param>
-        /// <param name="proxyCredentials">credentials to use to obtain access via proxy</param>
+        /// <param name="httpProxy">credentials to use to obtain access via proxy</param>
         /// <returns>An instance of UserCredentials</returns>
-        public UserCredentials(Uri authUrl, string username, string api_access_key, string cloudversion, string accountName, ProxyCredentials proxyCredentials)
+        public UserCredentials(Uri authUrl, string username, string api_access_key, string cloudversion, string accountName, HttpProxy httpProxy)
         {
             this.authUrl = authUrl;
             this.username = username;
             this.api_access_key = api_access_key;
             this.accountName = accountName;
             this.cloudversion = cloudversion;
-            this.proxyCredentials = proxyCredentials;
+            this.httpProxy = httpProxy;
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace Rackspace.CloudFiles.domain
         /// Proxy Credentials
         /// </summary>
         /// <returns>An instance of the local proxy credentials</returns>
-        public ProxyCredentials ProxyCredentials
+        public HttpProxy HttpProxy
         {
-            get { return proxyCredentials; }
+            get { return httpProxy; }
         }
 
 
