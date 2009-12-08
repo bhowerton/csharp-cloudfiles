@@ -39,10 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="SpecMaker.Core, Version=0.2.0.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\specmaker\SpecMaker.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -51,9 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Asserts.cs" />
-    <Compile Include="CustomMatchers\UriMatchers.cs" />
-    <Compile Include="CustomMatchers\WebHeaderMatchers.cs" />
+    <Compile Include="CustomAsserts\Asserts.cs" />
+    <Compile Include="CustomAsserts\AssertIt.cs" />
+    <Compile Include="CustomAsserts\UriMatchers.cs" />
+    <Compile Include="CustomAsserts\WebHeaderMatchers.cs" />
     <Compile Include="Domain\request\SetLoggingToContainerRequestSpec.cs" />
     <Compile Include="Domain\AccountSpecs.cs" />
     <Compile Include="Domain\request\DeleteStorageObjectSpecs.cs" />
@@ -61,7 +58,6 @@
     <Compile Include="Domain\request\GetPublicContainersSpecs.cs" />
     <Compile Include="Domain\request\GetStorageObjectInformationSpecs.cs" />
     <Compile Include="Domain\request\GetStorageObjectSpecs.cs" />
-    <Compile Include="Domain\request\PutStorageObjectSpecs.cs" />
     <Compile Include="Domain\request\SetPublicContainerDetailsSpecs.cs" />
     <Compile Include="Foo.cs" />
     <Compile Include="SpecContainer.cs" />

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.Request.Interfaces;
+using Rackspace.CloudFiles.Specs.CustomAsserts;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request
 {

@@ -1,18 +1,20 @@
 using System.Net;
+using NUnit.Framework;
 using Rackspace.CloudFiles.Request;
 using Rackspace.CloudFiles.Request.Interfaces;
-using Rackspace.CloudFiles.CustomMatchers;
 using Moq;
-using SpecMaker.Core;
+using Rackspace.CloudFiles.Specs.CustomAsserts;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request
 {
-    public class SetLoggingToContainerRequestSpec : BaseSpec
+    [TestFixture]
+    public class SetLoggingToContainerRequestSpec 
     {
         #region setup infoz
         private Mock<ICloudFilesRequest> requestmock;
         private WebHeaderCollection webheaders;
-        private void SetupApply(bool isenabled)
+        [SetUp]
+        public void SetupApply(bool isenabled)
         {
             var loggingtopublicontainer = new SetLoggingToContainerRequest("fakecontainer", "http://fake", isenabled);
             requestmock = new Mock<ICloudFilesRequest>();
@@ -22,6 +24,7 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         }
         #endregion
 
+        [Test]
         public void when_creating_the_uri()
         {
             const string container = "mycontainer";
@@ -30,24 +33,25 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
             var loggingtopublicontainer = new SetLoggingToContainerRequest(container, url, true);
             var uri = loggingtopublicontainer.CreateUri();
 
-            should("use a management url as the base url", () => uri.StartsWith(url));
-            should("put public container at end of url", () => uri.EndsWith(container));
+            AssertIt.should("use a management url as the base url", () => uri.StartsWith(url));
+            AssertIt.should("put public container at end of url", () => uri.EndsWith(container));
         }
-     
+        [Test]
         public void when_logging_is_not_set()
         {
             SetupApply(false);
 
-            should("set method to put", () => requestmock.VerifySet(x => x.Method = "POST"));
-            should("set X-Log-Retention to False", () => webheaders.KeyValueFor("X-Log-Retention").HasValueOf("False"));
+            AssertIt.should("set method to put", () => requestmock.VerifySet(x => x.Method = "POST"));
+            AssertIt.should("set X-Log-Retention to False", () => webheaders.KeyValueFor("X-Log-Retention").HasValueOf("False"));
         }
+        [Test]
         public void when_logging_is_set()
         {
 
             SetupApply(true);
 
-            should("set method to put", () => requestmock.VerifySet(x => x.Method = "POST"));
-            should("set X-Log-Retention to True", () => webheaders.KeyValueFor("X-Log-Retention").HasValueOf("True"));
+            AssertIt.should("set method to put", () => requestmock.VerifySet(x => x.Method = "POST"));
+            AssertIt.should("set X-Log-Retention to True", () => webheaders.KeyValueFor("X-Log-Retention").HasValueOf("True"));
         }
     }
 }

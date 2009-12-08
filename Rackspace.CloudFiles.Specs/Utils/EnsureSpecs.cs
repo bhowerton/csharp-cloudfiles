@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.Specs.CustomAsserts;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.Specs.Utils

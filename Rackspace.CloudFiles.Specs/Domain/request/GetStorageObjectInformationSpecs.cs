@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.Request;
+using Rackspace.CloudFiles.Specs.CustomAsserts;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request
 {
