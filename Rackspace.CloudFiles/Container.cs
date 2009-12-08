@@ -4,10 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Xml;
-using Rackspace.CloudFiles.domain;
-using Rackspace.CloudFiles.domain.request;
 using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Interfaces;
@@ -19,19 +16,20 @@ namespace Rackspace.CloudFiles
     /// <summary>
     /// Container
     /// </summary>
-    public class Container
+    public class Container:IContainer
     {
-        private readonly IAuthenticatedRequestFactory _authenticatedRequestFactory;
+        protected readonly IAccount _account;
 
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="containerName">Name of the container</param>
-        /// <param name="request"></param>
-        public Container(string containerName, IAuthenticatedRequestFactory request)
+        /// <param name="account"></param>
+        public Container(string containerName, IAccount account)
         {
-            _authenticatedRequestFactory = request;
+            _account = account;
+
 
             Name = containerName;
             ObjectCount = 0;
@@ -39,6 +37,12 @@ namespace Rackspace.CloudFiles
             TTL = -1;
         }
         #region properties
+
+        public IAuthenticatedRequestFactory Connection
+        {
+            get { return _account.Connection; }
+        }
+
         /// <summary>
         /// Size of the container
         /// </summary>
@@ -81,7 +85,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// Dictionary{GetItemListParameters, string} parameters = new Dictionary{GetItemListParameters, string}();
         /// parameters.Add(GetItemListParameters.Limit, 2);
         /// parameters.Add(GetItemListParameters.Marker, 1);
@@ -117,7 +121,7 @@ namespace Rackspace.CloudFiles
                         _stringBuilder.Append(paramName + "=" + parameters[param].Encode());
                     }
                 }
-                var request = _authenticatedRequestFactory.CreateRequest();
+                var request = _account.Connection.CreateRequest();
                 request.Method = HttpVerb.GET;
                 ICloudFilesResponse getContainerItemListResponse = request.SubmitStorageRequest(this.Name.Encode() + _stringBuilder);
                 if (getContainerItemListResponse.Status == HttpStatusCode.OK)
@@ -142,7 +146,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// List{string} containerItemList = connection.GetContainerStorageObjectList("container name");
         /// </code>
         /// </example>
@@ -161,7 +165,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// connection.DeleteStorageObject("container name", "RemoteStorageItem.txt");
         /// </code>
         /// </example>
@@ -172,7 +176,7 @@ namespace Rackspace.CloudFiles
             Ensure.NotNullOrEmpty(storageItemName);
             try
             {
-                var request = _authenticatedRequestFactory.CreateRequest();
+                var request = _account.Connection.CreateRequest();
                 request.Method = HttpVerb.DELETE;
 
                 request.SubmitStorageRequest(this.Name.Encode() + "/" + storageItemName.StripSlashPrefix().Encode());
@@ -197,7 +201,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// Dictionary{RequestHeaderFields, string} requestHeaderFields = Dictionary{RequestHeaderFields, string}();
         /// string dummy_etag = "5c66108b7543c6f16145e25df9849f7f";
         /// requestHeaderFields.Add(RequestHeaderFields.IfMatch, dummy_etag);
@@ -214,7 +218,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// Uri containerPublicUrl = connection.MarkContainerAsPublic("container name", 12345);
         /// </code>
         /// </example>
@@ -227,7 +231,7 @@ namespace Rackspace.CloudFiles
             try
             {
 
-                var request = _authenticatedRequestFactory.CreateRequest();
+                var request = _account.Connection.CreateRequest();
                 request.Method = HttpVerb.PUT;
                 if (timeToLiveInSeconds > -1) { request.Headers.Add(Constants.X_CDN_TTL, timeToLiveInSeconds.ToString()); }
                 var response = request.SubmitCdnRequest(Name);
@@ -249,7 +253,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// Uri containerPublicUrl = connection.MarkContainerAsPublic("container name");
         /// </code>
         /// </example>
@@ -267,7 +271,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// connection.MarkContainerAsPrivate("container name");
         /// </code>
         /// </example>
@@ -278,7 +282,7 @@ namespace Rackspace.CloudFiles
             Ensure.NotNullOrEmpty(containerName);
             try
             {
-                var request = _authenticatedRequestFactory.CreateRequest();
+                var request = _account.Connection.CreateRequest();
                 request.Method = HttpVerb.POST;
                 request.Headers.Add(Constants.X_CDN_ENABLED, "FALSE");
                 request.SubmitCdnRequest(containerName.Encode());
@@ -302,7 +306,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// Dictionary{string, string} metadata = new Dictionary{string, string}();
         /// metadata.Add("key1", "value1");
         /// metadata.Add("key2", "value2");
@@ -321,7 +325,7 @@ namespace Rackspace.CloudFiles
 
             try
             {
-                var request = _authenticatedRequestFactory.CreateRequest();
+                var request = _account.Connection.CreateRequest();
                 Action attachMetaData = () =>
                                           {
                                               foreach (var pair in metadata)
@@ -367,7 +371,7 @@ namespace Rackspace.CloudFiles
             try
             {
 
-                var request = _authenticatedRequestFactory.CreateRequest();
+                var request = _account.Connection.CreateRequest();
                 request.Method = HttpVerb.POST;
                 request.Headers.Add(Constants.X_LOG_RETENTION, loggingenabled.Capitalize());
                 if (ttl > -1) request.Headers.Add(Constants.X_CDN_TTL, ttl.ToString());
@@ -397,7 +401,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// connection.MakePath("containername", "/dir1/dir2/dir3/dir4");
         /// </code>
         /// </example>
@@ -416,10 +420,10 @@ namespace Rackspace.CloudFiles
                     if (string.IsNullOrEmpty(item)) continue;
                     if (!firstItem) directory += "/";
                     directory += item.Encode();
-                    var request = _authenticatedRequestFactory.CreateRequest();
+                    var request = _account.Connection.CreateRequest();
                     request.Method = HttpVerb.PUT;
                     request.ContentType = "application/directory";
-                    request.SetContent(new MemoryStream(new byte[0]), delegate { });
+                    request.SetContent(new MemoryStream(new byte[0]));
                     request.SubmitStorageRequest(Name.Encode() + "/" + directory.StripSlashPrefix().Encode());
                     firstItem = false;
                 }
@@ -451,7 +455,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// string jsonResponse = connection.GetStorageObjectListInJson("container name");
         /// </code>
         /// </example>
@@ -479,7 +483,7 @@ namespace Rackspace.CloudFiles
         }
         private ICloudFilesResponse BaseGetContainerObjectList(Format format)
         {
-            var request = _authenticatedRequestFactory.CreateRequest();
+            var request = _account.Connection.CreateRequest();
             return request.SubmitStorageRequest(Name.Encode() + "?format=" + EnumHelper.GetDescription(format));
         }
         /// <summary>
@@ -488,7 +492,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// XmlDocument xmlResponse = connection.GetStorageObjectListInXml("container name");
         /// </code>
         /// </example>
@@ -528,6 +532,7 @@ namespace Rackspace.CloudFiles
                 throw;
             }
         }
+
         #endregion
 
     }

@@ -5,71 +5,7 @@ using Rackspace.CloudFiles.Request;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request
 {
-    [TestFixture]
-    public class when_getting_information_of_a_storage_item_and_storage_url_is_null
-    {
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void should_throw_argument_null_exception()
-        {
-            new GetStorageItemInformation(null, "containername", "storageitemname");
-        }
-    }
-
-    [TestFixture]
-    public class when_getting_information_of_a_storage_item_and_storage_url_is_emptry_string
-    {
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void should_throw_argument_null_exception()
-        {
-            new GetStorageItemInformation("", "containername", "storageitemname");
-        }
-    }
-
-    [TestFixture]
-    public class when_getting_information_of_a_storage_item_and_container_name_is_null
-    {
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void should_throw_argument_null_exception()
-        {
-            new GetStorageItemInformation("http://storageurl", null, "storageitemname");
-        }
-    }
-
-    [TestFixture]
-    public class when_getting_information_of_a_storage_item_and_container_name_is_emptry_string
-    {
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void should_throw_argument_null_exception()
-        {
-            new GetStorageItemInformation("http://storageurl", "", "storageitemname");
-        }
-    }
-
-    [TestFixture]
-    public class when_getting_information_of_a_storage_item_and_storage_item_name_is_null
-    {
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void should_throw_argument_null_exception()
-        {
-            new GetStorageItemInformation("http://storageurl", "containername", null);
-        }
-    }
-
-    [TestFixture]
-    public class when_getting_information_of_a_storage_item_and_storage_item_name_is_emptry_string
-    {
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void should_throw_argument_null_exception()
-        {
-            new GetStorageItemInformation("http://storageurl", "containername", "");
-        }
-    }
+  
 
     [TestFixture]
     public class when_getting_information_of_a_storage_item

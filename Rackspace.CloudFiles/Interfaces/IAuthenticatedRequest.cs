@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Net;
 using Rackspace.CloudFiles.domain.response.Interfaces;
@@ -12,7 +11,7 @@ namespace Rackspace.CloudFiles.Interfaces
         string ContentType { get; set; }
         WebHeaderCollection Headers { get; set; }
         bool AllowWriteStreamBuffering { get; set; }
-        void SetContent(Stream stream, StorageObject.ProgressCallback action);
+        void SetContent(Stream stream);
         ICloudFilesResponse SubmitCdnRequest(string appendtocdnurl);
     }
 }

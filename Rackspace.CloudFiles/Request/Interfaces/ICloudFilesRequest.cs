@@ -22,6 +22,6 @@ namespace Rackspace.CloudFiles.Request.Interfaces
         bool SendChunked { get; set; }
         Stream ContentStream { get; }
         Stream GetRequestStream();
-        void SetContent(Stream stream, StorageObject.ProgressCallback progress);
+        void SetContent(Stream stream);
     }
 }

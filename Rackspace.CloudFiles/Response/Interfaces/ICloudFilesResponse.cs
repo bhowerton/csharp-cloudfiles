@@ -27,6 +27,6 @@ namespace Rackspace.CloudFiles.domain.response.Interfaces
         DateTime LastModified { get; }
         Stream GetResponseStream();
         void Dispose();
-        event StorageObject.ProgressCallback Progress;
+       
     }
 }

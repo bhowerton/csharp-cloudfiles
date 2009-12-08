@@ -22,13 +22,13 @@ namespace Rackspace.CloudFiles.Request
     {
         private readonly HttpWebRequest _httpWebRequest;
         private readonly HttpProxy _httpProxy;
-        private event StorageObject.ProgressCallback Progress;
+      
 
-        public void SetContent(Stream stream, StorageObject.ProgressCallback progress)
+        public void SetContent(Stream stream)
         {
             this.ContentStream = stream;
             this.ContentLength = stream.Length;
-            this.Progress = progress;
+            
 
             this.ETag = StringifyMD5(new MD5CryptoServiceProvider().ComputeHash(this.ContentStream));
             this.ContentStream.Seek(0, 0);
@@ -220,11 +220,7 @@ namespace Rackspace.CloudFiles.Request
                 {
                     webstream.Write(buffer, 0, amt);
 
-                    //Fire the progress event
-                    if (this.Progress != null)
-                    {
-                        this.Progress(amt);
-                    }
+               
                 }
 
                 ContentStream.Close();

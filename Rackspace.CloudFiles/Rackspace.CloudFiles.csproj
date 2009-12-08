@@ -14,7 +14,7 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <PublishUrl>http://localhost/com.mosso.cloudfiles/</PublishUrl>
+    <PublishUrl>http://localhost/Rackspace.Cloudfiles/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -40,7 +40,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <OutputType>Library</OutputType>
-    <RootNamespace>com.mosso.cloudfiles</RootNamespace>
+    <RootNamespace>Rackspace.Cloudfiles</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\Debug\Rackspace.Cloudfiles.xml</DocumentationFile>
     <NoWarn>1587, 1591</NoWarn>
@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
     <OutputType>Library</OutputType>
     <DebugSymbols>true</DebugSymbols>
-    <RootNamespace>com.mosso.cloudfiles</RootNamespace>
+    <RootNamespace>Rackspace.Cloudfiles</RootNamespace>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <NoWarn>1587, 1591</NoWarn>
     <DocumentationFile>bin\Release\Rackspace.Cloudfiles.xml</DocumentationFile>
@@ -71,14 +71,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticate.cs" />
+    <Compile Include="AuthenticatedRequestFactory.cs" />
     <Compile Include="Domain\RequestInfo.cs" />
     <Compile Include="HttpVerb.cs" />
+    <Compile Include="Interfaces\IAccount.cs" />
     <Compile Include="Interfaces\IAuthenticatedRequestFactory.cs" />
+    <Compile Include="Interfaces\IContainer.cs" />
     <Compile Include="Interfaces\IContainerRepository.cs" />
     <Compile Include="Interfaces\IAuthenticatedRequest.cs" />
     <Compile Include="Interfaces\IObjectRepository.cs" />
     <Compile Include="Interfaces\IWebRequest.cs" />
+    <Compile Include="PrivateContainer.cs" />
     <Compile Include="ProdWebRequest.cs" />
+    <Compile Include="PublicContainer.cs" />
     <Compile Include="Request\Format.cs" />
     <Compile Include="Request\SetAclOnPublicContainer.cs" />
     <Compile Include="Request\SetLoggingToContainerRequest.cs" />
@@ -121,7 +126,7 @@
     <Compile Include="Exceptions\PreconditionFailedException.cs" />
     <Compile Include="Exceptions\PublicContainerNotFoundException.cs" />
     <Compile Include="Exceptions\StorageItemNotFoundException.cs" />
-    <Compile Include="Connection.cs" />
+    <Compile Include="Account.cs" />
     <Compile Include="StorageObject.cs" />
     <Compile Include="Domain\UserCredentials.cs" />
     <Compile Include="Exceptions\InvalidContainerNameException.cs" />

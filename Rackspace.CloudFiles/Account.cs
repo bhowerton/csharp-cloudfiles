@@ -19,7 +19,7 @@ using Rackspace.CloudFiles.utils;
 /// <example>
 /// <code>
 /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-/// IConnection connection = new Connection(userCredentials);
+/// IConnection connection = new Account(userCredentials);
 /// </code>
 /// </example>
 namespace Rackspace.CloudFiles
@@ -42,12 +42,12 @@ namespace Rackspace.CloudFiles
     /// <example>
     /// <code>
     /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-    /// IConnection connection = new Connection(userCredentials);
+    /// IAccount connection = new Account(userCredentials);
     /// </code>
     /// </example>
-    public class Connection //: IConnection
+    public class Account : IAccount
     {
-        private readonly IAuthenticatedRequestFactory _authenticatedRequestFactory;
+       
 
         #region protected and private methods
 
@@ -101,7 +101,7 @@ namespace Rackspace.CloudFiles
         private string BuildAccountJson()
         {
             string jsonResponse = "";
-            var request = _authenticatedRequestFactory.CreateRequest();
+            var request = Connection.CreateRequest();
             request.Method = HttpVerb.GET;
             var response = request.SubmitStorageRequest("?format=" + EnumHelper.GetDescription(Format.JSON));
             if (response.ContentBody.Count > 0)
@@ -114,7 +114,7 @@ namespace Rackspace.CloudFiles
         AccountInformation BuildAccount()
         {
 
-            var request = _authenticatedRequestFactory.CreateRequest();
+            var request = Connection.CreateRequest();
             request.Method = HttpVerb.HEAD;
             var getAccountInformationResponse = request.SubmitStorageRequest("/");
             return new AccountInformation(getAccountInformationResponse.Headers[Constants.X_ACCOUNT_CONTAINER_COUNT], getAccountInformationResponse.Headers[Constants.X_ACCOUNT_BYTES_USED]);
@@ -126,7 +126,7 @@ namespace Rackspace.CloudFiles
 
             //	var accountInformationXml = new GetAccountInformationSerialized(StorageUrl, Format.XML);
             ///    var getAccountInformationXmlResponse = _requestfactory.Submit(accountInformationXml, AuthToken);
-            var request = _authenticatedRequestFactory.CreateRequest();
+            var request = Connection.CreateRequest();
             request.Method = HttpVerb.GET;
             var getAccountInformationXmlResponse = request.SubmitStorageRequest("?format=" + EnumHelper.GetDescription(Format.XML));
             if (getAccountInformationXmlResponse.ContentBody.Count == 0)
@@ -155,7 +155,7 @@ namespace Rackspace.CloudFiles
         List<string> BuildContainerList()
         {
             IList<string> containerList = new List<string>();
-            var request = _authenticatedRequestFactory.CreateRequest();
+            var request = Connection.CreateRequest();
             request.Method = HttpVerb.GET;
             var getContainersResponse = request.SubmitStorageRequest("");
             if (getContainersResponse.Status == HttpStatusCode.OK)
@@ -176,9 +176,9 @@ namespace Rackspace.CloudFiles
 
         }
         #endregion
-        public Connection(IAuthenticatedRequestFactory authenticatedRequestFactory)
+        public Account(IAuthenticatedRequestFactory authenticatedRequestFactory)
         {
-            _authenticatedRequestFactory = authenticatedRequestFactory;
+            Connection = authenticatedRequestFactory;
 
         }
         #region publicmethods
@@ -212,7 +212,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// AccountInformation accountInformation = connection.GetAccountInformation();
         /// </code>
         /// </example>
@@ -232,7 +232,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// string jsonReturnValue = connection.GetAccountInformationJson();
         /// </code>
         /// </example>
@@ -251,7 +251,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// XmlDocument xmlReturnValue = connection.GetAccountInformationXml();
         /// </code>
         /// </example>
@@ -272,20 +272,20 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// connection.CreateContainer("container name");
         /// </code>
         /// </example>
         /// <param name="containerName">The desired name of the container</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public void CreateContainer(string containerName)
+        public Container CreateContainer(string containerName)
         {
             Ensure.NotNullOrEmpty(containerName);
 
             StartProcess
                 .ByDoing(() =>
                              {
-                                 var request = _authenticatedRequestFactory.CreateRequest();
+                                 var request = Connection.CreateRequest();
                                  request.Method = HttpVerb.PUT;
                                  var createContainerResponse = request.SubmitStorageRequest(containerName.Encode());
                                  if (createContainerResponse.Status == HttpStatusCode.Accepted)
@@ -294,6 +294,7 @@ namespace Rackspace.CloudFiles
                              })
                 .AndIfErrorThrownIs<Exception>()
                 .Do(Nothing);
+            return new Container(containerName, this);
         }
 
         /// <summary>
@@ -302,7 +303,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// connection.DeleteContainer("container name");
         /// </code>
         /// </example>
@@ -316,7 +317,7 @@ namespace Rackspace.CloudFiles
             StartProcess
                 .ByDoing(() =>
                              {
-                                 var request = _authenticatedRequestFactory.CreateRequest();
+                                 var request = Connection.CreateRequest();
                                  request.Method = HttpVerb.DELETE;
                                  request.SubmitStorageRequest(containerName.Encode());
                              }
@@ -331,7 +332,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// List{string} containers = connection.GetContainers();
         /// </code>
         /// </example>
@@ -354,7 +355,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// List{string} containers = connection.GetPublicContainers();
         /// </code>
         /// </example>
@@ -363,7 +364,7 @@ namespace Rackspace.CloudFiles
         {
             try
             {
-                var request = _authenticatedRequestFactory.CreateRequest();
+                var request = Connection.CreateRequest();
                 var getPublicContainersResponse = request.SubmitCdnRequest("?enabled_only=true");
                 var containerList = getPublicContainersResponse.ContentBody;
                 getPublicContainersResponse.Dispose();
@@ -387,7 +388,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// Container container = connection.GetPublicContainerInformation("container name")
         /// </code>
         /// </example>
@@ -400,12 +401,12 @@ namespace Rackspace.CloudFiles
             Ensure.ValidContainerName(containerName);
             try
             {
-                var request = _authenticatedRequestFactory.CreateRequest();
+                var request = Connection.CreateRequest();
                 request.Method = HttpVerb.HEAD;
                 var response = request.SubmitCdnRequest(containerName.Encode() + "?enabled_only=true");
                 return response == null ?
                     null
-                    : new Container(containerName, _authenticatedRequestFactory) { CdnUri = response.Headers[Constants.X_CDN_URI], TTL = Convert.ToInt32(response.Headers[Constants.X_CDN_TTL]) };
+                    : new Container(containerName, this) { CdnUri = response.Headers[Constants.X_CDN_URI], TTL = Convert.ToInt32(response.Headers[Constants.X_CDN_TTL]) };
             }
             catch (WebException ex)
             {
@@ -429,7 +430,7 @@ namespace Rackspace.CloudFiles
                 ByDoing(() =>
                                          {
 
-                                             var request = _authenticatedRequestFactory.CreateRequest();
+                                             var request = Connection.CreateRequest();
                                              request.Method = HttpVerb.GET;
                                              var getSerializedResponse =
                                                  request.SubmitCdnRequest("?format=" +
@@ -473,7 +474,7 @@ namespace Rackspace.CloudFiles
         {
             return StartProcess.ByDoing(() =>
                                                     {
-                                                        var request = _authenticatedRequestFactory.CreateRequest();
+                                                        var request = Connection.CreateRequest();
                                                         request.Method = HttpVerb.GET;
                                                         var getSerializedResponse =
                                                             request.SubmitCdnRequest("?format=" +
@@ -502,7 +503,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// Container container = connection.GetContainerInformation("container name");
         /// </code>
         /// </example>
@@ -515,10 +516,10 @@ namespace Rackspace.CloudFiles
             Ensure.ValidContainerName(containerName);
             try
             {
-                var authenticatedRequest = _authenticatedRequestFactory.CreateRequest();
+                var authenticatedRequest = Connection.CreateRequest();
                 authenticatedRequest.Method = HttpVerb.HEAD;
                 var response = authenticatedRequest.SubmitStorageRequest(containerName);
-                var container = new Container(containerName, _authenticatedRequestFactory)
+                var container = new Container(containerName, this)
                 {
                     ByteCount =
                         long.Parse(
@@ -546,9 +547,12 @@ namespace Rackspace.CloudFiles
                 throw;
             }
         }
-      
 
 
+        public IAuthenticatedRequestFactory Connection
+        {
+            get; private set;
+        }
 
         #endregion
     }

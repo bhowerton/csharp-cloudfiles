@@ -17,7 +17,7 @@ namespace Rackspace.CloudFiles.Specs.Domain
         {
             authUrl = new Uri("http://authurl");
 
-            httpProxy = new HttpProxy("192.1.1.2", "proxyname", "proxypass", "foo.com");
+            httpProxy = new HttpProxy("192.168.1.2", "proxyname", "proxypass", "foo.com");
 
             userCreds = new UserCredentials(
                 authUrl,
@@ -56,7 +56,7 @@ namespace Rackspace.CloudFiles.Specs.Domain
         [Test]
         public void Should_have_account_name()
         {
-            Assert.That(userCreds.AccountName, Is.EqualTo("loginname"));
+            Assert.That(userCreds.AccountName, Is.EqualTo("myaccount"));
         }
 
         [Test]
@@ -74,13 +74,13 @@ namespace Rackspace.CloudFiles.Specs.Domain
         [Test]
         public void Should_have_proxy_address_when_proxy_information_is_set()
         {
-            Assert.That(userCreds.HttpProxy.ProxyAddress, Is.EqualTo("foo.com"));
+            Assert.That(userCreds.HttpProxy.ProxyAddress, Is.EqualTo("192.168.1.2"));
         }
 
         [Test]
         public void Should_have_proxy_domain_when_proxy_information_is_set()
         {
-            Assert.That(userCreds.HttpProxy.ProxyDomain, Is.EqualTo("proxydomain"));
+            Assert.That(userCreds.HttpProxy.ProxyDomain, Is.EqualTo("foo.com"));
         }
     }
 

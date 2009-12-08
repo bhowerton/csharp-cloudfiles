@@ -18,16 +18,29 @@ namespace Rackspace.CloudFiles
         {
 
         }
-        public Connection Connect(string username, string apikey, HttpProxy webProxy)
+        public Account ConnectToAccount(string username, string apikey)
         {
-            _request.WebProxy = webProxy;
             _request.Url = Constants.AUTH_URL;
             _request.Method = "GET";
-            _request.Headers.Add(Constants.X_AUTH_USER,username.Encode());
+            _request.Headers.Add(Constants.X_AUTH_USER, username.Encode());
             _request.Headers.Add(Constants.X_AUTH_KEY, apikey.Encode());
             var authenicatedrequest = _request.Submit();
-            return new Connection(authenicatedrequest);
+            return new Account(authenicatedrequest);
+        }
+        public Account ConnectToAccount(string username, string apikey, HttpProxy webproxy)
+        {
+            _request.WebProxy = webproxy;
+            return ConnectToAccount(username, apikey);
             
+        }
+        public static Account Connection(string username, string apikey, HttpProxy webproxy)
+        {
+            return new Authenticate().ConnectToAccount(username, apikey, webproxy);
+             
+        }
+        public static Account Connection(string username, string apikey)
+        {
+            return new Authenticate().ConnectToAccount(username, apikey);
         }
        
     }

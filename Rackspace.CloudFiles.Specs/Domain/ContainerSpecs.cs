@@ -14,7 +14,7 @@ namespace Rackspace.CloudFiles.Specs.Domain
         public void SetUp()
         {
             containerName = "foocontainer";
-            container = new Container(containerName, new Mock<IAuthenticatedRequestFactory>().Object);
+            container = new Container(containerName, new Mock<IAccount>().Object);
         }
 
         [Test]

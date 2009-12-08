@@ -17,7 +17,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteStorageItem.txt");
         /// </code>
         /// </example>
@@ -38,7 +38,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteStorageItem.txt", "C:\Local\File\Path\file.txt");
         /// </code>
         /// </example>
@@ -61,7 +61,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// Dictionary{RequestHeaderFields, string} requestHeaderFields = Dictionary{RequestHeaderFields, string}();
         /// string dummy_etag = "5c66108b7543c6f16145e25df9849f7f";
         /// requestHeaderFields.Add(RequestHeaderFields.IfMatch, dummy_etag);
@@ -117,7 +117,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// StorageObject storageItem = connection.GetStorageItemInformation("container name", "RemoteStorageItem.txt");
         /// </code>
         /// </example>
@@ -192,7 +192,7 @@ namespace Rackspace.CloudFiles
         /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
         /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// connection.AddProgressWatcher(fileTransferProgress);
         /// connection.OperationComplete += transferComplete;
         /// connection.GetStorageObjectAsync("container name", "RemoteStorageItem.txt", "RemoteStorageItem.txt", requestHeaderFields);
@@ -265,7 +265,7 @@ namespace Rackspace.CloudFiles
         /// }
         /// 
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials);
+        /// IConnection connection = new Account(userCredentials);
         /// connection.AddProgressWatcher(fileTransferProgress);
         /// connection.OperationComplete += transferComplete;
         /// connection.GetStorageObjectAsync("container name", "RemoteStorageItem.txt", "RemoteStorageItem.txt");
@@ -304,7 +304,7 @@ namespace Rackspace.CloudFiles
         /// <example>
         /// <code>
         /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Connection(userCredentials); 
+        /// IConnection connection = new Account(userCredentials); 
         /// Dictionary{RequestHeaderFields, string} requestHeaderFields = Dictionary{RequestHeaderFields, string}();
         /// string dummy_etag = "5c66108b7543c6f16145e25df9849f7f";
         /// requestHeaderFields.Add(RequestHeaderFields.IfMatch, dummy_etag);

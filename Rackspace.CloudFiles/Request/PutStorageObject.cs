@@ -27,8 +27,6 @@ namespace Rackspace.CloudFiles.Request
         private Dictionary<string, string> _mimetypes;
 
 
-        public event StorageObject.ProgressCallback Progress;
-
         /// <summary>
         /// PutStorageObject constructor
         /// </summary>
@@ -145,7 +143,7 @@ namespace Rackspace.CloudFiles.Request
             request.AllowWriteStreamBuffering = false;
 
            // request.ContentType = this.ContentType();
-            request.SetContent(filetosend, Progress);
+            request.SetContent(filetosend);
         }
 
     }

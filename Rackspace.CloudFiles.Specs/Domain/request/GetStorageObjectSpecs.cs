@@ -9,32 +9,7 @@ using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.Specs.Domain.request
 {
-    [TestFixture]
-    public class When_getting_a_storage_object
-    {
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Should_throw_an_exception_when_the_storage_url_is_null()
-        {
-            new GetStorageObject(null, "a", "a");
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Should_throw_an_exception_when_the_container_bame_is_null()
-        {
-            new GetStorageObject("a", null, "a");
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Should_throw_an_exception_when_the_storage_object_name_is_null()
-        {
-            new GetStorageObject("a", "a", null);
-        }
-
-     
-    }
+   
 
     [TestFixture]
     public class When_getting_a_storage_item_and_providing_a_if_match_request_header

@@ -63,6 +63,8 @@
     <Compile Include="Domain\request\GetStorageObjectSpecs.cs" />
     <Compile Include="Domain\request\PutStorageObjectSpecs.cs" />
     <Compile Include="Domain\request\SetPublicContainerDetailsSpecs.cs" />
+    <Compile Include="Foo.cs" />
+    <Compile Include="SpecContainer.cs" />
     <Compile Include="Utils\CreateString.cs" />
     <Compile Include="Utils\EnsureSpecs.cs" />
     <Compile Include="Domain\ContainerSpecs.cs" />

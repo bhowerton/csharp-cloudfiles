@@ -3,9 +3,8 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using Rackspace.CloudFiles.domain;
 
-namespace Rackspace.CloudFiles.domain
+namespace Rackspace.CloudFiles.Specs.Domain
 {
-    
     [TestFixture]
     public class When_checking_account
     {
