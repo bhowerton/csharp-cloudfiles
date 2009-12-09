@@ -48,13 +48,13 @@ namespace Rackspace.CloudFiles
     /// </example>
     public class Account : IAccount
     {
-       
+
 
         #region protected and private methods
 
 
 
-    
+
         private Dictionary<string, string> GetMetadata(ICloudFilesResponse getStorageItemResponse)
         {
             var metadata = new Dictionary<string, string>();
@@ -158,10 +158,10 @@ namespace Rackspace.CloudFiles
             Connection = authenticatedRequestFactory;
 
         }
-        
+
         private readonly Action<Exception> Nothing = (ex) => { };
 
-       
+
         /// <summary>
         /// This method is used to create a container on cloudfiles with a given name
         /// </summary>
@@ -178,18 +178,14 @@ namespace Rackspace.CloudFiles
         {
             Ensure.NotNullOrEmpty(containerName);
             Ensure.ValidContainerName(containerName);
-            StartProcess
-                .ByDoing(() =>
-                             {
-                                 var request = Connection.CreateRequest();
-                                 request.Method = HttpVerb.PUT;
-                                 var createContainerResponse = request.SubmitStorageRequest(containerName.Encode());
-                                 if (createContainerResponse.Status == HttpStatusCode.Accepted)
-                                     throw new ContainerAlreadyExistsException("The container already exists");
+            
+            var request = Connection.CreateRequest();
+            request.Method = HttpVerb.PUT;
+            var createContainerResponse = request.SubmitStorageRequest(containerName.Encode());
+            if (createContainerResponse.Status == HttpStatusCode.Accepted)
+                throw new ContainerAlreadyExistsException("The container already exists");
 
-                             })
-                .AndIfErrorThrownIs<Exception>()
-                .Do(Nothing);
+
             return new Container(containerName, this);
         }
 
@@ -222,30 +218,32 @@ namespace Rackspace.CloudFiles
                 .Do(ex => DetermineReasonForError(ex, containerName));
         }
 
-   
+
 
 
 
         public IAuthenticatedRequestFactory Connection
         {
-            get; private set;
+            get;
+            private set;
         }
 
         public long BytesUsed
         {
-            get; private set;
+            get;
+            private set;
         }
         public long StorageObjectCount
         {
             get { throw new NotImplementedException(); }
         }
 
-       
+
 
         public PrivateContainer GetContainer(string containerName)
         {
             var request = Connection.CreateRequest();
-            var response= request.SubmitStorageRequest(containerName);
+            var response = request.SubmitStorageRequest(containerName);
             return new PrivateContainer(containerName, this);
         }
     }
