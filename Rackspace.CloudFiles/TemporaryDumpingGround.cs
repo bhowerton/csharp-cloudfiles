@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using System.Threading;
 using Rackspace.CloudFiles.domain;
 using Rackspace.CloudFiles.exceptions;
@@ -352,5 +353,316 @@ namespace Rackspace.CloudFiles
             throw new AbandonedMutexException();
         }
 
+//        /// <summary>
+//        /// This method sets a container as public on the CDN
+//        /// </summary>
+//        /// <example>
+//        /// <code>
+//        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
+//        /// IConnection connection = new Account(userCredentials);
+//        /// Uri containerPublicUrl = connection.MarkContainerAsPublic("container name");
+//        /// </code>
+//        /// </example>
+//        /// <param name="containerName">The name of the container to mark public</param>
+//        /// <returns>A string representing the URL of the public container or null</returns>
+//        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
+//        public Uri MarkContainerAsPublic()
+//        {
+//            return MarkContainerAsPublic(-1);
+//        }
+//
+//        /// <summary>
+//        /// This method sets a container as private on the CDN
+//        /// </summary>
+//        /// <example>
+//        /// <code>
+//        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
+//        /// IConnection connection = new Account(userCredentials);
+//        /// connection.MarkContainerAsPrivate("container name");
+//        /// </code>
+//        /// </example>
+//        /// <param name="containerName">The name of the container to mark public</param>
+//        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
+//        public void MarkContainerAsPrivate(string containerName)
+//        {
+//            Ensure.NotNullOrEmpty(containerName);
+//            try
+//            {
+//                var request = _account.Connection.CreateRequest();
+//                request.Method = HttpVerb.POST;
+//                request.Headers.Add(Constants.X_CDN_ENABLED, "FALSE");
+//                request.SubmitCdnRequest(containerName.Encode());
+//
+//            }
+//            catch (WebException we)
+//            {
+//
+//                var response = (HttpWebResponse)we.Response;
+//                if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
+//                    throw new UnauthorizedAccessException("Your access credentials are invalid or have expired. ");
+//                if (response != null && response.StatusCode == HttpStatusCode.NotFound)
+//                    throw new PublicContainerNotFoundException("The specified container does not exist.");
+//                throw;
+//            }
+//
+//        }
+
+//        /// <summary>
+//        /// This method sets a container as public on the CDN
+//        /// </summary>
+//        /// <example>
+//        /// <code>
+//        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
+//        /// IConnection connection = new Account(userCredentials);
+//        /// Uri containerPublicUrl = connection.MarkContainerAsPublic("container name", 12345);
+//        /// </code>
+//        /// </example>
+//        /// <param name="timeToLiveInSeconds">The maximum time (in seconds) content should be kept alive on the CDN before it checks for freshness.</param>
+//        /// <returns>A string representing the URL of the public container or null</returns>
+//        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
+//        public Uri MarkContainerAsPublic(int timeToLiveInSeconds)
+//        {
+//
+//            try
+//            {
+//
+//                var request = _account.Connection.CreateRequest();
+//                request.Method = HttpVerb.PUT;
+//                if (timeToLiveInSeconds > -1) { request.Headers.Add(Constants.X_CDN_TTL, timeToLiveInSeconds.ToString()); }
+//                var response = request.SubmitCdnRequest(Name);
+//
+//                return response == null ? null : new Uri(response.Headers[Constants.X_CDN_URI]);
+//            }
+//            catch (WebException we)
+//            {
+//
+//                var response = (HttpWebResponse)we.Response;
+//                if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
+//                    throw new AuthenticationFailedException("You do not have permission to request the list of public containers.");
+//                throw;
+//            }
+//        }
+
+//        /// <summary>
+//        /// Retrieves a Container object containing the public CDN information
+//        /// </summary>
+//        /// <example>
+//        /// <code>
+//        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
+//        /// IConnection connection = new Account(userCredentials);
+//        /// Container container = connection.GetPublicContainerInformation("container name")
+//        /// </code>
+//        /// </example>
+//        /// <param name="containerName">The name of the container to query about</param>
+//        /// <returns>An instance of Container with appropriate CDN information or null</returns>
+//        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
+//        public Container GetPublicContainerInformation(string containerName)
+//        {
+//            Ensure.NotNullOrEmpty(containerName);
+//            Ensure.ValidContainerName(containerName);
+//            try
+//            {
+//                var request = Connection.CreateRequest();
+//                request.Method = HttpVerb.HEAD;
+//                var response = request.SubmitCdnRequest(containerName.Encode() + "?enabled_only=true");
+//                return response == null ?
+//                    null
+//                    : new Container(containerName, this) { CdnUri = response.Headers[Constants.X_CDN_URI], TTL = Convert.ToInt32(response.Headers[Constants.X_CDN_TTL]) };
+//            }
+//            catch (WebException ex)
+//            {
+//
+//
+//                var webResponse = (HttpWebResponse)ex.Response;
+//                if (webResponse != null && webResponse.StatusCode == HttpStatusCode.Unauthorized)
+//                    throw new UnauthorizedAccessException("Your authorization credentials are invalid or have expired.");
+//                if (webResponse != null && webResponse.StatusCode == HttpStatusCode.NotFound)
+//                    throw new ContainerNotFoundException("The specified container does not exist.");
+//                throw;
+//            }
+//        }
+//        //private bool IsAuthenticated()
+//        //{
+//        //	return this.isNotNullOrEmpty(AuthToken, StorageUrl, this.CdnManagementUrl) && _usercreds != null;
+//        //}
+//        private string getContainerCDNUri(Container container)
+//        {
+//            try
+//            {
+//                //    var public_container = GetPublicContainerInformation(container.Name);
+//                //   return public_container == null ? "" : public_container.CdnUri;
+//                throw new NotImplementedException();
+//            }
+//            catch (ContainerNotFoundException)
+//            {
+//                return "";
+//            }
+//            catch (WebException we)
+//            {
+//
+//
+//                var response = (HttpWebResponse)we.Response;
+//                if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
+//                    throw new AuthenticationFailedException(we.Message);
+//                throw;
+//            }
+//        }
+//        /// <summary>
+//        /// This method retrieves the names of the of the containers made public on the CDN
+//        /// </summary>
+//        /// <example>
+//        /// <code>
+//        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
+//        /// IConnection connection = new Account(userCredentials);
+//        /// List{string} containers = connection.GetPublicContainers();
+//        /// </code>
+//        /// </example>
+//        /// <returns>A list of the public containers</returns>
+//        public List<string> GetPublicContainers()
+//        {
+//            try
+//            {
+//                var request = Connection.CreateRequest();
+//                var getPublicContainersResponse = request.SubmitCdnRequest("?enabled_only=true");
+//                var containerList = getPublicContainersResponse.ContentBody;
+//                getPublicContainersResponse.Dispose();
+//
+//                return containerList.ToList();
+//            }
+//            catch (WebException we)
+//            {
+//
+//                var response = (HttpWebResponse)we.Response;
+//                if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
+//                    throw new AuthenticationFailedException("You do not have permission to request the list of public containers.");
+//                throw;
+//            }
+//        }
+
+//
+//        public XmlDocument GetPublicAccountInformationXML()
+//        {
+//            return StartProcess.
+//
+//                ByDoing(() =>
+//                {
+//
+//                    var request = Connection.CreateRequest();
+//                    request.Method = HttpVerb.GET;
+//                    var getSerializedResponse =
+//                        request.SubmitCdnRequest("?format=" +
+//                                                 EnumHelper.GetDescription(Format.XML) +
+//                                                 "&enabled_only=true");
+//                    var xmlResponse = String.Join("",
+//                                                  getSerializedResponse.ContentBody.ToArray());
+//                    getSerializedResponse.Dispose();
+//
+//                    if (xmlResponse == null) return new XmlDocument();
+//
+//                    var xmlDocument = new XmlDocument();
+//                    try
+//                    {
+//                        xmlDocument.LoadXml(xmlResponse);
+//
+//                    }
+//                    catch (XmlException)
+//                    {
+//                        return xmlDocument;
+//                    }
+//
+//                    return xmlDocument;
+//                })
+//                .AndIfErrorThrownIs<WebException>()
+//                .Do((ex) =>
+//                {
+//                    var response = (HttpWebResponse)ex.Response;
+//                    if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
+//                        throw new UnauthorizedAccessException(
+//                            "Your access credentials are invalid or have expired. ");
+//                    if (response != null && response.StatusCode == HttpStatusCode.NotFound)
+//                        throw new PublicContainerNotFoundException("The specified container does not exist.");
+//
+//
+//                });
+//        }
+//
+//
+//        public string GetPublicAccountInformationJSON()
+//        {
+//            return StartProcess.ByDoing(() =>
+//            {
+//                var request = Connection.CreateRequest();
+//                request.Method = HttpVerb.GET;
+//                var getSerializedResponse =
+//                    request.SubmitCdnRequest("?format=" +
+//                                             EnumHelper.GetDescription(Format.JSON) +
+//                                             "&enabled_only=true");
+//
+//                return string.Join("",
+//                                   getSerializedResponse.ContentBody.ToArray());
+//            })
+//                .AndIfErrorThrownIs<WebException>()
+//                .Do((ex) =>
+//                {
+//                    var response = (HttpWebResponse)ex.Response;
+//                    if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
+//                        throw new UnauthorizedAccessException(
+//                            "Your access credentials are invalid or have expired. ");
+//                    if (response != null && response.StatusCode == HttpStatusCode.NotFound)
+//                        throw new PublicContainerNotFoundException("The specified container does not exist.");
+//
+//
+//                });
+//        }
+//        /// <summary>
+//        /// This method retrieves the number of storage objects in a container, and the total size, in bytes, of the container
+//        /// </summary>
+//        /// <example>
+//        /// <code>
+//        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
+//        /// IConnection connection = new Account(userCredentials);
+//        /// Container container = connection.GetContainerInformation("container name");
+//        /// </code>
+//        /// </example>
+//        /// <param name="containerName">The name of the container to query about</param>
+//        /// <returns>An instance of container, with the number of storage objects contained and total byte allocation</returns>
+//        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
+//        public Container GetContainerInformation(string containerName)
+//        {
+//            Ensure.NotNullOrEmpty(containerName);
+//            Ensure.ValidContainerName(containerName);
+//            try
+//            {
+//                var authenticatedRequest = Connection.CreateRequest();
+//                authenticatedRequest.Method = HttpVerb.HEAD;
+//                var response = authenticatedRequest.SubmitStorageRequest(containerName);
+//                var container = new Container(containerName, this)
+//                {
+//                    ByteCount =
+//                        long.Parse(
+//                        response.Headers[Constants.X_CONTAINER_BYTES_USED]),
+//                    ObjectCount =
+//                        long.Parse(
+//                        response.Headers[
+//                            Constants.X_CONTAINER_STORAGE_OBJECT_COUNT])
+//                };
+//                var url = getContainerCDNUri(container);
+//                if (!string.IsNullOrEmpty(url))
+//                    url += "/";
+//                container.CdnUri = url;
+//                return container;
+//            }
+//            catch (WebException we)
+//            {
+//
+//
+//                var response = (HttpWebResponse)we.Response;
+//                if (response != null && response.StatusCode == HttpStatusCode.NotFound)
+//                    throw new ContainerNotFoundException("The requested container does not exist");
+//                if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
+//                    throw new AuthenticationFailedException(we.Message);
+//                throw;
+//            }
+//        }
     }
 }

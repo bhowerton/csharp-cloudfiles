@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Authenticate.cs" />
     <Compile Include="AuthenticatedRequestFactory.cs" />
+    <Compile Include="CdnService.cs" />
     <Compile Include="Domain\RequestInfo.cs" />
     <Compile Include="HttpVerb.cs" />
     <Compile Include="Interfaces\IAccount.cs" />

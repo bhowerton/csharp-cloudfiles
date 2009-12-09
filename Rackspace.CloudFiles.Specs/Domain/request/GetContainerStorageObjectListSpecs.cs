@@ -52,12 +52,12 @@ namespace Rackspace.CloudFiles.Specs.Domain.request
         {
             var parameters = new Dictionary<GetItemListParameters, string> { { GetItemListParameters.Prefix, "a" } };
             Uri uri;
-            Mock<ICloudFilesRequest> _mockrequest = GetMockrequest(parameters, out uri);
+            Mock<ICloudFilesRequest> mockrequest = GetMockrequest(parameters, out uri);
 
             AssertIt.should("have url with storage url at beginning ", () => uri.StartsWith("http://storageurl"));
             AssertIt.should("have url with container name followed by query string with prefix at the end ",
                    () => uri.EndsWith("containername?prefix=a"));
-            AssertIt.should("use HTTP GET method", () => _mockrequest.VerifySet(x => x.Method = "GET"));
+            AssertIt.should("use HTTP GET method", () => mockrequest.VerifySet(x => x.Method = "GET"));
         }
         [Test]
         public void when_getting_a_list_of_items_in_a_container_with_path_query_parameter()

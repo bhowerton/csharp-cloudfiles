@@ -1,14 +1,10 @@
 using System;
+using System.Text;
 using Rackspace.CloudFiles.exceptions;
 
 namespace Rackspace.CloudFiles.utils
 {
-    public interface IEnsure
-    {
-        void NotNullOrEmpty(params string[] args);
-        void ValidStorageObjectName(string name);
-        void ValidContainerName(string name);
-    }
+    
 
     public static class Ensure
     {
@@ -34,7 +30,7 @@ namespace Rackspace.CloudFiles.utils
             if(
                 name.IndexOf("?") < 0 &&
                    name.IndexOf("/") < 0 &&
-                   name.Length <= Constants.MAX_CONTAINER_NAME_LENGTH
+                   Encoding.Unicode.GetByteCount(name) <= Constants.MAX_CONTAINER_NAME_LENGTH
                 
                 )
                 return;

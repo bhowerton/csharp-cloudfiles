@@ -8,13 +8,13 @@ namespace Rackspace.CloudFiles.Specs.Domain
     [TestFixture]
     public class When_creating_a_container
     {
-        private Container container;
+        private PublicContainer container;
         private string containerName;
         [SetUp]
         public void SetUp()
         {
             containerName = "foocontainer";
-            container = new Container(containerName, new Mock<IAccount>().Object);
+            container = new PublicContainer(containerName, new Mock<IAccount>().Object);
         }
 
         [Test]
@@ -27,8 +27,7 @@ namespace Rackspace.CloudFiles.Specs.Domain
         public void Should_have_time_to_live_initialized_to_negative_one()
         {
             Assert.That(container.TTL, Is.EqualTo(-1));
-            container.TTL = 300;
-            Assert.That(container.TTL, Is.EqualTo(300));
+            
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Rackspace.CloudFiles
             Name = containerName;
             ObjectCount = 0;
             ByteCount = 0;
-            TTL = -1;
+          
         }
         #region properties
 
@@ -58,25 +58,7 @@ namespace Rackspace.CloudFiles
         /// </summary>
         public string Name { get; private set; }
 
-        /// <summary>
-        /// The maximum time (in seconds) content should be kept alive on the CDN before it checks for freshness.
-        /// </summary>
-        public int TTL { get; set; }
 
-        /// <summary>
-        /// The URI one can use to access objects in this container via the CDN. No time based URL stuff will be included with this URI
-        /// </summary>
-        public string CdnUri { get; set; }
-
-        /// <summary>
-        /// Referrer ACL 
-        /// </summary>
-        public string ReferrerACL { get; set; }
-
-        /// <summary>
-        /// User Agent ACL
-        /// </summary>
-        public string UserAgentACL { get; set; }
         #endregion 
         #region methods
         /// <summary>
@@ -98,32 +80,35 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public List<string> GetContainerStorageObjectList(Dictionary<GetItemListParameters, string> parameters)
         {
+            StringBuilder _stringBuilder = new StringBuilder();
+
+
+            foreach (GetItemListParameters param in parameters.Keys)
+            {
+                var paramName = param.ToString().ToLower();
+                //FIXME: what does this do
+                if (param == GetItemListParameters.Limit)
+                    int.Parse(parameters[param]);
+
+                if (_stringBuilder.Length > 0)
+                    _stringBuilder.Append("&");
+                else
+                    _stringBuilder.AppendFormat("?");
+                _stringBuilder.Append(paramName + "=" + parameters[param].Encode());
+            }
+            return GetContainerStorageObjectList(_stringBuilder.ToString());
+          
+        }
+        private List<string> GetContainerStorageObjectList(string urlparams)
+        {
             var containerItemList = new List<string>();
 
             try
             {
-                StringBuilder _stringBuilder = new StringBuilder();
-                if (parameters == null || parameters.Count <= 0)
-                { }
-                else
-                {
-                    foreach (GetItemListParameters param in parameters.Keys)
-                    {
-                        var paramName = param.ToString().ToLower();
-                        //FIXME: what does this do
-                        if (param == GetItemListParameters.Limit)
-                            int.Parse(parameters[param]);
 
-                        if (_stringBuilder.Length > 0)
-                            _stringBuilder.Append("&");
-                        else
-                            _stringBuilder.AppendFormat("?");
-                        _stringBuilder.Append(paramName + "=" + parameters[param].Encode());
-                    }
-                }
                 var request = _account.Connection.CreateRequest();
                 request.Method = HttpVerb.GET;
-                ICloudFilesResponse getContainerItemListResponse = request.SubmitStorageRequest(this.Name.Encode() + _stringBuilder);
+                var getContainerItemListResponse = request.SubmitStorageRequest(this.Name.Encode() + urlparams);
                 if (getContainerItemListResponse.Status == HttpStatusCode.OK)
                 {
                     containerItemList.AddRange(getContainerItemListResponse.ContentBody);
@@ -154,10 +139,8 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public List<string> GetContainerStorageObjectList()
         {
-            return GetContainerStorageObjectList(null);
 
-
-
+            return GetContainerStorageObjectList("");
         }
         /// <summary>
         /// This method deletes a storage object in a given container
@@ -212,94 +195,7 @@ namespace Rackspace.CloudFiles
         /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
 
 
-        /// <summary>
-        /// This method sets a container as public on the CDN
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Uri containerPublicUrl = connection.MarkContainerAsPublic("container name", 12345);
-        /// </code>
-        /// </example>
-        /// <param name="timeToLiveInSeconds">The maximum time (in seconds) content should be kept alive on the CDN before it checks for freshness.</param>
-        /// <returns>A string representing the URL of the public container or null</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public Uri MarkContainerAsPublic(int timeToLiveInSeconds)
-        {
-
-            try
-            {
-
-                var request = _account.Connection.CreateRequest();
-                request.Method = HttpVerb.PUT;
-                if (timeToLiveInSeconds > -1) { request.Headers.Add(Constants.X_CDN_TTL, timeToLiveInSeconds.ToString()); }
-                var response = request.SubmitCdnRequest(Name);
-
-                return response == null ? null : new Uri(response.Headers[Constants.X_CDN_URI]);
-            }
-            catch (WebException we)
-            {
-
-                var response = (HttpWebResponse)we.Response;
-                if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
-                    throw new AuthenticationFailedException("You do not have permission to request the list of public containers.");
-                throw;
-            }
-        }
-        /// <summary>
-        /// This method sets a container as public on the CDN
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Uri containerPublicUrl = connection.MarkContainerAsPublic("container name");
-        /// </code>
-        /// </example>
-        /// <param name="containerName">The name of the container to mark public</param>
-        /// <returns>A string representing the URL of the public container or null</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public Uri MarkContainerAsPublic()
-        {
-            return MarkContainerAsPublic(-1);
-        }
-
-        /// <summary>
-        /// This method sets a container as private on the CDN
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// connection.MarkContainerAsPrivate("container name");
-        /// </code>
-        /// </example>
-        /// <param name="containerName">The name of the container to mark public</param>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public void MarkContainerAsPrivate(string containerName)
-        {
-            Ensure.NotNullOrEmpty(containerName);
-            try
-            {
-                var request = _account.Connection.CreateRequest();
-                request.Method = HttpVerb.POST;
-                request.Headers.Add(Constants.X_CDN_ENABLED, "FALSE");
-                request.SubmitCdnRequest(containerName.Encode());
-
-            }
-            catch (WebException we)
-            {
-
-                var response = (HttpWebResponse)we.Response;
-                if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
-                    throw new UnauthorizedAccessException("Your access credentials are invalid or have expired. ");
-                if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new PublicContainerNotFoundException("The specified container does not exist.");
-                throw;
-            }
-
-        }
+       
         /// <summary>
         /// This method applies meta tags to a storage object on cloudfiles
         /// </summary>
@@ -534,6 +430,14 @@ namespace Rackspace.CloudFiles
         }
 
         #endregion
-
+        
+        public StorageObject GetStorageObject(string storageObjectName)
+        {
+            throw new NotImplementedException();
+        }
+        public IEnumerable<StorageObject> GetStorageObjects()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -22,25 +22,7 @@ namespace Rackspace.CloudFiles.Interfaces
         /// </summary>
         string Name { get; }
 
-        /// <summary>
-        /// The maximum time (in seconds) content should be kept alive on the CDN before it checks for freshness.
-        /// </summary>
-        int TTL { get; set; }
-
-        /// <summary>
-        /// The URI one can use to access objects in this container via the CDN. No time based URL stuff will be included with this URI
-        /// </summary>
-        string CdnUri { get; set; }
-
-        /// <summary>
-        /// Referrer ACL 
-        /// </summary>
-        string ReferrerACL { get; set; }
-
-        /// <summary>
-        /// User Agent ACL
-        /// </summary>
-        string UserAgentACL { get; set; }
+      
 
         /// <summary>
         /// This method retrieves the contents of a container
@@ -106,50 +88,7 @@ namespace Rackspace.CloudFiles.Interfaces
         /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
 
 
-        /// <summary>
-        /// This method sets a container as public on the CDN
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Uri containerPublicUrl = connection.MarkContainerAsPublic("container name", 12345);
-        /// </code>
-        /// </example>
-        /// <param name="timeToLiveInSeconds">The maximum time (in seconds) content should be kept alive on the CDN before it checks for freshness.</param>
-        /// <returns>A string representing the URL of the public container or null</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        Uri MarkContainerAsPublic(int timeToLiveInSeconds);
-
-        /// <summary>
-        /// This method sets a container as public on the CDN
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Uri containerPublicUrl = connection.MarkContainerAsPublic("container name");
-        /// </code>
-        /// </example>
-        /// <param name="containerName">The name of the container to mark public</param>
-        /// <returns>A string representing the URL of the public container or null</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        Uri MarkContainerAsPublic();
-
-        /// <summary>
-        /// This method sets a container as private on the CDN
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// connection.MarkContainerAsPrivate("container name");
-        /// </code>
-        /// </example>
-        /// <param name="containerName">The name of the container to mark public</param>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        void MarkContainerAsPrivate(string containerName);
-
+     
         /// <summary>
         /// This method applies meta tags to a storage object on cloudfiles
         /// </summary>

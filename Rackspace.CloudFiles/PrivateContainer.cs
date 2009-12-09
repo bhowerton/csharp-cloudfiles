@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Rackspace.CloudFiles.Interfaces;
 
 namespace Rackspace.CloudFiles
@@ -8,10 +10,8 @@ namespace Rackspace.CloudFiles
         {
         }
 
-        public IAuthenticatedRequestFactory Connection
-        {
-            get { return _account.Connection; }
-            
-        }
+      
+
+       
     }
 }

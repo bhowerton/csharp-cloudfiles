@@ -27,7 +27,8 @@ namespace Rackspace.CloudFiles
         private readonly Stream objectStream;
         private readonly long contentLength;
         private readonly DateTime lastModified;
-        
+        private string _etag;
+
         /// <summary>
         /// 
         /// </summary>
@@ -80,7 +81,7 @@ namespace Rackspace.CloudFiles
         /// <summary>
         /// 
         /// </summary>
-        public long FileLength
+        public long ContentLength
         {
             get { return contentLength; }
         }
@@ -101,18 +102,14 @@ namespace Rackspace.CloudFiles
             get { return metadata; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Stream ObjectStream
+        public string ETag
         {
-            get { return objectStream; }
+            get { return _etag; }
         }
-
         /// <summary>
         /// 
         /// </summary>
-        public string ObjectName
+        public string RemoteName
         {
             get { return objectName; }
         }
@@ -296,6 +293,16 @@ namespace Rackspace.CloudFiles
                 //unfortunately, the HttpStatusCode enum does not have that value
                 //throw new InvalidETagException("The ETag supplied in the request does not match the ETag calculated by the server");
             }
+        }
+
+        public void Save(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(string filelocation)
+        {
+            throw new NotImplementedException();
         }
     }
 }
