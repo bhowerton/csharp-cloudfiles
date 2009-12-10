@@ -18,7 +18,7 @@ namespace Rackspace.CloudFiles.domain.response.Interfaces
         Dictionary<string, string> Metadata { get; }
 
         string Method { get;  }
-        HttpStatusCode StatusCode { get; }
+       
         string StatusDescription { get;  }
         IList<string> ContentBody { get; }
         string ContentType{ get; }

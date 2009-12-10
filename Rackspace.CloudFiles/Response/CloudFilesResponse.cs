@@ -117,11 +117,7 @@ namespace Rackspace.CloudFiles.domain.response
             get { return _webResponse.Method; }
         }
 
-        public HttpStatusCode StatusCode
-        {
-            get { return _webResponse.StatusCode; }
-        }
-
+      
         public string StatusDescription
         {
             get { return _webResponse.StatusDescription; }

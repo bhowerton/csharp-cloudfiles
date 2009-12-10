@@ -39,7 +39,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
            
                mockrequest.Setup(x => x.SubmitStorageRequest(It.IsAny<string>())).Returns(mockresponse.Object);
                mockrequest.Setup(x => x.SubmitCdnRequest(It.IsAny<string>())).Returns(mockresponse.Object);
-               mockresponse.SetupGet(x => x.StatusCode).Returns(code);
+               mockresponse.SetupGet(x => x.Status).Returns(code);
 
 
             return new WebMocks()

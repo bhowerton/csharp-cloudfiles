@@ -60,7 +60,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         [Test]
         public void should_be_valid()
         {
-            var containerName = CreateString.WithLength(256);
+            var containerName = CreateString.WithLength(128);
             Ensure.ValidContainerName(containerName);
 
         }
@@ -72,7 +72,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
         [Test]
         public void should_be_invalid()
         {
-            var containerName = CreateString.WithLength(257);
+            var containerName = CreateString.WithLength(129);
             Asserts.Throws<InvalidContainerNameException>(()=> Ensure.ValidContainerName(containerName));
 
         }

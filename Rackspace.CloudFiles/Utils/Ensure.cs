@@ -8,6 +8,10 @@ namespace Rackspace.CloudFiles.utils
 
     public static class Ensure
     {
+        public static void CanNotBeMoreThan(this int actualnumber, int limit)
+        {
+            if (actualnumber > limit) throw new ArgumentOutOfRangeException("the this variable must be less than " + limit + " but is " + actualnumber);
+        }
         public static void NotNullOrEmpty(params string[] args)
         {
             Array.ForEach(args, s =>

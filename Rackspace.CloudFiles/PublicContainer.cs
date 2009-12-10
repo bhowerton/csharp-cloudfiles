@@ -5,7 +5,7 @@ namespace Rackspace.CloudFiles
 {
     public class PublicContainer:Container
     {
-        public PublicContainer(string containerName, IAccount request) : base(containerName, request)
+        public PublicContainer(string containerName, IAccount request, long objectcount, long bytesused) : base(containerName, request,objectcount ,bytesused)
         {
         }
         public Uri CdnUri

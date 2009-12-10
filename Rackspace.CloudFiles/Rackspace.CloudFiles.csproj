@@ -68,12 +68,15 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticate.cs" />
+    <Compile Include="AuthenticatedRequest.cs" />
     <Compile Include="AuthenticatedRequestFactory.cs" />
     <Compile Include="CdnService.cs" />
-    <Compile Include="Domain\RequestInfo.cs" />
     <Compile Include="HttpVerb.cs" />
     <Compile Include="Interfaces\IAccount.cs" />
     <Compile Include="Interfaces\IAuthenticatedRequestFactory.cs" />
@@ -81,8 +84,7 @@
     <Compile Include="Interfaces\IContainerRepository.cs" />
     <Compile Include="Interfaces\IAuthenticatedRequest.cs" />
     <Compile Include="Interfaces\IObjectRepository.cs" />
-    <Compile Include="Interfaces\IWebRequest.cs" />
-    <Compile Include="PrivateContainer.cs" />
+    <Compile Include="Interfaces\IAuthorizationRequest.cs" />
     <Compile Include="ProdWebRequest.cs" />
     <Compile Include="PublicContainer.cs" />
     <Compile Include="Request\Format.cs" />
@@ -90,18 +92,15 @@
     <Compile Include="Request\SetLoggingToContainerRequest.cs" />
     <Compile Include="Request\Interfaces\IAddToWebRequest.cs" />
     <Compile Include="Request\Interfaces\ICloudFilesRequest.cs" />
-    <Compile Include="Domain\RequestFactory.cs" />
-    <Compile Include="Domain\GenerateRequestByType.cs" />
     <Compile Include="Response\Interfaces\ICloudFilesResponse.cs" />
     <Compile Include="Interfaces\IConnection.cs" />
-    <Compile Include="Domain\AccountInformation.cs" />
     <Compile Include="Request\GetPublicContainers.cs" />
     <Compile Include="Request\MarkContainerAsPublic.cs" />
     <Compile Include="Request\SetPublicContainerDetails.cs" />
     <Compile Include="Response\CloudFilesResponse.cs" />
     <Compile Include="Response\CloudFilesResponseWithContentBody.cs" />
-    <Compile Include="Domain\StorageObjectInformation.cs" />
     <Compile Include="TemporaryDumpingGround.cs" />
+    <Compile Include="Utils\ArrayHelpers.cs" />
     <Compile Include="Utils\Ensure.cs" />
     <Compile Include="Utils\EnumHelper.cs" />
     <Compile Include="Exceptions\ContainerNotEmptyException.cs" />
@@ -117,10 +116,7 @@
     <Compile Include="Response\IResponse.cs" />
     <Compile Include="Response\IResponseWithContentBody.cs" />
     <Compile Include="Request\CloudFilesRequest.cs" />
-    <Compile Include="Domain\HttpProxy.cs" />
     <Compile Include="Request\PutStorageObject.cs" />
-    <Compile Include="Domain\ResponseFactory.cs" />
-    <Compile Include="Domain\ResponseFactoryWithContentBody.cs" />
     <Compile Include="Exceptions\ContainerAlreadyExistsException.cs" />
     <Compile Include="Exceptions\ContainerNotFoundException.cs" />
     <Compile Include="Exceptions\InvalidETagException.cs" />
@@ -129,7 +125,6 @@
     <Compile Include="Exceptions\StorageItemNotFoundException.cs" />
     <Compile Include="Account.cs" />
     <Compile Include="StorageObject.cs" />
-    <Compile Include="Domain\UserCredentials.cs" />
     <Compile Include="Exceptions\InvalidContainerNameException.cs" />
     <Compile Include="Exceptions\InvalidResponseTypeException.cs" />
     <Compile Include="Exceptions\MetaKeyLengthException.cs" />

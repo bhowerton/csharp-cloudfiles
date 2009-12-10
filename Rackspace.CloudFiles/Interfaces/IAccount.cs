@@ -9,9 +9,9 @@ namespace Rackspace.CloudFiles.Interfaces
     {
         
         IAuthenticatedRequestFactory Connection { get; }
-
+        long ContainerCount { get; }
         long BytesUsed { get; }
-        long StorageObjectCount { get; }
+
         /// <summary>
         /// This method is used to create a container on cloudfiles with a given name
         /// </summary>
@@ -24,7 +24,7 @@ namespace Rackspace.CloudFiles.Interfaces
         /// </example>
         /// <param name="containerName">The desired name of the container</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        Container CreateContainer(string containerName);
+        PrivateContainer CreateContainer(string containerName);
 
         /// <summary>
         /// This method is used to delete a container on cloudfiles

@@ -21,7 +21,7 @@ namespace Rackspace.CloudFiles.Request
     public class CloudFilesRequest : ICloudFilesRequest
     {
         private readonly HttpWebRequest _httpWebRequest;
-        private readonly HttpProxy _httpProxy;
+        private readonly IWebProxy _httpProxy;
       
 
         public void SetContent(Stream stream)
@@ -62,7 +62,7 @@ namespace Rackspace.CloudFiles.Request
         /// <param name="request">The request being sent to the server</param>
         /// <param name="httpProxy">Proxy credentials</param>
         /// <exception cref="System.ArgumentNullException">Thrown when any of the reference arguments are null</exception>
-        public CloudFilesRequest(HttpWebRequest request, HttpProxy httpProxy)
+        public CloudFilesRequest(HttpWebRequest request, IWebProxy httpProxy)
         {
             if (request == null) throw new ArgumentNullException();
 
@@ -108,7 +108,7 @@ namespace Rackspace.CloudFiles.Request
             HandleRangeHeader(_httpWebRequest);
             if (_httpWebRequest.ContentLength > 0)
                 AttachBodyToWebRequest(_httpWebRequest);
-            HandleProxyCredentialsFor(_httpWebRequest);
+            HandleProxyCredentialsFor(_httpWebRequest); 
             return new CloudFilesResponse((HttpWebResponse)_httpWebRequest.GetResponse());
 
         }
@@ -197,17 +197,18 @@ namespace Rackspace.CloudFiles.Request
             else if (this.RangeFrom != 0 && this.RangeTo != 0)
                 webrequest.AddRange("bytes", this.RangeFrom, this.RangeTo);
         }
-
-
+//
+//really missing why we need magic proxy handling
         private void HandleProxyCredentialsFor(HttpWebRequest httpWebRequest)
         {
             if (_httpProxy == null) return;
 
-            var loProxy = new System.Net.WebProxy(_httpProxy.ProxyAddress, true);
-
-            if (_httpProxy.ProxyUsername.Length > 0)
-                loProxy.Credentials = new NetworkCredential(_httpProxy.ProxyUsername, _httpProxy.ProxyPassword, _httpProxy.ProxyDomain);
-            httpWebRequest.Proxy = loProxy;
+//            var loProxy = new System.Net.WebProxy(_httpProxy.ProxyAddress, true);
+//
+//            if (_httpProxy.ProxyUsername.Length > 0)
+//                loProxy.Credentials = new NetworkCredential(_httpProxy.ProxyUsername, _httpProxy.ProxyPassword, _httpProxy.ProxyDomain);
+//            httpWebRequest.Proxy = loProxy;
+            httpWebRequest.Proxy = this._httpProxy;
         }
         private void AttachBodyToWebRequest(HttpWebRequest request)
         {

@@ -10,7 +10,7 @@ namespace Rackspace.CloudFiles.Interfaces
         /// <summary>
         /// Size of the container
         /// </summary>
-        long ByteCount { get; set; }
+        long ByteUsed { get; set; }
 
         /// <summary>
         /// Number of items in the container

@@ -31,11 +31,12 @@ namespace Rackspace.CloudFiles.Specs.CustomAsserts
             addtowebrequest.Apply(_mockrequest.Object);
             return _mockrequest;
         }
-        public static void Throws<T>(Action action)where T:Exception
+        public static void Throws<T>(Action action)where T:Exception,new()
         {
             try
             {
                 action.Invoke();
+                Assert.Fail(String.Format("exception of {0} was not called", typeof(T).Name));
             }
             catch(Exception ex)
             {

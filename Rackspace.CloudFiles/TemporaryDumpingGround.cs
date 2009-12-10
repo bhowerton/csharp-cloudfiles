@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Xml;
 using Rackspace.CloudFiles.domain;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Request;
@@ -125,10 +127,10 @@ namespace Rackspace.CloudFiles
         /// <param name="storageObjectName">The name of the storage object</param>
         /// <returns>An instance of StorageObject containing the byte size and meta information associated with the container</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public StorageObjectInformation GetStorageItemInformation(string storageObjectName)
-        {
+      //  public StorageObjectInformation GetStorageItemInformation(string storageObjectName)
+        //{
             //May not need this one, moving it over, but it will likely be replaced
-            throw new NotImplementedException();
+          //  throw new NotImplementedException();
 //            Ensure.NotNullOrEmpty(containerName, storageObjectName);
 //            try
 //            {
@@ -149,7 +151,7 @@ namespace Rackspace.CloudFiles
 //
 //                throw;
 //            }
-        }
+      //  }
         /// <summary>
         /// This method downloads a storage object from cloudfiles asychronously
         /// </summary>
@@ -638,7 +640,7 @@ namespace Rackspace.CloudFiles
 //                var response = authenticatedRequest.SubmitStorageRequest(containerName);
 //                var container = new Container(containerName, this)
 //                {
-//                    ByteCount =
+//                    BytesUsed =
 //                        long.Parse(
 //                        response.Headers[Constants.X_CONTAINER_BYTES_USED]),
 //                    ObjectCount =
@@ -663,6 +665,95 @@ namespace Rackspace.CloudFiles
 //                    throw new AuthenticationFailedException(we.Message);
 //                throw;
 //            }
+//        }
+        
+//
+//        private Dictionary<string, string> GetMetadata(ICloudFilesResponse getStorageItemResponse)
+//        {
+//            var metadata = new Dictionary<string, string>();
+//            var headers = getStorageItemResponse.Headers;
+//            foreach (var key in headers.AllKeys)
+//            {
+//                if (key.IndexOf(Constants.META_DATA_HEADER) > -1)
+//                    metadata.Add(key, headers[key]);
+//            }
+//            return metadata;
+//        }
+//        private static void StoreFile(string filename, Stream contentStream)
+//        {
+//            using (var file = File.Create(filename))
+//            {
+//                contentStream.WriteTo(file);
+//            }
+//        }
+//        #endregion
+//        #region private methods to REFACTOR into a service
+//        private string BuildAccountJson()
+//        {
+//            string jsonResponse = "";
+//            var request = Connection.CreateRequest();
+//            request.Method = HttpVerb.GET;
+//            var response = request.SubmitStorageRequest("?format=" + EnumHelper.GetDescription(Format.JSON));
+//            if (response.ContentBody.Count > 0)
+//                jsonResponse = String.Join("", response.ContentBody.ToArray());
+//
+//            response.Dispose();
+//            return jsonResponse;
+//        }
+//
+//        AccountInformation BuildAccount()
+//        {
+//
+//            var request = Connection.CreateRequest();
+//            request.Method = HttpVerb.HEAD;
+//            var getAccountInformationResponse = request.SubmitStorageRequest("/");
+//            return new AccountInformation(getAccountInformationResponse.Headers[Constants.X_ACCOUNT_CONTAINER_COUNT], getAccountInformationResponse.Headers[Constants.X_ACCOUNT_BYTES_USED]);
+//
+//        }
+//
+//        XmlDocument BuildAccountXml()
+//        {
+//
+//            //	var accountInformationXml = new GetAccountInformationSerialized(StorageUrl, Format.XML);
+//            ///    var getAccountInformationXmlResponse = _requestfactory.Submit(accountInformationXml, AuthToken);
+//            var request = Connection.CreateRequest();
+//            request.Method = HttpVerb.GET;
+//            var getAccountInformationXmlResponse = request.SubmitStorageRequest("?format=" + EnumHelper.GetDescription(Format.XML));
+//            if (getAccountInformationXmlResponse.ContentBody.Count == 0)
+//            {
+//                return new XmlDocument();
+//
+//            }
+//            var contentBody = String.Join("", getAccountInformationXmlResponse.ContentBody.ToArray());
+//
+//            getAccountInformationXmlResponse.Dispose();
+//
+//            try
+//            {
+//                var doc = new XmlDocument();
+//                doc.LoadXml(contentBody);
+//                return doc;
+//            }
+//            catch (XmlException)
+//            {
+//                return new XmlDocument();
+//
+//            }
+//
+//
+//        }
+//        List<string> BuildContainerList()
+//        {
+//            IList<string> containerList = new List<string>();
+//            var request = Connection.CreateRequest();
+//            request.Method = HttpVerb.GET;
+//            var getContainersResponse = request.SubmitStorageRequest("");
+//            if (getContainersResponse.Status == HttpStatusCode.OK)
+//            {
+//
+//                containerList = getContainersResponse.ContentBody;
+//            }
+//            return containerList.ToList();
 //        }
     }
 }

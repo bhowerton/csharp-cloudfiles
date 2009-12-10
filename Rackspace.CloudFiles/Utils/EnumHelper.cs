@@ -11,14 +11,14 @@ namespace Rackspace.CloudFiles.utils
     /// <summary>
     /// 
     /// </summary>
-    public class EnumHelper
+    public static class EnumHelper
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="enumType"></param>
         /// <returns></returns>
-        public static string GetDescription(Enum enumType)
+        public static string GetDescription(this Enum enumType)
         {
             Type type = enumType.GetType();
 

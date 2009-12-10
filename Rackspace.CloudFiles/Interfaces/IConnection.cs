@@ -9,7 +9,7 @@ namespace Rackspace.CloudFiles.Interfaces
 {
     public interface IConnection
     {
-        AccountInformation GetAccountInformation();
+        
         string GetAccountInformationJson();
         XmlDocument GetAccountInformationXml();
         void CreateContainer(string containerName);
@@ -32,7 +32,7 @@ namespace Rackspace.CloudFiles.Interfaces
         void GetStorageObject(string containerName, string storageContainerName, string localFileName);
         StorageObject GetStorageObject(string containerName, string storageObjectName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
         void GetStorageObject(string containerName, string storageObjectName, string localFileName, Dictionary<RequestHeaderFields, string> requestHeaderFields);
-        StorageObjectInformation GetStorageItemInformation(string containerName, string storageObjectName);
+     
         void SetStorageObjectMetaInformation(string containerName, string storageObjectName, Dictionary<string, string> metadata);
         List<string> GetPublicContainers();
         Uri MarkContainerAsPublic(string containerName);

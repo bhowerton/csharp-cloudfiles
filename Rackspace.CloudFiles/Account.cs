@@ -4,17 +4,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
-using System.Xml;
-using Rackspace.CloudFiles.domain;
-using Rackspace.CloudFiles.Domain;
-using Rackspace.CloudFiles.domain.response.Interfaces;
+using System.Xml.Linq;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Interfaces;
-using Rackspace.CloudFiles.Request;
 using Rackspace.CloudFiles.utils;
 
 /// <example>
@@ -55,94 +52,6 @@ namespace Rackspace.CloudFiles
 
 
 
-        private Dictionary<string, string> GetMetadata(ICloudFilesResponse getStorageItemResponse)
-        {
-            var metadata = new Dictionary<string, string>();
-            var headers = getStorageItemResponse.Headers;
-            foreach (var key in headers.AllKeys)
-            {
-                if (key.IndexOf(Constants.META_DATA_HEADER) > -1)
-                    metadata.Add(key, headers[key]);
-            }
-            return metadata;
-        }
-        private static void StoreFile(string filename, Stream contentStream)
-        {
-            using (var file = File.Create(filename))
-            {
-                contentStream.WriteTo(file);
-            }
-        }
-        #endregion
-        #region private methods to REFACTOR into a service
-        private string BuildAccountJson()
-        {
-            string jsonResponse = "";
-            var request = Connection.CreateRequest();
-            request.Method = HttpVerb.GET;
-            var response = request.SubmitStorageRequest("?format=" + EnumHelper.GetDescription(Format.JSON));
-            if (response.ContentBody.Count > 0)
-                jsonResponse = String.Join("", response.ContentBody.ToArray());
-
-            response.Dispose();
-            return jsonResponse;
-        }
-
-        AccountInformation BuildAccount()
-        {
-
-            var request = Connection.CreateRequest();
-            request.Method = HttpVerb.HEAD;
-            var getAccountInformationResponse = request.SubmitStorageRequest("/");
-            return new AccountInformation(getAccountInformationResponse.Headers[Constants.X_ACCOUNT_CONTAINER_COUNT], getAccountInformationResponse.Headers[Constants.X_ACCOUNT_BYTES_USED]);
-
-        }
-
-        XmlDocument BuildAccountXml()
-        {
-
-            //	var accountInformationXml = new GetAccountInformationSerialized(StorageUrl, Format.XML);
-            ///    var getAccountInformationXmlResponse = _requestfactory.Submit(accountInformationXml, AuthToken);
-            var request = Connection.CreateRequest();
-            request.Method = HttpVerb.GET;
-            var getAccountInformationXmlResponse = request.SubmitStorageRequest("?format=" + EnumHelper.GetDescription(Format.XML));
-            if (getAccountInformationXmlResponse.ContentBody.Count == 0)
-            {
-                return new XmlDocument();
-
-            }
-            var contentBody = String.Join("", getAccountInformationXmlResponse.ContentBody.ToArray());
-
-            getAccountInformationXmlResponse.Dispose();
-
-            try
-            {
-                var doc = new XmlDocument();
-                doc.LoadXml(contentBody);
-                return doc;
-            }
-            catch (XmlException)
-            {
-                return new XmlDocument();
-
-            }
-
-
-        }
-        List<string> BuildContainerList()
-        {
-            IList<string> containerList = new List<string>();
-            var request = Connection.CreateRequest();
-            request.Method = HttpVerb.GET;
-            var getContainersResponse = request.SubmitStorageRequest("");
-            if (getContainersResponse.Status == HttpStatusCode.OK)
-            {
-
-                containerList = getContainersResponse.ContentBody;
-            }
-            return containerList.ToList();
-        }
-
         static void DetermineReasonForError(WebException ex, string containername)
         {
             var response = (HttpWebResponse)ex.Response;
@@ -153,10 +62,11 @@ namespace Rackspace.CloudFiles
 
         }
         #endregion
-        public Account(IAuthenticatedRequestFactory authenticatedRequestFactory)
+        public Account(IAuthenticatedRequestFactory authenticatedRequestFactory,long containerCount, long bytesUsed)
         {
             Connection = authenticatedRequestFactory;
-
+            ContainerCount = containerCount;
+            BytesUsed = bytesUsed;
         }
 
         private readonly Action<Exception> Nothing = (ex) => { };
@@ -174,21 +84,30 @@ namespace Rackspace.CloudFiles
         /// </example>
         /// <param name="containerName">The desired name of the container</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public Container CreateContainer(string containerName)
+        public PrivateContainer CreateContainer(string containerName)
         {
             Ensure.NotNullOrEmpty(containerName);
             Ensure.ValidContainerName(containerName);
-            
+
             var request = Connection.CreateRequest();
             request.Method = HttpVerb.PUT;
             var createContainerResponse = request.SubmitStorageRequest(containerName.Encode());
             if (createContainerResponse.Status == HttpStatusCode.Accepted)
                 throw new ContainerAlreadyExistsException("The container already exists");
 
-
-            return new Container(containerName, this);
+            var headers = new ContainerHeaders(createContainerResponse.Headers);
+            return new PrivateContainer(containerName, this,headers.ObjectCount, headers.BytesUsed);
         }
-
+        private class ContainerHeaders
+        {
+            public long BytesUsed { get; private set; }
+            public long ObjectCount { get; private set; }
+            public ContainerHeaders(NameValueCollection headers)
+            {
+                 ObjectCount = long.Parse(headers["X-Container-Object-Count"]);
+                BytesUsed= long.Parse(headers["X-Container-Bytes-Used"]);
+            }
+        }
         /// <summary>
         /// This method is used to delete a container on cloudfiles
         /// </summary>
@@ -206,20 +125,15 @@ namespace Rackspace.CloudFiles
             Ensure.NotNullOrEmpty(containerName);
             Ensure.ValidContainerName(containerName);
 
-            StartProcess
-                .ByDoing(() =>
-                             {
-                                 var request = Connection.CreateRequest();
-                                 request.Method = HttpVerb.DELETE;
-                                 request.SubmitStorageRequest(containerName.Encode());
-                             }
-                )
-                .AndIfErrorThrownIs<WebException>()
-                .Do(ex => DetermineReasonForError(ex, containerName));
+
+            var request = Connection.CreateRequest();
+            request.Method = HttpVerb.DELETE;
+            var response = request.SubmitStorageRequest(containerName);
+            if(response.Status==HttpStatusCode.Conflict)throw new ContainerNotEmptyException();
+            if (response.Status == HttpStatusCode.NoContent)throw new ContainerNotFoundException();
+
+
         }
-
-
-
 
 
         public IAuthenticatedRequestFactory Connection
@@ -228,23 +142,58 @@ namespace Rackspace.CloudFiles
             private set;
         }
 
+        public long ContainerCount
+        {
+            get; private set;
+        }
+
         public long BytesUsed
         {
             get;
             private set;
         }
-        public long StorageObjectCount
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-
-
+      
         public PrivateContainer GetContainer(string containerName)
         {
+            Ensure.NotNullOrEmpty(containerName);
+            Ensure.ValidContainerName(containerName);
+
             var request = Connection.CreateRequest();
+            request.Method = HttpVerb.HEAD;
             var response = request.SubmitStorageRequest(containerName);
-            return new PrivateContainer(containerName, this);
+            if (response.Status == HttpStatusCode.NoContent) throw new ContainerNotFoundException();
+            var containerheaders = new ContainerHeaders(response.Headers);
+           
+            return new PrivateContainer(containerName, this, containerheaders.ObjectCount, containerheaders.BytesUsed); 
+               
+        }
+
+        public IList<PrivateContainer> GetContainers(int limit)
+        {
+            limit.CanNotBeMoreThan(10000);
+            var request = Connection.CreateRequest();
+            request.Method = HttpVerb.GET;
+            request.SubmitStorageRequest("?limit="+limit+"&format=xml");
+            return new List<PrivateContainer>();
+        }
+
+        public IList<PrivateContainer> GetContainers()
+        {
+            var request = Connection.CreateRequest();
+            request.Method = HttpVerb.GET;
+            var response = request.SubmitStorageRequest("?format=xml");
+
+            var xml = response.ContentBody.ConvertToString();
+            var masterelement = XElement.Parse(xml);
+            var containers = masterelement.Elements("container");
+            var objects =    containers.Select(x => new PrivateContainer(
+                                                                                    x.Element("name").Value,
+                                                                                    this,
+                                                                                    long.Parse(x.Element("count").Value),
+                                                                                    long.Parse(x.Element("bytes").Value)
+                                                                                    ));
+
+            return objects.ToArray();
         }
     }
 }

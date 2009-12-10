@@ -13,6 +13,15 @@ using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles
 {
+    public class PrivateContainer : Container
+    {
+        public PrivateContainer(string containerName, IAccount request, long objectcount, long bytesused)
+            : base(containerName, request, objectcount, bytesused)
+        {
+        }
+
+
+    }
     /// <summary>
     /// Container
     /// </summary>
@@ -21,21 +30,14 @@ namespace Rackspace.CloudFiles
         protected readonly IAccount _account;
 
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="containerName">Name of the container</param>
-        /// <param name="account"></param>
-        public Container(string containerName, IAccount account)
+        protected Container(string name, IAccount account, long objectcount, long bytesused)
         {
             _account = account;
-
-
-            Name = containerName;
-            ObjectCount = 0;
-            ByteCount = 0;
-          
+            Name = name;
+            ObjectCount = objectcount;
+            ByteUsed = bytesused;
         }
+
         #region properties
 
         public IAuthenticatedRequestFactory Connection
@@ -46,7 +48,7 @@ namespace Rackspace.CloudFiles
         /// <summary>
         /// Size of the container
         /// </summary>
-        public long ByteCount { get; set; }
+        public long ByteUsed { get; set; }
 
         /// <summary>
         /// Number of items in the container
