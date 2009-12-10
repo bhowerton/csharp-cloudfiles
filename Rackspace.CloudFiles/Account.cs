@@ -52,15 +52,7 @@ namespace Rackspace.CloudFiles
 
 
 
-        static void DetermineReasonForError(WebException ex, string containername)
-        {
-            var response = (HttpWebResponse)ex.Response;
-            if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                throw new ContainerNotFoundException("The requested container " + containername + " does not exist");
-            if (response != null && response.StatusCode == HttpStatusCode.Conflict)
-                throw new ContainerNotEmptyException("The container you are trying to delete " + containername + "is not empty");
-
-        }
+        
         #endregion
         public Account(IAuthenticatedRequestFactory authenticatedRequestFactory,long containerCount, long bytesUsed)
         {
@@ -69,8 +61,7 @@ namespace Rackspace.CloudFiles
             BytesUsed = bytesUsed;
         }
 
-        private readonly Action<Exception> Nothing = (ex) => { };
-
+       
 
         /// <summary>
         /// This method is used to create a container on cloudfiles with a given name
@@ -84,7 +75,7 @@ namespace Rackspace.CloudFiles
         /// </example>
         /// <param name="containerName">The desired name of the container</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public PrivateContainer CreateContainer(string containerName)
+        public Container CreateContainer(string containerName)
         {
             Ensure.NotNullOrEmpty(containerName);
             Ensure.ValidContainerName(containerName);
@@ -96,7 +87,7 @@ namespace Rackspace.CloudFiles
                 throw new ContainerAlreadyExistsException("The container already exists");
 
             var headers = new ContainerHeaders(createContainerResponse.Headers);
-            return new PrivateContainer(containerName, this,headers.ObjectCount, headers.BytesUsed);
+            return new Container(containerName, this,headers.ObjectCount, headers.BytesUsed);
         }
         private class ContainerHeaders
         {
@@ -153,7 +144,7 @@ namespace Rackspace.CloudFiles
             private set;
         }
       
-        public PrivateContainer GetContainer(string containerName)
+        public Container GetContainer(string containerName)
         {
             Ensure.NotNullOrEmpty(containerName);
             Ensure.ValidContainerName(containerName);
@@ -164,20 +155,20 @@ namespace Rackspace.CloudFiles
             if (response.Status == HttpStatusCode.NoContent) throw new ContainerNotFoundException();
             var containerheaders = new ContainerHeaders(response.Headers);
            
-            return new PrivateContainer(containerName, this, containerheaders.ObjectCount, containerheaders.BytesUsed); 
+            return new Container(containerName, this, containerheaders.ObjectCount, containerheaders.BytesUsed); 
                
         }
 
-        public IList<PrivateContainer> GetContainers(int limit)
+        public IList<Container> GetContainers(int limit)
         {
             limit.CanNotBeMoreThan(10000);
             var request = Connection.CreateRequest();
             request.Method = HttpVerb.GET;
             request.SubmitStorageRequest("?limit="+limit+"&format=xml");
-            return new List<PrivateContainer>();
+            return new List<Container>();
         }
 
-        public IList<PrivateContainer> GetContainers()
+        public IList<Container> GetContainers()
         {
             var request = Connection.CreateRequest();
             request.Method = HttpVerb.GET;
@@ -186,7 +177,7 @@ namespace Rackspace.CloudFiles
             var xml = response.ContentBody.ConvertToString();
             var masterelement = XElement.Parse(xml);
             var containers = masterelement.Elements("container");
-            var objects =    containers.Select(x => new PrivateContainer(
+            var objects =    containers.Select(x => new Container(
                                                                                     x.Element("name").Value,
                                                                                     this,
                                                                                     long.Parse(x.Element("count").Value),

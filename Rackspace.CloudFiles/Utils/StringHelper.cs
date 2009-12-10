@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Web;
 
 namespace Rackspace.CloudFiles.utils
@@ -31,5 +32,9 @@ namespace Rackspace.CloudFiles.utils
         {
             return path[0] == '/' ? path.Substring(1, path.Length - 1) : path;
         }
+		public static DateTime ParseCfDateTime(this string datestring){
+			string format = "yyyy-MM-ddThh:mm:ss.ffffff";
+			return DateTime.ParseExact( datestring, format,CultureInfo.InvariantCulture);
+		}
     }
 }

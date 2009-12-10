@@ -6,7 +6,6 @@ namespace Rackspace.CloudFiles.Examples.CDNManagement
         {
             var account = Authenticate.Connection("fooname", "akjlafj1423");
             var cdnservice = new CdnService(account);
-            var containers = cdnservice.GetContainers();
             var privatecontainer = account.GetContainer("container");
             cdnservice.MakeContainerPublic(privatecontainer);
             
@@ -15,7 +14,6 @@ namespace Rackspace.CloudFiles.Examples.CDNManagement
         {
             var account = Authenticate.Connection("fooname", "akjlafj1423");
             var cdnservice = new CdnService(account);
-            var containers = cdnservice.GetContainers();
             var privatecontainer = account.GetContainer("container");
            
             const int ttl = 3600;

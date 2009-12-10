@@ -24,7 +24,7 @@ namespace Rackspace.CloudFiles.Interfaces
         /// </example>
         /// <param name="containerName">The desired name of the container</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        PrivateContainer CreateContainer(string containerName);
+        Container CreateContainer(string containerName);
 
         /// <summary>
         /// This method is used to delete a container on cloudfiles

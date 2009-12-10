@@ -10,12 +10,13 @@ using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Interfaces;
 using Rackspace.CloudFiles.Request;
 using Rackspace.CloudFiles.utils;
+using System.Xml.Linq;
 
 namespace Rackspace.CloudFiles
 {
-    public class PrivateContainer : Container
+    public class Container : BaseContainer
     {
-        public PrivateContainer(string containerName, IAccount request, long objectcount, long bytesused)
+        public Container(string containerName, IAccount request, long objectcount, long bytesused)
             : base(containerName, request, objectcount, bytesused)
         {
         }
@@ -25,12 +26,12 @@ namespace Rackspace.CloudFiles
     /// <summary>
     /// Container
     /// </summary>
-    public class Container:IContainer
+    public class BaseContainer:IContainer
     {
         protected readonly IAccount _account;
 
 
-        protected Container(string name, IAccount account, long objectcount, long bytesused)
+        protected BaseContainer(string name, IAccount account, long objectcount, long bytesused)
         {
             _account = account;
             Name = name;
@@ -335,7 +336,7 @@ namespace Rackspace.CloudFiles
                 if (webResponse.StatusCode == HttpStatusCode.PreconditionFailed)
                     throw new PreconditionFailedException(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;
@@ -437,9 +438,24 @@ namespace Rackspace.CloudFiles
         {
             throw new NotImplementedException();
         }
-        public IEnumerable<StorageObject> GetStorageObjects()
+        public IList<StorageObject> GetStorageObjects()
         {
-            throw new NotImplementedException();
+             var request = _account.Connection.CreateRequest();
+			request.Method= HttpVerb.GET;
+			var response = request.SubmitStorageRequest(Name);
+			var xml = response.ContentBody.ConvertToString();
+			var rootelemtn = XElement.Parse(xml);
+			var objectelements = rootelemtn.Elements("object");
+			
+			var objects = objectelements.Select(x=>
+			                                    new StorageObject(this,x.Element("name").Value, new Dictionary<string,string>(),
+			                                          x.Element("content_type").Value, 
+			                                                      long.Parse(x.Element("bytes").Value),
+			                                                      x.Element("last_modified").Value.ParseCfDateTime(),
+			                                                      x.Element("hash").Value
+			                                                      )          
+			                                    );
+			return objects.ToArray();
         }
     }
 }

@@ -2,31 +2,29 @@
 /// See COPYING file for licensing information
 ///
 
+using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.Interfaces;
+using Rackspace.CloudFiles.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using Rackspace.CloudFiles.exceptions;
-using Rackspace.CloudFiles.Interfaces;
-using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles
 {
     /// <summary>
     /// StorageObject
     /// </summary>
-    public class StorageObject : IDisposable
+    public class StorageObject 
     {
         private readonly IContainer _container;
-        private readonly string _containerName;
+ 
         private readonly string objectName;
         private readonly Dictionary<string, string> metadata;
         private readonly string objectContentType;
-        private readonly Stream objectStream;
         private readonly long contentLength;
         private readonly DateTime lastModified;
-        private string _etag;
-
+         
         /// <summary>
         /// 
         /// </summary>
@@ -37,43 +35,25 @@ namespace Rackspace.CloudFiles
         /// <param name="contentLength"></param>
         /// <param name="lastModified"></param>
         /// <param name="container"></param>
-        public StorageObject(IContainer container, string objectName, Dictionary<string, string> metadata, string objectContentType, long contentLength, DateTime lastModified):
-            this(container,  objectName, metadata, objectContentType, null, contentLength, lastModified)
-        {
-          
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="objectName"></param>
-        /// <param name="metadata"></param>
-        /// <param name="objectContentType"></param>
-        /// <param name="contentStream"></param>
-        /// <param name="contentLength"></param>
-        /// <param name="lastModified"></param>
-        /// <param name="container"></param>
-        public StorageObject(IContainer container,  string objectName, Dictionary<string, string> metadata, string objectContentType, Stream contentStream, long contentLength, DateTime lastModified)
+        public StorageObject(IContainer container, string objectName, 
+		                     Dictionary<string, string> metadata,
+		                     string objectContentType, 
+		                     long contentLength, 
+		                     DateTime lastModified,
+		                     string etag)
         {
             _container = container;
-            
+            this.ETag = etag;
             this.objectName = objectName;
             this.lastModified = lastModified;
             this.contentLength = contentLength;
             this.objectContentType = objectContentType;
             this.metadata = metadata;
-            if(contentStream!=null)
-                objectStream = contentStream;
+           
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Dispose()
-        {
-            if (objectStream != null)
-                objectStream.Close();
-        }
+     
+
 
         /// <summary>
         /// 
@@ -101,7 +81,7 @@ namespace Rackspace.CloudFiles
 
         public string ETag
         {
-            get { return _etag; }
+            get ;private set;
         }
         /// <summary>
         /// 
@@ -160,7 +140,7 @@ namespace Rackspace.CloudFiles
                 var filetosend = File.OpenRead(localName);
                 request.SetContent(filetosend);
               
-                request.SubmitStorageRequest(_containerName.Encode() + "/" + remoteName.StripSlashPrefix().Encode());
+                request.SubmitStorageRequest(_container.Name.Encode() + "/" + remoteName.StripSlashPrefix().Encode());
             }
             catch (WebException webException)
             {

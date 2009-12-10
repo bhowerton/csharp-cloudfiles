@@ -3,7 +3,7 @@ using Rackspace.CloudFiles.Interfaces;
 
 namespace Rackspace.CloudFiles
 {
-    public class PublicContainer:Container
+    public class PublicContainer:BaseContainer
     {
         public PublicContainer(string containerName, IAccount request, long objectcount, long bytesused) : base(containerName, request,objectcount ,bytesused)
         {

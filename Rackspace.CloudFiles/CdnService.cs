@@ -16,17 +16,17 @@ namespace Rackspace.CloudFiles
         {
             throw new NotImplementedException();
         }
-        public PrivateContainer MakeContainerPrivate(PublicContainer publicContainer)
+        public Container MakeContainerPrivate(PublicContainer publicContainer)
         {
             throw new NotImplementedException();
         }
 
-        public PublicContainer MakeContainerPublic(PrivateContainer privateContainer, int ttl, bool isLoggingEnabled, string userAcl, string referrerAcl)
+        public PublicContainer MakeContainerPublic(Container privateContainer, int ttl, bool isLoggingEnabled, string userAcl, string referrerAcl)
         {
             throw new NotImplementedException();
         }
 
-        public PublicContainer MakeContainerPublic(PrivateContainer privatecontainer)
+        public PublicContainer MakeContainerPublic(Container privatecontainer)
         {
             throw new NotImplementedException();
         }

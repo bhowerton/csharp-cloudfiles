@@ -24,7 +24,7 @@ namespace Rackspace.CloudFiles.Request
         private Stream filetosend;
         private readonly Dictionary<string, string> _metadata;
         private string _fileUrl;
-        private Dictionary<string, string> _mimetypes;
+       
 
 
         /// <summary>

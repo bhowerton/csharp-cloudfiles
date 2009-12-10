@@ -17,7 +17,7 @@ namespace Rackspace.CloudFiles.Interfaces
         List<string> GetContainers();
         List<string> GetContainerItemList(string containerName);
         List<string> GetContainerItemList(string containerName, Dictionary<GetItemListParameters, string> parameters);
-        Container GetContainerInformation(string containerName);
+        BaseContainer GetContainerInformation(string containerName);
         string GetContainerInformationJson(string containerName);
         XmlDocument GetContainerInformationXml(string containerName);
         void PutStorageObjectAsync(string containerName, Stream storageStream, string remoteStorageItemName);
@@ -39,7 +39,7 @@ namespace Rackspace.CloudFiles.Interfaces
         Uri MarkContainerAsPublic(string containerName, int timeToLiveInSeconds);
         void MarkContainerAsPrivate(string containerName);
        
-        Container GetPublicContainerInformation(string containerName);
+        BaseContainer GetPublicContainerInformation(string containerName);
         void MakePath(string containerName, string path);
       
 
