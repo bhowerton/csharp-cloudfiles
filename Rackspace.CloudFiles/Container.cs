@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Xml;
 using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Interfaces;
@@ -173,7 +172,7 @@ namespace Rackspace.CloudFiles
 
                 var response = (HttpWebResponse)we.Response;
                 if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new StorageItemNotFoundException("The requested storage object for deletion does not exist");
+                    throw new StorageObjectNotFoundException("The requested storage object for deletion does not exist");
 
                 throw;
             }
@@ -181,24 +180,8 @@ namespace Rackspace.CloudFiles
 
 
 
-        /// <summary>
-        /// An alternate method for downloading storage objects from cloudfiles directly to a file name specified in the method
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Dictionary{RequestHeaderFields, string} requestHeaderFields = Dictionary{RequestHeaderFields, string}();
-        /// string dummy_etag = "5c66108b7543c6f16145e25df9849f7f";
-        /// requestHeaderFields.Add(RequestHeaderFields.IfMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfNoneMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
-
-
-       
+   
+      
         /// <summary>
         /// This method applies meta tags to a storage object on cloudfiles
         /// </summary>
@@ -252,47 +235,12 @@ namespace Rackspace.CloudFiles
 
                 var response = (HttpWebResponse)we.Response;
                 if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new StorageItemNotFoundException("The requested storage object does not exist");
+                    throw new StorageObjectNotFoundException("The requested storage object does not exist");
 
                 throw;
             }
         }
-        /// <summary>
-        /// needs error checking or code restructure to make sure this is only called on public container
-        /// </summary>
-        /// <param name="loggingenabled"></param>
-        /// <param name="ttl"></param>
-        /// <param name="referreracl"></param>
-        /// <param name="useragentacl"></param>
-        public void SetDetailsOnPublicContainer(bool loggingenabled, int ttl, string referreracl, string useragentacl)
-        {
-
-            try
-            {
-
-                var request = _account.Connection.CreateRequest();
-                request.Method = HttpVerb.POST;
-                request.Headers.Add(Constants.X_LOG_RETENTION, loggingenabled.Capitalize());
-                if (ttl > -1) request.Headers.Add(Constants.X_CDN_TTL, ttl.ToString());
-                if (!String.IsNullOrEmpty(useragentacl)) request.Headers.Add(Constants.X_USER_AGENT_ACL, useragentacl);
-                if (!String.IsNullOrEmpty(referreracl)) request.Headers.Add(Constants.X_REFERRER_ACL, referreracl);
-                request.SubmitCdnRequest(Name.Encode() );
-            }
-            catch (WebException we)
-            {
-
-
-                var response = (HttpWebResponse)we.Response;
-                if (response != null && response.StatusCode == HttpStatusCode.Unauthorized)
-                    throw new UnauthorizedAccessException("Your access credentials are invalid or have expired. ");
-                if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new PublicContainerNotFoundException("The specified container does not exist.");
-                throw;
-            }
-
-
-
-        }
+     
 
         /// <summary>
         /// This method ensures directory objects created for the entire path
@@ -336,54 +284,13 @@ namespace Rackspace.CloudFiles
                 if (webResponse.StatusCode == HttpStatusCode.PreconditionFailed)
                     throw new PreconditionFailedException(ex.Message);
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+          
         }
 
-
-
-
-
-
-        /// <summary>
-        /// JSON serialized format of the container's objects
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// string jsonResponse = connection.GetStorageObjectListInJson("container name");
-        /// </code>
-        /// </example>
-        /// <returns>json string of object information inside the container</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public string GetStorageObjectListInJson()
-        {
-            try
-            {
-                var getSerializedResponse = BaseGetContainerObjectList(Format.JSON);
-                var jsonResponse = String.Join("", getSerializedResponse.ContentBody.ToArray());
-                getSerializedResponse.Dispose();
-                return jsonResponse;
-            }
-            catch (WebException we)
-            {
-
-
-                var response = (HttpWebResponse)we.Response;
-                if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new ContainerNotFoundException("The requested container does not exist");
-
-                throw;
-            }
-        }
         private ICloudFilesResponse BaseGetContainerObjectList(Format format)
         {
             var request = _account.Connection.CreateRequest();
-            return request.SubmitStorageRequest(Name.Encode() + "?format=" + EnumHelper.GetDescription(format));
+            return request.SubmitStorageRequest(Name.Encode() + "?format=" + format.GetDescription());
         }
         /// <summary>
         /// XML serialized format of the container's objects
@@ -397,46 +304,28 @@ namespace Rackspace.CloudFiles
         /// </example>
         /// <returns>xml document of object information inside the container</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public XmlDocument GetStorageObjectListInXml()
+        public string GetStorageObjectListInSpecifiedFormat(Format outputformat)
         {
-            try
-            {
-                var getSerializedResponse = BaseGetContainerObjectList(Format.XML);
+            
+             
+                var getSerializedResponse = BaseGetContainerObjectList(outputformat);
                 var xmlResponse = String.Join("", getSerializedResponse.ContentBody.ToArray());
                 getSerializedResponse.Dispose();
-
-                if (xmlResponse == null) return new XmlDocument();
-
-                var xmlDocument = new XmlDocument();
-                try
-                {
-                    xmlDocument.LoadXml(xmlResponse);
-
-                }
-                catch (XmlException)
-                {
-                    return xmlDocument;
-                }
-
-                return xmlDocument;
-            }
-            catch (WebException we)
-            {
-
-
-                var response = (HttpWebResponse)we.Response;
-                if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new ContainerNotFoundException("The requested container does not exist");
-
-                throw;
-            }
+                return xmlResponse;
         }
 
         #endregion
         
         public StorageObject GetStorageObject(string storageObjectName)
         {
-            throw new NotImplementedException();
+            var request = _account.Connection.CreateRequest();
+            request.Method = HttpVerb.HEAD;
+            var response = request.SubmitStorageRequest(Name.Encode() + "/" + storageObjectName);
+            if(response.Status==HttpStatusCode.NoContent)
+            return new StorageObject(this, storageObjectName, response.ContentType,response.ContentLength, response.LastModified, response.ETag);
+            if (response.Status == HttpStatusCode.NotFound) throw new StorageObjectNotFoundException();
+            throw new Exception("Response status was "+ response.Status);
+
         }
         public IList<StorageObject> GetStorageObjects()
         {
@@ -448,7 +337,7 @@ namespace Rackspace.CloudFiles
 			var objectelements = rootelemtn.Elements("object");
 			
 			var objects = objectelements.Select(x=>
-			                                    new StorageObject(this,x.Element("name").Value, new Dictionary<string,string>(),
+			                                    new StorageObject(this,x.Element("name").Value,
 			                                          x.Element("content_type").Value, 
 			                                                      long.Parse(x.Element("bytes").Value),
 			                                                      x.Element("last_modified").Value.ParseCfDateTime(),

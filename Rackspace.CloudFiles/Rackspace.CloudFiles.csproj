@@ -122,7 +122,7 @@
     <Compile Include="Exceptions\InvalidETagException.cs" />
     <Compile Include="Exceptions\PreconditionFailedException.cs" />
     <Compile Include="Exceptions\PublicContainerNotFoundException.cs" />
-    <Compile Include="Exceptions\StorageItemNotFoundException.cs" />
+    <Compile Include="Exceptions\StorageObjectNotFoundException.cs" />
     <Compile Include="Account.cs" />
     <Compile Include="StorageObject.cs" />
     <Compile Include="Exceptions\InvalidContainerNameException.cs" />

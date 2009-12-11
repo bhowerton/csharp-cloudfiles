@@ -109,15 +109,6 @@ namespace Rackspace.CloudFiles.Interfaces
         void SetStorageObjectMetaInformation(string storageObjectName, Dictionary<string, string> metadata);
 
         /// <summary>
-        /// needs error checking or code restructure to make sure this is only called on public container
-        /// </summary>
-        /// <param name="loggingenabled"></param>
-        /// <param name="ttl"></param>
-        /// <param name="referreracl"></param>
-        /// <param name="useragentacl"></param>
-        void SetDetailsOnPublicContainer(bool loggingenabled, int ttl, string referreracl, string useragentacl);
-
-        /// <summary>
         /// This method ensures directory objects created for the entire path
         /// </summary>
         /// <example>
@@ -129,33 +120,7 @@ namespace Rackspace.CloudFiles.Interfaces
         /// </example>
         /// <param name="path">The path of directory objects to create</param>
         void MakePath(string path);
-
-        /// <summary>
-        /// JSON serialized format of the container's objects
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// string jsonResponse = connection.GetStorageObjectListInJson("container name");
-        /// </code>
-        /// </example>
-        /// <returns>json string of object information inside the container</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        string GetStorageObjectListInJson();
-
-        /// <summary>
-        /// XML serialized format of the container's objects
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// XmlDocument xmlResponse = connection.GetStorageObjectListInXml("container name");
-        /// </code>
-        /// </example>
-        /// <returns>xml document of object information inside the container</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        XmlDocument GetStorageObjectListInXml();
+ 
+    
     }
 }

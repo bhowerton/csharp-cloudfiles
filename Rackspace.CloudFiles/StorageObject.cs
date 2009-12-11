@@ -20,7 +20,7 @@ namespace Rackspace.CloudFiles
         private readonly IContainer _container;
  
         private readonly string objectName;
-        private readonly Dictionary<string, string> metadata;
+         
         private readonly string objectContentType;
         private readonly long contentLength;
         private readonly DateTime lastModified;
@@ -36,7 +36,7 @@ namespace Rackspace.CloudFiles
         /// <param name="lastModified"></param>
         /// <param name="container"></param>
         public StorageObject(IContainer container, string objectName, 
-		                     Dictionary<string, string> metadata,
+		                    
 		                     string objectContentType, 
 		                     long contentLength, 
 		                     DateTime lastModified,
@@ -48,7 +48,7 @@ namespace Rackspace.CloudFiles
             this.lastModified = lastModified;
             this.contentLength = contentLength;
             this.objectContentType = objectContentType;
-            this.metadata = metadata;
+           
            
         }
 
@@ -71,13 +71,7 @@ namespace Rackspace.CloudFiles
             get { return objectContentType; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Dictionary<string, string> Metadata
-        {
-            get { return metadata; }
-        }
+        
 
         public string ETag
         {

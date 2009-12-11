@@ -9,12 +9,12 @@ namespace Rackspace.CloudFiles.exceptions
     /// <summary>
     /// This exception is thrown when the requested storage item does not exist on cloudfiles in the container specified 
     /// </summary>
-    public class StorageItemNotFoundException : Exception
+    public class StorageObjectNotFoundException : Exception
     {
         /// <summary>
         /// The default constructor
         /// </summary>
-        public StorageItemNotFoundException()
+        public StorageObjectNotFoundException()
         {
         }
 
@@ -22,7 +22,7 @@ namespace Rackspace.CloudFiles.exceptions
         /// A constructor for more explicitly describing the reason for failure
         /// </summary>
         /// <param name="msg">The message detailing the failure</param>
-        public StorageItemNotFoundException(string msg) : base(msg)
+        public StorageObjectNotFoundException(string msg) : base(msg)
         {
         }
     }

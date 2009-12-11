@@ -106,7 +106,7 @@ namespace Rackspace.CloudFiles
 //                var response = (HttpWebResponse)we.Response;
 //                response.Close();
 //                if (response.StatusCode == HttpStatusCode.NotFound)
-//                    throw new StorageItemNotFoundException("The requested storage object does not exist");
+//                    throw new StorageObjectNotFoundException("The requested storage object does not exist");
 //
 //                throw;
 //            }
@@ -147,7 +147,7 @@ namespace Rackspace.CloudFiles
 //
 //                var response = (HttpWebResponse)we.Response;
 //                if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-//                    throw new StorageItemNotFoundException("The requested storage object does not exist");
+//                    throw new StorageObjectNotFoundException("The requested storage object does not exist");
 //
 //                throw;
 //            }
@@ -348,7 +348,7 @@ namespace Rackspace.CloudFiles
 //                var response = (HttpWebResponse)we.Response;
 //                response.Close();
 //                if (response.StatusCode == HttpStatusCode.NotFound)
-//                    throw new StorageItemNotFoundException("The requested storage object does not exist");
+//                    throw new StorageObjectNotFoundException("The requested storage object does not exist");
 //
 //                throw;
 //            }
