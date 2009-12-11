@@ -106,7 +106,7 @@ namespace Rackspace.CloudFiles
         /// <param name="localFilePath">The complete file path of the storage object to be uploaded</param>
         /// <param name="metadata">An optional parameter containing a dictionary of meta tags to associate with the storage object</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public void Send(string localFilePath, Dictionary<string, string> metadata)
+        public void SendToCloud(string localFilePath, Dictionary<string, string> metadata)
         {
             Ensure.NotNullOrEmpty(localFilePath);
             
@@ -173,15 +173,40 @@ namespace Rackspace.CloudFiles
             Constants.ExtensionToMimeTypeMap.TryGetValue(extension, out mimetype);
             return mimetype ?? "application/octet-stream";
         }
-
-        public void Save(Stream stream)
+        /// <summary>
+        /// </summary>
+        /// <param name="streamToWriteTo">does not close the stream you are responsible yourself</param>
+        public void SaveToDisk(Stream streamToWriteTo)
         {
-            throw new NotImplementedException();
+
+            var request = _container.Connection.CreateRequest();
+            request.Method = HttpVerb.GET;
+            var response = request.SubmitStorageRequest(_container.Name + "/" + RemoteName);
+            using (var responseStream = response.GetResponseStream())
+            {
+                byte[] buffer = new byte[4096];
+
+                int amt = 0;
+                while ((amt = responseStream.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    streamToWriteTo.Write(buffer, 0, amt);
+
+                }
+
+            }
+
         }
-
-        public void Save(string filelocation)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filelocation"></param>
+        public void SaveToDisk(string filelocation)
         {
-            throw new NotImplementedException();
+            using (var fs = new FileStream(filelocation, FileMode.Create))
+            {
+                SaveToDisk(fs);
+            }
+
         }
     }
 }

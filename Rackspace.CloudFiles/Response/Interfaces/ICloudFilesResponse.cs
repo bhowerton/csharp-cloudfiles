@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
+using Rackspace.CloudFiles.domain.response;
 
-namespace Rackspace.CloudFiles.domain.response.Interfaces
+namespace Rackspace.Cloudfiles.Response.Interfaces
 {
     public interface ICloudFilesResponse:IResponse
     {
@@ -20,13 +21,13 @@ namespace Rackspace.CloudFiles.domain.response.Interfaces
         string Method { get;  }
        
         string StatusDescription { get;  }
-        IList<string> ContentBody { get; }
+   
         string ContentType{ get; }
         string ETag { get; set; }
         long ContentLength { get; }
         DateTime LastModified { get; }
         Stream GetResponseStream();
-        void Dispose();
+      
        
     }
 }

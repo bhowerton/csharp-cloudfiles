@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.Interfaces;
+using Rackspace.Cloudfiles.Response.Interfaces;
 
 namespace Rackspace.CloudFiles.Specs.Utils
 {

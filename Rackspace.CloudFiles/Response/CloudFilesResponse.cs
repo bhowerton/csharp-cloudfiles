@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
-using Rackspace.CloudFiles.domain.response.Interfaces;
+using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.CloudFiles.domain.response
+namespace Rackspace.Cloudfiles.Response
 {
     /// <summary>
     /// Represents the response information from a CloudFiles request
@@ -19,66 +19,66 @@ namespace Rackspace.CloudFiles.domain.response
     {
         private readonly HttpWebResponse _webResponse;
         private IList<string> _contentbody = new List<string>();
-        private MemoryStream memstream = new MemoryStream( );
-        private Stream Getstream()
-        {
-            memstream.Seek(0, 0);
-        //    var copystream = new MemoryStream();
-         //   CopyToMemory(memstream, copystream);
-            return memstream;
-        }
+//        private MemoryStream memstream = new MemoryStream( );
+//        private Stream Getstream()
+//        {
+//            memstream.Seek(0, 0);
+//            //    var copystream = new MemoryStream();
+//            //   CopyToMemory(memstream, copystream);
+//            return memstream;
+//        }
         public CloudFilesResponse(HttpWebResponse webResponse)
         {
             _webResponse = webResponse;
-            CopyToMemory(_webResponse.GetResponseStream(), memstream);
-            if (HasTextBody())
-            try
-            {
-                GetBody(Getstream());
-            }
-            catch
-            {
+          //  CopyToMemory(_webResponse.GetResponseStream(), memstream);///this method call will crush computer on 5G size file. please fix or confirm proper behavior
+           // if (HasTextBody())
+             //   try
+               // {
+                 //   GetBody(Getstream());
+                //}
+                //catch
+               // {
                 
-            }
+               // }
             
         }
 
-        private bool HasTextBody()
-        {
-            return (_webResponse.ContentType.Contains("application/json") ||
-                _webResponse.ContentType=="application/xml"||
-                    _webResponse.ContentType == "application/xml; charset=utf-8" ||
-                    _webResponse.ContentType.Contains("text/plain") && _webResponse.ContentLength == -1) ||
-                   _webResponse.ContentType == "text/plain; charset=UTF-8";
-        }
+//        private bool HasTextBody()
+//        {
+//            return (_webResponse.ContentType.Contains("application/json") ||
+//                    _webResponse.ContentType=="application/xml"||
+//                    _webResponse.ContentType == "application/xml; charset=utf-8" ||
+//                    _webResponse.ContentType.Contains("text/plain") && _webResponse.ContentLength == -1) ||
+//                   _webResponse.ContentType == "text/plain; charset=UTF-8";
+//        }
 
-        private void CopyToMemory(Stream input, Stream output)
-        {
-            byte[] buffer = new byte[32768];
-            while (true)
-            {
-                int read = input.Read(buffer, 0, buffer.Length);
-                if (read <= 0)
-                {
-                    output.Seek(0, 0);
-                    return;
-                }
-                output.Write(buffer, 0, read);
-            }
-            
-        }
-        private void GetBody(Stream stream)
-        {
-             
-            using(var reader = new StreamReader(stream))
-            {
-                var line = "";
-                while((line = reader.ReadLine())!= null)
-                {
-                    _contentbody.Add(line);
-                }
-            }
-        }
+//        private static void CopyToMemory(Stream input, Stream output)
+//        {
+//            byte[] buffer = new byte[32768];
+//            while (true)
+//            {
+//                int read = input.Read(buffer, 0, buffer.Length);
+//                if (read <= 0)
+//                {
+//                    output.Seek(0, 0);
+//                    return;
+//                }
+//                output.Write(buffer, 0, read);
+//            }
+//            
+//        }
+//        private void GetBody(Stream stream)
+//        {
+//             
+//            using(var reader = new StreamReader(stream))
+//            {
+//                var line = "";
+//                while((line = reader.ReadLine())!= null)
+//                {
+//                    _contentbody.Add(line);
+//                }
+//            }
+//        }
         /// <summary>
         /// A property representing the HTTP Status code returned from cloudfiles
         /// </summary>
@@ -123,13 +123,7 @@ namespace Rackspace.CloudFiles.domain.response
             get { return _webResponse.StatusDescription; }
         }
 
-        public IList<string> ContentBody
-        {
-            get
-            {
-                return _contentbody;
-            }
-        }
+       
 
         public string ContentType
         {
@@ -155,16 +149,9 @@ namespace Rackspace.CloudFiles.domain.response
 
         public Stream GetResponseStream()
         {
-            
-            return  Getstream();
+            return _webResponse.GetResponseStream();
         }
 
-        public void Dispose()
-        {
-            memstream.Close();
-            _webResponse.Close();
-        }
-
-       
+        
     }
 }

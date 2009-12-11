@@ -215,10 +215,10 @@ namespace Rackspace.CloudFiles.Specs
         [Test]
         public void it_uses_a_format_of_xml()
         {
-            _fakehttp.Response.SetupGet(x => x.ContentBody).Returns(new[]
-                                                                        {
-                                                                            "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <account name=\"MichaelBarton\"></account>"
-                                                                        });
+            var responsestream =
+                TextStreamFactory.MakeFromString(
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <account name=\"MichaelBarton\"></account>");
+            _fakehttp.Response.Setup(x => x.GetResponseStream()).Returns(responsestream);
             
             _account.GetContainers();
             _fakehttp.Request.Verify(x => x.SubmitStorageRequest("?format=xml"));
@@ -227,24 +227,23 @@ namespace Rackspace.CloudFiles.Specs
         public void it_should_return_all_containers_in_account()
         {
 
-            string[] xmllines = new[]
-                                    {
-                                        "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <account name=\"MichaelBarton\">" ,
-                                        "<container>",
-                                                "<name>test_container_1</name>", 
-                                                "<count>2</count>", 
-                                                "<bytes>78</bytes>",
-                                            "</container>", 
-                                            "<container>",
-                                                "<name>test_container_2</name>" ,
-                                                "<count>1</count>", 
-                                                "<bytes>17</bytes>",
-                                            "</container>", 
-                                           "</account>"
-                                    };
+            var xmllines = TextStreamFactory.MakeFromString(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <account name=\"MichaelBarton\">"+
+                "<container>"+
+                "<name>test_container_1</name>"+
+                "<count>2</count>"+
+                "<bytes>78</bytes>"+
+                "</container>"+
+                "<container>"+
+                "<name>test_container_2</name>"+
+                "<count>1</count>"+
+                "<bytes>17</bytes>"+
+                "</container>"+
+                "</account>"
+                );
 
 
-            _fakehttp.Response.SetupGet(x => x.ContentBody).Returns(xmllines);
+            _fakehttp.Response.Setup(x => x.GetResponseStream()).Returns(xmllines);
                 var containers = _account.GetContainers();
                 Assert.AreEqual(2, containers.Count);
                 Assert.AreEqual("test_container_1", containers[0].Name);

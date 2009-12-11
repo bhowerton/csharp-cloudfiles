@@ -20,7 +20,7 @@ namespace Rackspace.CloudFiles.Specs
         {
 
             _fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.OK);
-            _fakehttp.Response.SetupGet(x => x.ContentBody).Returns(new[]{"<?xml version=\"1.0\" encoding=\"UTF-8\"?> <container name=\"test_container_1\">",
+            _fakehttp.Response.Setup(x => x.GetResponseStream()).Returns(TextStreamFactory.MakeFromString("<?xml version=\"1.0\" encoding=\"UTF-8\"?> <container name=\"test_container_1\">"+
 																			@"<object> 
 																				<name>test_object_1</name> 
 																				<hash>4281c348eaf83e70ddce0e07221c3d28</hash> 
@@ -35,7 +35,7 @@ namespace Rackspace.CloudFiles.Specs
 																				<content_type>application/octet-stream</content_type> 
 																				<last_modified>2009-02-03T05:26:32.612278</last_modified>
 																			</object> 
-																		</container>"});
+																		</container>"));
             var acct = new Account(_fakehttp.Factory.Object, 1, 89);
             _container = new Container("foobar", acct, 1, 12);
             _objects = _container.GetStorageObjects();
@@ -86,8 +86,8 @@ namespace Rackspace.CloudFiles.Specs
         public void setup()
         {
             _fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.OK);
-            _fakehttp.Response.SetupGet(x => x.ContentBody).Returns(new[]{"<?xml version=\"1.0\" encoding=\"UTF-8\"?> <container name=\"test_container_1\">",
-																			@"</container>"});
+            _fakehttp.Response.Setup(x => x.GetResponseStream()).Returns(TextStreamFactory.MakeFromString("<?xml version=\"1.0\" encoding=\"UTF-8\"?> <container name=\"test_container_1\">"+
+																			@"</container>"));
             var acct = new Account(_fakehttp.Factory.Object, 1, 89);
             _container = new Container("foobar", acct, 1, 12);
             _objects = _container.GetStorageObjects();

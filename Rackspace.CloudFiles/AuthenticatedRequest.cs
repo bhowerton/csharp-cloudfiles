@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Net;
-using Rackspace.CloudFiles.domain.response;
-using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.Interfaces;
+using Rackspace.Cloudfiles.Response;
+using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles

@@ -98,7 +98,6 @@
     <Compile Include="Request\MarkContainerAsPublic.cs" />
     <Compile Include="Request\SetPublicContainerDetails.cs" />
     <Compile Include="Response\CloudFilesResponse.cs" />
-    <Compile Include="Response\CloudFilesResponseWithContentBody.cs" />
     <Compile Include="TemporaryDumpingGround.cs" />
     <Compile Include="Utils\ArrayHelpers.cs" />
     <Compile Include="Utils\Ensure.cs" />
@@ -111,10 +110,8 @@
     <Compile Include="Request\DeleteStorageObject.cs" />
     <Compile Include="Request\GetContainerItemList.cs" />
     <Compile Include="Request\GetStorageObject.cs" />
-    <Compile Include="Response\GetStorageItemResponse.cs" />
     <Compile Include="Request\GetStorageItemInformation.cs" />
     <Compile Include="Response\IResponse.cs" />
-    <Compile Include="Response\IResponseWithContentBody.cs" />
     <Compile Include="Request\CloudFilesRequest.cs" />
     <Compile Include="Request\PutStorageObject.cs" />
     <Compile Include="Exceptions\ContainerAlreadyExistsException.cs" />
@@ -133,6 +130,7 @@
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\StreamHelpers.cs" />
     <Compile Include="Utils\StringHelper.cs" />
     <Compile Include="Utils\Writer.cs" />
     <Compile Include="Domain\Execution.cs" />

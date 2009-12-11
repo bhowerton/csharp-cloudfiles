@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Interfaces;
 using Rackspace.CloudFiles.Request;
+using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 using System.Xml.Linq;
 
@@ -63,87 +63,7 @@ namespace Rackspace.CloudFiles
 
         #endregion 
         #region methods
-        /// <summary>
-        /// This method retrieves the contents of a container
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Dictionary{GetItemListParameters, string} parameters = new Dictionary{GetItemListParameters, string}();
-        /// parameters.Add(GetItemListParameters.Limit, 2);
-        /// parameters.Add(GetItemListParameters.Marker, 1);
-        /// parameters.Add(GetItemListParameters.Prefix, "a");
-        /// List{string} containerItemList = connection.GetContainerStorageObjectList("container name", parameters);
-        /// </code>
-        /// </example>
-        /// <param name="parameters">Parameters to feed to the request to filter the returned list</param>
-        /// <returns>An instance of List, containing the names of the storage objects in the give container</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public List<string> GetContainerStorageObjectList(Dictionary<GetItemListParameters, string> parameters)
-        {
-            StringBuilder _stringBuilder = new StringBuilder();
-
-
-            foreach (GetItemListParameters param in parameters.Keys)
-            {
-                var paramName = param.ToString().ToLower();
-                //FIXME: what does this do
-                if (param == GetItemListParameters.Limit)
-                    int.Parse(parameters[param]);
-
-                if (_stringBuilder.Length > 0)
-                    _stringBuilder.Append("&");
-                else
-                    _stringBuilder.AppendFormat("?");
-                _stringBuilder.Append(paramName + "=" + parameters[param].Encode());
-            }
-            return GetContainerStorageObjectList(_stringBuilder.ToString());
-          
-        }
-        private List<string> GetContainerStorageObjectList(string urlparams)
-        {
-            var containerItemList = new List<string>();
-
-            try
-            {
-
-                var request = _account.Connection.CreateRequest();
-                request.Method = HttpVerb.GET;
-                var getContainerItemListResponse = request.SubmitStorageRequest(this.Name.Encode() + urlparams);
-                if (getContainerItemListResponse.Status == HttpStatusCode.OK)
-                {
-                    containerItemList.AddRange(getContainerItemListResponse.ContentBody);
-                }
-            }
-            catch (WebException we)
-            {
-
-                var response = (HttpWebResponse)we.Response;
-                if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new ContainerNotFoundException("The requested container does not exist!");
-
-                throw;
-            }
-            return containerItemList;
-        }
-        /// <summary>
-        /// This method retrieves the contents of a container
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// List{string} containerItemList = connection.GetContainerStorageObjectList("container name");
-        /// </code>
-        /// </example>
-        /// <returns>An instance of List, containing the names of the storage objects in the give container</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public List<string> GetContainerStorageObjectList()
-        {
-
-            return GetContainerStorageObjectList("");
-        }
+       
         /// <summary>
         /// This method deletes a storage object in a given container
         /// </summary>
@@ -306,12 +226,9 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public string GetStorageObjectListInSpecifiedFormat(Format outputformat)
         {
-            
-             
+ 
                 var getSerializedResponse = BaseGetContainerObjectList(outputformat);
-                var xmlResponse = String.Join("", getSerializedResponse.ContentBody.ToArray());
-                getSerializedResponse.Dispose();
-                return xmlResponse;
+                return getSerializedResponse.GetResponseStream().ConvertToString();          
         }
 
         #endregion
@@ -332,7 +249,7 @@ namespace Rackspace.CloudFiles
              var request = _account.Connection.CreateRequest();
 			request.Method= HttpVerb.GET;
 			var response = request.SubmitStorageRequest(Name);
-			var xml = response.ContentBody.ConvertToString();
+			var xml = response.GetResponseStream().ConvertToString();
 			var rootelemtn = XElement.Parse(xml);
 			var objectelements = rootelemtn.Elements("object");
 			

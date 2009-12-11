@@ -1,8 +1,8 @@
 using System;
 using System.Net;
 using Moq;
-using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.Interfaces;
+using Rackspace.Cloudfiles.Response.Interfaces;
 
 namespace Rackspace.CloudFiles.Specs.Utils
 {

@@ -24,39 +24,7 @@ namespace Rackspace.CloudFiles.Interfaces
 
       
 
-        /// <summary>
-        /// This method retrieves the contents of a container
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Dictionary{GetItemListParameters, string} parameters = new Dictionary{GetItemListParameters, string}();
-        /// parameters.Add(GetItemListParameters.Limit, 2);
-        /// parameters.Add(GetItemListParameters.Marker, 1);
-        /// parameters.Add(GetItemListParameters.Prefix, "a");
-        /// List{string} containerItemList = connection.GetContainerStorageObjectList("container name", parameters);
-        /// </code>
-        /// </example>
-        /// <param name="parameters">Parameters to feed to the request to filter the returned list</param>
-        /// <returns>An instance of List, containing the names of the storage objects in the give container</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        List<string> GetContainerStorageObjectList(Dictionary<GetItemListParameters, string> parameters);
-
-        /// <summary>
-        /// This method retrieves the contents of a container
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// List{string} containerItemList = connection.GetContainerStorageObjectList("container name");
-        /// </code>
-        /// </example>
-        /// <returns>An instance of List, containing the names of the storage objects in the give container</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        List<string> GetContainerStorageObjectList();
-
+       
         /// <summary>
         /// This method deletes a storage object in a given container
         /// </summary>
@@ -71,22 +39,7 @@ namespace Rackspace.CloudFiles.Interfaces
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         void DeleteStorageItem(string storageItemName);
 
-        /// <summary>
-        /// An alternate method for downloading storage objects from cloudfiles directly to a file name specified in the method
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Dictionary{RequestHeaderFields, string} requestHeaderFields = Dictionary{RequestHeaderFields, string}();
-        /// string dummy_etag = "5c66108b7543c6f16145e25df9849f7f";
-        /// requestHeaderFields.Add(RequestHeaderFields.IfMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfNoneMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
-
+       
 
      
         /// <summary>

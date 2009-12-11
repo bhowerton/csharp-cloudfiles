@@ -15,7 +15,7 @@ namespace Rackspace.CloudFiles.Examples.Retrieving
             {
                 using(var filestream = File.OpenWrite(basedir+so.RemoteName))
                 {
-                    so.Save(filestream);
+                    so.SaveToDisk(filestream);
                 }
             }
         }
@@ -28,7 +28,7 @@ namespace Rackspace.CloudFiles.Examples.Retrieving
             const string basedir = "c:\\foo\\";
             foreach (var so in storageobjects)
             {
-                so.Save(basedir + so.RemoteName);
+                so.SaveToDisk(basedir + so.RemoteName);
                 
             }
         }

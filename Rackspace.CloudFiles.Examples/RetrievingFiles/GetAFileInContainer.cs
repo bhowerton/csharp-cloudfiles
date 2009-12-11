@@ -7,7 +7,7 @@ namespace Rackspace.CloudFiles.Examples.Retrieving
             var account = Authenticate.Connection("foobar", "askljk");
             var container = account.GetContainer("MyContainer");
             var storageobject = container.GetStorageObject("Foo.txt");
-            storageobject.Save("c:\\myfoo\\Foo.txt");
+            storageobject.SaveToDisk("c:\\myfoo\\Foo.txt");
         }
        
     }

@@ -1,6 +1,6 @@
 using System.IO;
 using System.Net;
-using Rackspace.CloudFiles.domain.response.Interfaces;
+using Rackspace.Cloudfiles.Response.Interfaces;
 
 namespace Rackspace.CloudFiles.Interfaces
 {

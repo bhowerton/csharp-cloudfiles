@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using Moq;
 using NUnit.Framework;
-using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.Interfaces;
+using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.Specs

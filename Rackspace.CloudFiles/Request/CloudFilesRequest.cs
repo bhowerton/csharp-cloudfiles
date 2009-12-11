@@ -8,9 +8,9 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using Rackspace.CloudFiles.domain;
-using Rackspace.CloudFiles.domain.response;
-using Rackspace.CloudFiles.domain.response.Interfaces;
 using Rackspace.CloudFiles.Request.Interfaces;
+using Rackspace.Cloudfiles.Response;
+using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles.Request

@@ -174,7 +174,7 @@ namespace Rackspace.CloudFiles
             request.Method = HttpVerb.GET;
             var response = request.SubmitStorageRequest("?format=xml");
 
-            var xml = response.ContentBody.ConvertToString();
+            var xml = response.GetResponseStream().ConvertToString();
             var masterelement = XElement.Parse(xml);
             var containers = masterelement.Elements("container");
             var objects =    containers.Select(x => new Container(
