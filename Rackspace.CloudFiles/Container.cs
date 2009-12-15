@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Interfaces;
@@ -24,6 +25,21 @@ namespace Rackspace.CloudFiles
             IAccount request, long objectcount, long bytesused):base(
             containerName, readerwriter, request, objectcount, bytesused
             ){}
+
+        public StorageObject CreateStorageObject(string filename, IDictionary<string,string> metadata)
+        {
+            return CreateStorageObject(filename, File.OpenRead(filename), metadata);
+        }
+        public StorageObject CreateStorageObject(string remotename, Stream stream, IDictionary<string, string> metadata)
+        {
+            var request = Connection.CreateRequest();
+            request.Method = HttpVerb.PUT;
+            request.Etag = BitConverter.ToString(MD5.Create().ComputeHash(stream));
+            request.ContentType = remotename.MimeType();
+            var response = request.SubmitStorageRequest("/" + Name.Encode() + "/" + remotename.Encode());
+
+            return new StorageObject(this, remotename.Encode(), response.ContentType, response.ContentLength, response.LastModified, response.ETag);
+        }
     }
     /// <summary>
     /// Container
@@ -71,21 +87,15 @@ namespace Rackspace.CloudFiles
 
 
         #endregion
-        #region methods
-
+         
         /// <summary>
         /// This method deletes a storage object in a given container
         /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// connection.DeleteStorageObject("container name", "RemoteStorageItem.txt");
-        /// </code>
-        /// </example>
         /// <param name="storageItemName">The name of the storage object to delete</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public void DeleteStorageItem(string storageItemName)
+        /// <exception cref="StorageObjectNotFoundException">Thrown on response code 404</exception>
+        /// <exception cref="InvalidResponseCodeException">Thrown on response code 404</exception>
+        public void DeleteStorageObject(string storageItemName)
         {
             Ensure.NotNullOrEmpty(storageItemName);
 
@@ -94,9 +104,11 @@ namespace Rackspace.CloudFiles
 
             var response = request.SubmitStorageRequest("/" + this.Name.Encode() + "/" + storageItemName.StripSlashPrefix().Encode());
 
-            if (response != null && response.Status == HttpStatusCode.NotFound)
+            if(response.Status ==HttpStatusCode.NoContent)
+                return;
+            if (response.Status == HttpStatusCode.NotFound)
                 throw new StorageObjectNotFoundException("The requested storage object for deletion does not exist");
-
+            throw new InvalidResponseCodeException(response.Status);
         }
 
 
@@ -178,7 +190,10 @@ namespace Rackspace.CloudFiles
             {
                 if (string.IsNullOrEmpty(item)) continue;
                 if (!firstItem) directory += "/";
-                directory += item.Encode();
+                {
+                    directory += item.Encode();
+                }
+                firstItem = false;
                 var request = _account.Connection.CreateRequest();
                 request.Method = HttpVerb.PUT;
                 request.ContentType = "application/directory";
@@ -186,12 +201,15 @@ namespace Rackspace.CloudFiles
 
                 var urltoappend = "/" + Name.Encode() + "/" + directory.Encode();
                 var response = request.SubmitStorageRequest(urltoappend, req => req.ContentLength = 0, res => { });
-                if (response.Status == HttpStatusCode.BadRequest) throw new ContainerNotFoundException("The requested container does not exist");
-                if (response.Status == HttpStatusCode.PreconditionFailed) throw new PreconditionFailedException("Precondition error you are missing some required fields for this request");
-
-                firstItem = false;
+                if (response.Status == HttpStatusCode.Created) continue;
+                if (((int)response.Status) == 422)
+                    throw new InvalidETagException(
+                        "The sent ETAG does not match the ETAG check on the remote server. Please verify the ETAG sent is the correct MD5 hash for the file sent");
+                if(response.Status==HttpStatusCode.LengthRequired) throw new MissingHeaderException("is missing the Content-Length And/Or Content-Type headers");
+                throw new InvalidResponseCodeException(response.Status);
+               
             }
-
+            
 
 
 
@@ -223,7 +241,7 @@ namespace Rackspace.CloudFiles
             return retvalue;
         }
 
-        #endregion
+  
 
         public StorageObject GetStorageObject(string storageObjectName)
         {

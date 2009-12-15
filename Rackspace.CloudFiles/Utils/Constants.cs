@@ -34,7 +34,7 @@ namespace Rackspace.CloudFiles.utils
         public const string CONTENT_TYPE_HEADER = "Content-Type";
         public const string AUTH_URL = "https://auth.api.rackspacecloud.com/v1.0";
         public const string X_LOG_RETENTION = "X-Log-Retention";
-        public static IDictionary<string,string> ExtensionToMimeTypeMap = new Dictionary<string, string>()
+        public static readonly IDictionary<string,string> ExtensionToMimeTypeMap = new Dictionary<string, string>()
                                                                        {
                                                                              {".3dm", "x-world/x-3dmf"},
                                  {".3dmf", "x-world/x-3dmf"},

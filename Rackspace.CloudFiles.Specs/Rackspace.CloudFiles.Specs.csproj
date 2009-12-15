@@ -52,9 +52,7 @@
     <Compile Include="CustomAsserts\UriMatchers.cs" />
     <Compile Include="CustomAsserts\WebHeaderMatchers.cs" />
     <Compile Include="Domain\request\SetLoggingToContainerRequestSpec.cs" />
-    <Compile Include="Domain\request\DeleteStorageObjectSpecs.cs" />
     <Compile Include="Domain\request\GetPublicContainersSpecs.cs" />
-    <Compile Include="Domain\request\GetStorageObjectInformationSpecs.cs" />
     <Compile Include="Domain\request\GetStorageObjectSpecs.cs" />
     <Compile Include="Domain\request\SetPublicContainerDetailsSpecs.cs" />
     <Compile Include="SpecAccount.cs" />

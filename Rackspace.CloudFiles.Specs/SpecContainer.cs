@@ -1,3 +1,5 @@
+using System.IO;
+using System.Security.Cryptography;
 using Moq;
 using NUnit.Framework;
 using Rackspace.CloudFiles.exceptions;
@@ -15,7 +17,7 @@ namespace Rackspace.CloudFiles.Specs
     public class SpecContainerWhenGettingListOfObjects
     {
 
-       
+
         private Container _container;
         private IList<StorageObject> _objects;
         private Mock<IAuthenticatedRequestFactory> _mockfactory;
@@ -52,8 +54,8 @@ namespace Rackspace.CloudFiles.Specs
             _mockfactory.Setup(x => x.CreateRequest()).Returns(_mockrequest);
             _mockresponse.Setup(x => x.Status).Returns(HttpStatusCode.OK);
 
-            var acct = new Account(mockhttpreaderwriter.Object , _mockfactory.Object, 1, 89);
-            _container = new Container( "foobar", mockhttpreaderwriter.Object,acct, 1, 12);
+            var acct = new Account(mockhttpreaderwriter.Object, _mockfactory.Object, 1, 89);
+            _container = new Container("foobar", mockhttpreaderwriter.Object, acct, 1, 12);
             _objects = _container.GetStorageObjects();
 
 
@@ -62,7 +64,7 @@ namespace Rackspace.CloudFiles.Specs
         public void should_use_get_method()
         {
 
-            Assert.AreEqual(_mockrequest.Method ,HttpVerb.GET);
+            Assert.AreEqual(_mockrequest.Method, HttpVerb.GET);
 
         }
 
@@ -94,7 +96,7 @@ namespace Rackspace.CloudFiles.Specs
     public class SpecContainerWhenGettingListOfObjectsAndThereAreNoObjectsInTheContainer
     {
 
-        
+
         private Container _container;
         private IList<StorageObject> _objects;
 
@@ -109,9 +111,9 @@ namespace Rackspace.CloudFiles.Specs
             var mockrequest = new MockAuthenticatedRequest(mockresponse.Object);
             var mockfactory = new Mock<IAuthenticatedRequestFactory>();
             mockfactory.Setup(x => x.CreateRequest()).Returns(mockrequest);
-            
+
             var acct = new Account(httpreaderwriter.Object, mockfactory.Object, 1, 89);
-            _container = new Container( "foobar", httpreaderwriter.Object,acct, 1, 12);
+            _container = new Container("foobar", httpreaderwriter.Object, acct, 1, 12);
             _objects = _container.GetStorageObjects();
         }
 
@@ -222,6 +224,76 @@ namespace Rackspace.CloudFiles.Specs
 
     }
     [TestFixture]
+    public class SpecContainerMakingPathAndResponseCodeIsOtherThan201Or422Or412
+    {
+        private WebMocks _webmocks;
+        private Container _container;
+
+        [SetUp]
+        public void setup()
+        {
+            _webmocks = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.Unauthorized);
+            _webmocks.Request.Setup(
+                x =>
+                x.SubmitStorageRequest(It.IsAny<string>(), It.IsAny<Action<HttpWebRequest>>(),
+                                       It.IsAny<Action<HttpWebResponse>>())).Returns(_webmocks.Response.Object);
+            _container = new Container("container", new Account(_webmocks.Factory.Object, 1, 2), 1, 2);
+
+        }
+
+        [Test]
+        public void it_throws_invalid_response_code_exception()
+        {
+            try
+            {
+                _container.MakePath("/foobar/myfoo/myfooworld");
+                Assert.Fail("");
+            }
+            catch (InvalidResponseCodeException ex)
+            {
+                StringAssert.Contains("Unauthorized", ex.Message);
+
+            }
+
+        }
+    }
+    [TestFixture]
+    public class SpecContainerMakingPathAndResponseCodeIs412
+    {
+
+        private WebMocks _webmocks;
+        private Container _container;
+
+        [SetUp]
+        public void setup()
+        {
+            _webmocks = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.LengthRequired);
+            _webmocks.Request.Setup(
+                x =>
+                x.SubmitStorageRequest(It.IsAny<string>(), It.IsAny<Action<HttpWebRequest>>(),
+                                       It.IsAny<Action<HttpWebResponse>>())).Returns(_webmocks.Response.Object);
+            _container = new Container("container", new Account(_webmocks.Factory.Object, 1, 2), 1, 2);
+
+        }
+
+        [Test]
+        public void it_throws_missing_header_exception()
+        {
+            try
+            {
+                _container.MakePath("/foobar/myfoo/myfooworld");
+                Assert.Fail();
+            }
+            catch (MissingHeaderException)
+            {
+
+
+            }
+
+        }
+
+    }
+    [TestFixture]
     public class SpecContainerWhenMakingDirectoryPath
     {
         private WebMocks _webmocks;
@@ -248,7 +320,7 @@ namespace Rackspace.CloudFiles.Specs
         [Test]
         public void it_runs_a_request_for_each_path()
         {
-           
+
             _webmocks.Request.Verify(x => x.SubmitStorageRequest("/container/foobar", It.IsAny<Action<HttpWebRequest>>(), It.IsAny<Action<HttpWebResponse>>()), Times.Once());
 
             _webmocks.Request.Verify(x => x.SubmitStorageRequest("/container/foobar%2fmyfoo", It.IsAny<Action<HttpWebRequest>>(), It.IsAny<Action<HttpWebResponse>>()), Times.Once());
@@ -260,6 +332,196 @@ namespace Rackspace.CloudFiles.Specs
         {
             _webmocks.Request.VerifySet(x => x.ContentType = "application/directory");
         }
+    }
+    [TestFixture]
+    public class SpecContainerDeletingStorageObject
+    {
+        private WebMocks _webmocks;
+        private Container _container;
+
+        [SetUp]
+        public void setup()
+        {
+            _webmocks = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.NoContent);
+
+
+            _container = new Container("container", new Account(_webmocks.Factory.Object, 1, 2), 1, 2);
+            _container.DeleteStorageObject("foobar");
+        }
+        [Test]
+        public void it_calls_container_name_and_storage_remote_name_in_url()
+        {
+            _webmocks.Request.Verify(x => x.SubmitStorageRequest("/container/foobar"));
+        }
+
+        [Test]
+        public void it_uses_http_delete_method()
+        {
+            _webmocks.Request.VerifySet(x => x.Method = HttpVerb.DELETE);
+        }
+
+    }
+
+    [TestFixture]
+    public class SpecContainerDeletingStorageObjectThatDoesNotExist
+    {
+        private WebMocks _webmocks;
+        private Container _container;
+
+        [SetUp]
+        public void setup()
+        {
+            _webmocks = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.NotFound);
+
+
+            _container = new Container("container", new Account(_webmocks.Factory.Object, 1, 2), 1, 2);
+
+        }
+
+
+        [Test]
+        public void it_throws_object_not_found_exception()
+        {
+            Asserts.Throws<StorageObjectNotFoundException>(() => _container.DeleteStorageObject("foobar"));
+        }
+
+    }
+    [TestFixture]
+    public class SpecContainerDeletingStorageObjectAndErrorCodeOtherThan204Or404Occurs
+    {
+        private WebMocks _webmocks;
+        private Container _container;
+
+        [SetUp]
+        public void setup()
+        {
+            _webmocks = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.Unauthorized);
+
+
+            _container = new Container("container", new Account(_webmocks.Factory.Object, 1, 2), 1, 2);
+
+        }
+
+
+        [Test]
+        public void it_throws_generic_exception_with_actual_response_code()
+        {
+            try
+            {
+                _container.DeleteStorageObject("foobar");
+                Assert.Fail("should throw");
+            }
+            catch (InvalidResponseCodeException ex)
+            {
+                Assert.AreEqual(typeof(InvalidResponseCodeException), ex.GetType());
+                StringAssert.Contains("Unauthorized", ex.Message);
+            }
+        }
+    }
+    [TestFixture]
+    public class SpecContainerWhenCreatingStorageObject
+    {
+        private MockAuthenticatedRequest _mockrequest;
+        private Mock<IAuthenticatedRequestFactory> _mockfactory;
+        private Mock<ICloudFilesResponse> _mockresponse;
+        private Mock<IHttpReaderWriter> _mockreaderwriter
+            ;
+
+        private Container _container;
+        private StorageObject so;
+        private string _md5;
+
+
+        [SetUp]
+        public void Setup()
+        {
+
+            _mockfactory = new Mock<IAuthenticatedRequestFactory>();
+            _mockresponse = new Mock<ICloudFilesResponse>();
+
+            _mockrequest = new MockAuthenticatedRequest(_mockresponse.Object);
+
+            _mockreaderwriter = new Mock<IHttpReaderWriter>();
+
+            _mockfactory.Setup(x => x.CreateRequest()).Returns(_mockrequest);
+
+
+            Stream stream = new MemoryStream(200);
+            _md5 = BitConverter.ToString(MD5.Create().ComputeHash(stream));
+
+            
+            _mockresponse.SetupGet(x => x.ETag).Returns(_md5);
+            _mockresponse.SetupGet(x => x.LastModified).Returns(DateTime.MinValue);
+            _mockresponse.SetupGet(x => x.ContentLength).Returns(200);
+            _mockresponse.SetupGet(x => x.ContentType).Returns("text/plain");
+
+            var account = new Mock<IAccount>();
+            account.SetupGet(x => x.Connection).Returns(_mockfactory.Object);
+
+
+
+
+            _container = new Container("foobar", _mockreaderwriter.Object, account.Object, 1, 1);
+            string remotename = "foobar.txt";
+         
+            IDictionary<string, string> metadata = new Dictionary<string, string>();
+             so = _container.CreateStorageObject(remotename, stream, metadata);
+            
+
+        }
+
+        [Test]
+        public void it_uses_put_method()
+        {
+            Assert.AreEqual(HttpVerb.PUT, _mockrequest.Method);
+        }
+
+        [Test]
+        public void it_has_container_name_and_object_name_in_url()
+        {
+            Assert.AreEqual("/foobar/foobar.txt", _mockrequest.StorageUrlsPassed[0]);
+        }
+
+        [Test]
+        public void it_sends_etag()
+        {
+            Assert.AreEqual(_md5, _mockrequest.Etag);
+        }
+
+        [Test]
+        public void it_sends_contenttype()
+        {
+           Assert.AreEqual( "text/plain",_mockrequest.ContentType);
+        }
+
+        
+        [Test]
+        public void it_stores_response_values_in_storageobject()
+        {
+            Assert.AreEqual( 200, so.ContentLength);
+            Assert.AreEqual(_md5, so.ETag);
+            Assert.AreEqual(DateTime.MinValue, so.LastModified);
+            Assert.AreEqual("foobar.txt", so.RemoteName);
+            Assert.AreEqual("text/plain", so.ContentType);
+        }
+    }
+
+    [TestFixture]
+    public class SpecContainerWhenCreatingStorageObjectAndResponseCodeIs412
+    {
+
+
+    }
+    [TestFixture]
+    public class SpecContainerWhenCreatingStorageObjectAndResponseCodeIs422
+    {
+
+
+    }
+
+    [TestFixture]
+    public class SpecContainerWhenCreatingStorageObjectAndResponseCodeIsNot412Or422Or201
+    {
 
 
     }

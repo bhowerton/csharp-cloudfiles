@@ -52,9 +52,9 @@ namespace Rackspace.CloudFiles
 
 
         }
-        public StorageObject(IContainer container, string objectName, string objectContentLength,long contentLength ,
+        public StorageObject(IContainer container, string objectName, string objectContentType,long contentLength ,
             DateTime lastmodified, string etag):
-            this(new HttpReaderWriter(), container, objectName, objectContentLength, contentLength,lastmodified, etag)
+            this(new HttpReaderWriter(), container, objectName, objectContentType, contentLength,lastmodified, etag)
         {
             
         }
@@ -156,8 +156,7 @@ namespace Rackspace.CloudFiles
 
             if (webResponse.Status == HttpStatusCode.BadRequest)
                 throw new ContainerNotFoundException("The requested container does not exist");
-            if (webResponse.Status == HttpStatusCode.PreconditionFailed)
-                throw new PreconditionFailedException("Precondition Failed");
+          
         }
         private string CleanUpFilePath(string filePath)
         {
@@ -171,17 +170,10 @@ namespace Rackspace.CloudFiles
         {
 
             if (String.IsNullOrEmpty(fileUrl) || fileUrl.IndexOf(".") < 0) return "application/octet-stream";
-            return MimeType(fileUrl);
+            return fileUrl.MimeType();
 
         }
-        private string MimeType(string filename)
-        {
-            var extension = Path.GetExtension(filename).ToLower();
-
-            string mimetype = "";
-            Constants.ExtensionToMimeTypeMap.TryGetValue(extension, out mimetype);
-            return mimetype ?? "application/octet-stream";
-        }
+       
         /// <summary>
         /// </summary>
         /// <param name="streamToWriteTo">does not close the stream you are responsible yourself</param>
@@ -228,6 +220,12 @@ namespace Rackspace.CloudFiles
             };
 
             var cfresponse = request.SubmitStorageRequest(_container.Name + "/" + RemoteName, req => { }, del);
+        }
+
+        public IDictionary<string,string> GetMetaData()
+        {
+            ///need to make head call here
+            return new Dictionary<string, string>();
         }
     }
 }

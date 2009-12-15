@@ -16,5 +16,6 @@ namespace Rackspace.CloudFiles.Interfaces
         WebHeaderCollection Headers { get; set; }
         bool AllowWriteStreamBuffering { set; get; }
         bool Chunked { set; get; }
+        string Etag { get; set; }
     }
 }

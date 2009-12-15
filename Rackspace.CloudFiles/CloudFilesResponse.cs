@@ -9,7 +9,7 @@ using System.Net;
 using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.Cloudfiles.Response
+namespace Rackspace.Cloudfiles
 {
     /// <summary>
     /// Represents the response information from a CloudFiles request
@@ -30,7 +30,7 @@ namespace Rackspace.Cloudfiles.Response
             webResponse.Close();
         }
 
-       /// <summary>
+        /// <summary>
         /// A property representing the HTTP Status code returned from cloudfiles
         /// </summary>
         public HttpStatusCode Status { get; private set; }

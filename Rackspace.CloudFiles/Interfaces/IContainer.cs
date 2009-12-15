@@ -37,7 +37,7 @@ namespace Rackspace.CloudFiles.Interfaces
         /// </example>
         /// <param name="storageItemName">The name of the storage object to delete</param>
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        void DeleteStorageItem(string storageItemName);
+        void DeleteStorageObject(string storageItemName);
 
        
 

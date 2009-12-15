@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
+using Rackspace.Cloudfiles;
 using Rackspace.CloudFiles.Interfaces;
-using Rackspace.Cloudfiles.Response;
 using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 
@@ -55,6 +55,7 @@ namespace Rackspace.CloudFiles
             request.Method = Method.GetDescription();
             request.Headers = Headers;
             request.Headers.Add(Constants.X_AUTH_TOKEN, _authtoken);
+            request.Headers.Add("Etag", Etag);
             if (ContentType != null) request.ContentType = ContentType;
             request.AllowWriteStreamBuffering = AllowWriteStreamBuffering;
             request.SendChunked = Chunked;
@@ -104,7 +105,10 @@ namespace Rackspace.CloudFiles
         {
             set; get;
         }
-     
-       
+
+        public string Etag
+        {
+            get; set;
+        }
     }
 }

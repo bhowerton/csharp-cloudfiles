@@ -231,8 +231,6 @@ namespace Rackspace.CloudFiles.Specs
         public void setup()
         {
             _mockfactory = new Mock<IAuthenticatedRequestFactory>();
-        
-           
             _response = new Mock<ICloudFilesResponse>();
             _request = new MockAuthenticatedRequest(_response.Object);
             _mockfactory.Setup(j => j.CreateRequest()).Returns(_request);
@@ -260,30 +258,10 @@ namespace Rackspace.CloudFiles.Specs
         {
 
             _account.GetContainers();
-          //  _request.Verify(x => x.SubmitStorageRequest("?format=xml",
-            //    It.IsAny<Action<HttpWebRequest>>()
-              //  , It.IsAny<Action<HttpWebResponse>>()));
         }
         [Test]
         public void it_should_return_all_containers_in_account()
         {
-
-//            var xmllines = TextStreamFactory.MakeFromString(
-//                "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <account name=\"MichaelBarton\">" +
-//                "<container>" +
-//                "<name>test_container_1</name>" +
-//                "<count>2</count>" +
-//                "<bytes>78</bytes>" +
-//                "</container>" +
-//                "<container>" +
-//                "<name>test_container_2</name>" +
-//                "<count>1</count>" +
-//                "<bytes>17</bytes>" +
-//                "</container>" +
-//                "</account>"
-//                );
-
-
 
             var containers = _account.GetContainers();
             Assert.AreEqual(2, containers.Count);

@@ -27,6 +27,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
 
         public ICloudFilesResponse SubmitStorageRequest(string appendtostorageurl)
         {
+            _storageurlsPassed.Add(appendtostorageurl);
             return _response;
         }
 
@@ -71,15 +72,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
             set; get;
         }
 
-        public int ContentLength
-        {
-            get; set;
-        }
-
-        public void SetContent(Stream stream)
-        {
-            StreamSet = stream;
-        }
+    
         public IList<string> Cdnurlspassed
         {
             get { return _cdnurlspassed; }
@@ -92,6 +85,12 @@ namespace Rackspace.CloudFiles.Specs.Utils
         {
             get; private set;
         }
+
+        public string Etag
+        {
+            get; set;
+        }
+
         public ICloudFilesResponse SubmitCdnRequest(string appendtocdnurl)
         {
             _cdnurlspassed.Add(appendtocdnurl);

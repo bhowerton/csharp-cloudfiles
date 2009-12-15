@@ -20,7 +20,7 @@ namespace Rackspace.CloudFiles.Specs.Utils
             var mockrequest = new Mock<IAuthenticatedRequest>();
             var mockresponse = new Mock<ICloudFilesResponse>();
             var mockfactory = new Mock<IAuthenticatedRequestFactory>();
-            
+
             mockfactory.Setup(x => x.CreateRequest()).Returns(mockrequest.Object);
             mockrequest.Setup(x => x.SubmitStorageRequest(It.IsAny<string>())).Returns(mockresponse.Object);
             mockrequest.Setup(x => x.SubmitCdnRequest(It.IsAny<string>())).Returns(mockresponse.Object);

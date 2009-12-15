@@ -1,5 +1,8 @@
 using System;
 using System.Globalization;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 
 namespace Rackspace.CloudFiles.utils
@@ -36,5 +39,15 @@ namespace Rackspace.CloudFiles.utils
 			string format = "yyyy-MM-ddThh:mm:ss.ffffff";
 			return DateTime.ParseExact( datestring, format,CultureInfo.InvariantCulture);
 		}
+
+        public static string MimeType(this string filename)
+        {
+            var extension = Path.GetExtension(filename).ToLower();
+
+            string mimetype = "";
+            Constants.ExtensionToMimeTypeMap.TryGetValue(extension, out mimetype);
+            return mimetype ?? "application/octet-stream";
+        }
+
     }
 }

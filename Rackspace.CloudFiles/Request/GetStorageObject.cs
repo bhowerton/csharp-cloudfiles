@@ -42,18 +42,6 @@ namespace Rackspace.CloudFiles.Request
         private Dictionary<RequestHeaderFields, string> _requestHeaderFields;
          
 
-        /// <summary>
-        /// GetStorageObject constructor
-        /// </summary>
-        /// <param name="storageUrl">the customer unique url to interact with cloudfiles</param>
-        /// <param name="containerName">the name of the container where the storage item is located</param>
-        /// <param name="storageItemName">the name of the storage item to add meta information too</param>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        /// <exception cref="InvalidContainerNameException">Thrown when the container name length exceeds the maximum container length allowed</exception>
-        public GetStorageObject(string storageUrl, string containerName, string storageItemName) :
-            this(storageUrl, containerName, storageItemName, (Dictionary<RequestHeaderFields, string>) null)
-        {
-        }
 
         /// <summary>
         /// GetStorageObject constructor with http comparison header fields
@@ -84,7 +72,7 @@ namespace Rackspace.CloudFiles.Request
                 
                 if (item.Key == RequestHeaderFields.IfUnmodifiedSince)
                 {
-                    request.Headers.Add(EnumHelper.GetDescription(item.Key), String.Format("{0:r}", ParserDateTimeHttpHeader(item.Value)));
+                    request.Headers.Add(item.Key.GetDescription(), String.Format("{0:r}", ParserDateTimeHttpHeader(item.Value)));
                     continue;
                 }
                 if (item.Key == RequestHeaderFields.IfModifiedSince)
