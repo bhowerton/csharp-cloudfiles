@@ -424,8 +424,7 @@ namespace Rackspace.CloudFiles.Specs
         private MockAuthenticatedRequest _mockrequest;
         private Mock<IAuthenticatedRequestFactory> _mockfactory;
         private Mock<ICloudFilesResponse> _mockresponse;
-        private Mock<IHttpReaderWriter> _mockreaderwriter
-            ;
+        private Mock<IHttpReaderWriter> _mockreaderwriter;
 
         private Container _container;
         private StorageObject so;
@@ -454,7 +453,7 @@ namespace Rackspace.CloudFiles.Specs
             _mockresponse.SetupGet(x => x.LastModified).Returns(DateTime.MinValue);
             _mockresponse.SetupGet(x => x.ContentLength).Returns(200);
             _mockresponse.SetupGet(x => x.ContentType).Returns("text/plain");
-
+            _mockresponse.SetupGet(x => x.Status).Returns(HttpStatusCode.Created);
             var account = new Mock<IAccount>();
             account.SetupGet(x => x.Connection).Returns(_mockfactory.Object);
 
@@ -509,20 +508,72 @@ namespace Rackspace.CloudFiles.Specs
     [TestFixture]
     public class SpecContainerWhenCreatingStorageObjectAndResponseCodeIs412
     {
+      
+        [Test]
+        public void it_throws_missing_header_exception()
+        {
+            try
+            {
+                var fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.LengthRequired);
+                var account = new Account(fakehttp.Factory.Object, 1, 2);
+                var container = new Container("foobar", account, 1, 2);
+                container.CreateStorageObject("foobar", new MemoryStream(), new Dictionary<string, string>());
+                Assert.Fail();
+            }
+            catch (MissingHeaderException)
+            {
 
+
+            }
+
+        }
 
     }
     [TestFixture]
     public class SpecContainerWhenCreatingStorageObjectAndResponseCodeIs422
     {
+        [Test]
+        public void it_throws_etag_incorrect()
+        {
+            try
+            {
+                var fakehttp = FakeHttpResponse.CreateWithResponseCode((HttpStatusCode)422);
+                var account = new Account(fakehttp.Factory.Object, 1, 2);
+                var container = new Container("foobar", account, 1, 2);
+                container.CreateStorageObject("foobar", new MemoryStream(), new Dictionary<string, string>());
+                Assert.Fail();
+            }
+            catch (InvalidETagException)
+            {
 
+
+            }
+
+        }
 
     }
 
     [TestFixture]
     public class SpecContainerWhenCreatingStorageObjectAndResponseCodeIsNot412Or422Or201
     {
+          [Test]
+        public void it_throws_missing_header_exception()
+        {
+            try
+            {
+                var fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.Unauthorized);
+                var account = new Account(fakehttp.Factory.Object, 1, 2);
+                var container = new Container("foobar", account, 1, 2);
+                container.CreateStorageObject("foobar", new MemoryStream(), new Dictionary<string, string>());
+                Assert.Fail();
+            }
+            catch (InvalidResponseCodeException)
+            {
 
+
+            }
+
+        }
 
     }
 }

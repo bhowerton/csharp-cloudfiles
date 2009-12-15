@@ -26,20 +26,6 @@ namespace Rackspace.CloudFiles
             containerName, readerwriter, request, objectcount, bytesused
             ){}
 
-        public StorageObject CreateStorageObject(string filename, IDictionary<string,string> metadata)
-        {
-            return CreateStorageObject(filename, File.OpenRead(filename), metadata);
-        }
-        public StorageObject CreateStorageObject(string remotename, Stream stream, IDictionary<string, string> metadata)
-        {
-            var request = Connection.CreateRequest();
-            request.Method = HttpVerb.PUT;
-            request.Etag = BitConverter.ToString(MD5.Create().ComputeHash(stream));
-            request.ContentType = remotename.MimeType();
-            var response = request.SubmitStorageRequest("/" + Name.Encode() + "/" + remotename.Encode());
-
-            return new StorageObject(this, remotename.Encode(), response.ContentType, response.ContentLength, response.LastModified, response.ETag);
-        }
     }
     /// <summary>
     /// Container
@@ -87,7 +73,26 @@ namespace Rackspace.CloudFiles
 
 
         #endregion
-         
+
+        public StorageObject CreateStorageObject(string filename, IDictionary<string, string> metadata)
+        {
+            return CreateStorageObject(filename, File.OpenRead(filename), metadata);
+        }
+        public StorageObject CreateStorageObject(string remotename, Stream stream, IDictionary<string, string> metadata)
+        {
+            var request = Connection.CreateRequest();
+            request.Method = HttpVerb.PUT;
+            request.Etag = BitConverter.ToString(MD5.Create().ComputeHash(stream));
+            request.ContentType = remotename.MimeType();
+            var response = request.SubmitStorageRequest("/" + Name.Encode() + "/" + remotename.Encode());
+            if (response.Status == HttpStatusCode.Created)
+                return new StorageObject(this, remotename.Encode(), response.ContentType, response.ContentLength, response.LastModified, response.ETag);
+            if(response.Status == HttpStatusCode.LengthRequired)
+                throw new MissingHeaderException("missing either content length or content type");
+            if ((int)response.Status == 422)
+                throw new InvalidETagException(etagerror);
+            throw new InvalidResponseCodeException(response.Status);
+        }
         /// <summary>
         /// This method deletes a storage object in a given container
         /// </summary>
@@ -203,8 +208,7 @@ namespace Rackspace.CloudFiles
                 var response = request.SubmitStorageRequest(urltoappend, req => req.ContentLength = 0, res => { });
                 if (response.Status == HttpStatusCode.Created) continue;
                 if (((int)response.Status) == 422)
-                    throw new InvalidETagException(
-                        "The sent ETAG does not match the ETAG check on the remote server. Please verify the ETAG sent is the correct MD5 hash for the file sent");
+                    throw new InvalidETagException(etagerror);
                 if(response.Status==HttpStatusCode.LengthRequired) throw new MissingHeaderException("is missing the Content-Length And/Or Content-Type headers");
                 throw new InvalidResponseCodeException(response.Status);
                
@@ -214,7 +218,7 @@ namespace Rackspace.CloudFiles
 
 
         }
-
+        private readonly string etagerror = "The sent ETAG does not match the ETAG check on the remote server. Please verify the ETAG sent is the correct MD5 hash for the file sent";
         private ICloudFilesResponse BaseGetContainerObjectList(Format format, string getresponse)
         {
             var request = _account.Connection.CreateRequest();
