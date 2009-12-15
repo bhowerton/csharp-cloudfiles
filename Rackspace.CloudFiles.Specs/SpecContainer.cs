@@ -1,5 +1,3 @@
-using System.IO;
-using MindTouch.Dream;
 using Moq;
 using NUnit.Framework;
 using Rackspace.CloudFiles.exceptions;
