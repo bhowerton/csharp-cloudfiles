@@ -1,43 +1,61 @@
+using System.IO;
+using MindTouch.Dream;
+using Moq;
 using NUnit.Framework;
 using Rackspace.CloudFiles.exceptions;
+using Rackspace.CloudFiles.Interfaces;
+using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.Specs.CustomAsserts;
 using Rackspace.CloudFiles.Specs.Utils;
 using System.Net;
 using System.Collections.Generic;
 using System;
+
 namespace Rackspace.CloudFiles.Specs
 {
     [TestFixture]
     public class SpecContainerWhenGettingListOfObjects
     {
 
-        private WebMocks _fakehttp;
+       
         private Container _container;
         private IList<StorageObject> _objects;
+        private Mock<IAuthenticatedRequestFactory> _mockfactory;
+        private Mock<ICloudFilesResponse> _mockresponse;
+        private MockAuthenticatedRequest _mockrequest;
 
         [SetUp]
         public void setup()
         {
 
-            _fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.OK);
-            _fakehttp.Response.Setup(x => x.GetResponseStream()).Returns(TextStreamFactory.MakeFromString("<?xml version=\"1.0\" encoding=\"UTF-8\"?> <container name=\"test_container_1\">"+
-																			@"<object> 
-																				<name>test_object_1</name> 
-																				<hash>4281c348eaf83e70ddce0e07221c3d28</hash> 
-																				<bytes>14</bytes> 
-																				<content_type>application/octet-stream</content_type> 	
-																				<last_modified>2009-02-03T05:26:32.612278</last_modified>
-																			</object> 
-																			<object>
-																				<name>test_object_2</name> 
-																				<hash>b039efe731ad111bc1b0ef221c3849d0</hash> 
-																				<bytes>64</bytes> 
-																				<content_type>application/octet-stream</content_type> 
-																				<last_modified>2009-02-03T05:26:32.612278</last_modified>
-																			</object> 
-																		</container>"));
-            var acct = new Account(_fakehttp.Factory.Object, 1, 89);
-            _container = new Container("foobar", acct, 1, 12);
+
+            var mockhttpreaderwriter = new Mock<IHttpReaderWriter>();
+
+            mockhttpreaderwriter.Setup(x => x.GetStringFromStream(It.IsAny<HttpWebResponse>())).Returns(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <container name=\"test_container_1\">" +
+                @"<object> 
+				    <name>test_object_1</name> 
+				    <hash>4281c348eaf83e70ddce0e07221c3d28</hash> 
+				    <bytes>14</bytes> 
+				    <content_type>application/octet-stream</content_type> 	
+				    <last_modified>2009-02-03T05:26:32.612278</last_modified>
+			    </object> 
+			    <object>
+				    <name>test_object_2</name> 
+				    <hash>b039efe731ad111bc1b0ef221c3849d0</hash> 
+				    <bytes>64</bytes> 
+				    <content_type>application/octet-stream</content_type> 
+				    <last_modified>2009-02-03T05:26:32.612278</last_modified>
+			    </object> 
+        		</container>");
+            _mockfactory = new Mock<IAuthenticatedRequestFactory>();
+            _mockresponse = new Mock<ICloudFilesResponse>();
+            _mockrequest = new MockAuthenticatedRequest(_mockresponse.Object);
+            _mockfactory.Setup(x => x.CreateRequest()).Returns(_mockrequest);
+            _mockresponse.Setup(x => x.Status).Returns(HttpStatusCode.OK);
+
+            var acct = new Account(mockhttpreaderwriter.Object , _mockfactory.Object, 1, 89);
+            _container = new Container( "foobar", mockhttpreaderwriter.Object,acct, 1, 12);
             _objects = _container.GetStorageObjects();
 
 
@@ -46,7 +64,7 @@ namespace Rackspace.CloudFiles.Specs
         public void should_use_get_method()
         {
 
-            _fakehttp.Request.VerifySet(x => x.Method = HttpVerb.GET);
+            Assert.AreEqual(_mockrequest.Method ,HttpVerb.GET);
 
         }
 
@@ -54,7 +72,7 @@ namespace Rackspace.CloudFiles.Specs
         public void should_submit_storage_request_url_with_container_name()
         {
 
-            _fakehttp.Request.Verify(x => x.SubmitStorageRequest("foobar"));
+            Assert.AreEqual(_mockrequest.StorageUrlsPassed[0], "/foobar");
 
         }
 
@@ -78,18 +96,24 @@ namespace Rackspace.CloudFiles.Specs
     public class SpecContainerWhenGettingListOfObjectsAndThereAreNoObjectsInTheContainer
     {
 
-        private WebMocks _fakehttp;
+        
         private Container _container;
         private IList<StorageObject> _objects;
 
         [SetUp]
         public void setup()
         {
-            _fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.OK);
-            _fakehttp.Response.Setup(x => x.GetResponseStream()).Returns(TextStreamFactory.MakeFromString("<?xml version=\"1.0\" encoding=\"UTF-8\"?> <container name=\"test_container_1\">"+
-																			@"</container>"));
-            var acct = new Account(_fakehttp.Factory.Object, 1, 89);
-            _container = new Container("foobar", acct, 1, 12);
+            var httpreaderwriter = new Mock<IHttpReaderWriter>();
+            httpreaderwriter.Setup(x => x.GetStringFromStream(It.IsAny<HttpWebResponse>())).Returns(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <container name=\"test_container_1\">" +
+            @"</container>");
+            var mockresponse = new Mock<ICloudFilesResponse>();
+            var mockrequest = new MockAuthenticatedRequest(mockresponse.Object);
+            var mockfactory = new Mock<IAuthenticatedRequestFactory>();
+            mockfactory.Setup(x => x.CreateRequest()).Returns(mockrequest);
+            
+            var acct = new Account(httpreaderwriter.Object, mockfactory.Object, 1, 89);
+            _container = new Container( "foobar", httpreaderwriter.Object,acct, 1, 12);
             _objects = _container.GetStorageObjects();
         }
 
@@ -98,6 +122,7 @@ namespace Rackspace.CloudFiles.Specs
         {
             Assert.AreEqual(0, _objects.Count);
         }
+
     }
 
     [TestFixture]
@@ -119,8 +144,10 @@ namespace Rackspace.CloudFiles.Specs
             _fakehttp.Response.SetupGet(x => x.ContentLength).Returns(51200);
             _fakehttp.Response.SetupGet(x => x.LastModified).Returns(new DateTime(2009, 1, 1, 1, 1, 1, 1));
             _fakehttp.Response.SetupGet(x => x.ContentType).Returns("text/plain; charset=UTF-8");
-            // _fakehttp.Request.Setup(x => x.SubmitStorageRequest("foobar/foobar.txt"));
             _object = _container.GetStorageObject("foobar.txt");
+
+
+
         }
 
         [Test]
@@ -152,7 +179,7 @@ namespace Rackspace.CloudFiles.Specs
         [Test]
         public void it_passes_container_name_and_storage_name_to_url()
         {
-            _fakehttp.Request.Verify(x => x.SubmitStorageRequest("foobar/foobar.txt"));
+            _fakehttp.Request.Verify(x => x.SubmitStorageRequest("/foobar/foobar.txt"));
         }
 
     }
@@ -161,19 +188,20 @@ namespace Rackspace.CloudFiles.Specs
     {
         private WebMocks _fakehttp;
         private Container _container;
-      
+
         [SetUp]
         public void Setup()
         {
-            _fakehttp =FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.NotFound);
-            _container = new Container("foo", new Account(_fakehttp.Factory.Object, 1,12),1,12);
+            _fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.NotFound);
+            _container = new Container("foo", new Account(_fakehttp.Factory.Object, 1, 12), 1, 12);
         }
 
         [Test]
         public void it_throws_object_not_found_exception()
         {
-            Asserts.Throws<StorageObjectNotFoundException>(()=>_container.GetStorageObject("myfoo.txt"));
+            Asserts.Throws<StorageObjectNotFoundException>(() => _container.GetStorageObject("myfoo.txt"));
         }
+
     }
     [TestFixture]
     public class SpecContainerWhenGettingIndividualObjectAndAnotherStatusCodeOccurs
@@ -193,5 +221,48 @@ namespace Rackspace.CloudFiles.Specs
         {
             Asserts.Throws<Exception>(() => _container.GetStorageObject("myfoo.txt"));
         }
+
+    }
+    [TestFixture]
+    public class SpecContainerWhenMakingDirectoryPath
+    {
+        private WebMocks _webmocks;
+        private Container _container;
+
+        [SetUp]
+        public void setup()
+        {
+            _webmocks = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.Created);
+            _webmocks.Request.Setup(
+                x =>
+                x.SubmitStorageRequest(It.IsAny<string>(), It.IsAny<Action<HttpWebRequest>>(),
+                                       It.IsAny<Action<HttpWebResponse>>())).Returns(_webmocks.Response.Object);
+            _container = new Container("container", new Account(_webmocks.Factory.Object, 1, 2), 1, 2);
+            _container.MakePath("/foobar/myfoo/myfooworld");
+        }
+
+        [Test]
+        public void it_uses_PUT_method()
+        {
+            _webmocks.Request.VerifySet(x => x.Method = HttpVerb.PUT);
+        }
+
+        [Test]
+        public void it_runs_a_request_for_each_path()
+        {
+           
+            _webmocks.Request.Verify(x => x.SubmitStorageRequest("/container/foobar", It.IsAny<Action<HttpWebRequest>>(), It.IsAny<Action<HttpWebResponse>>()), Times.Once());
+
+            _webmocks.Request.Verify(x => x.SubmitStorageRequest("/container/foobar%2fmyfoo", It.IsAny<Action<HttpWebRequest>>(), It.IsAny<Action<HttpWebResponse>>()), Times.Once());
+            _webmocks.Request.Verify(x => x.SubmitStorageRequest("/container/foobar%2fmyfoo%2fmyfooworld", It.IsAny<Action<HttpWebRequest>>(), It.IsAny<Action<HttpWebResponse>>()), Times.Once());
+        }
+
+        [Test]
+        public void it_sets_content_type_to_application_dir()
+        {
+            _webmocks.Request.VerifySet(x => x.ContentType = "application/directory");
+        }
+
+
     }
 }

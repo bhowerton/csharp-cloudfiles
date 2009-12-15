@@ -5,10 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Xml.Linq;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Interfaces;
@@ -45,23 +43,32 @@ namespace Rackspace.CloudFiles
     /// </example>
     public class Account : IAccount
     {
-
+        private readonly IHttpReaderWriter _readerWriter;
 
         #region protected and private methods
 
 
 
 
-        
+
         #endregion
-        public Account(IAuthenticatedRequestFactory authenticatedRequestFactory,long containerCount, long bytesUsed)
+        public Account(IHttpReaderWriter readerWriter
+            ,IAuthenticatedRequestFactory authenticatedRequestFactory, long containerCount, long bytesUsed)
         {
+            _readerWriter = readerWriter;
+
             Connection = authenticatedRequestFactory;
             ContainerCount = containerCount;
             BytesUsed = bytesUsed;
         }
+        public Account(IAuthenticatedRequestFactory authenticatedRequestFactory, long containerCount, long bytesUsed):this(
+            new HttpReaderWriter(), authenticatedRequestFactory, containerCount, bytesUsed
+            
+            )
+        {
+            
+        }
 
-       
 
         /// <summary>
         /// This method is used to create a container on cloudfiles with a given name
@@ -85,9 +92,9 @@ namespace Rackspace.CloudFiles
             var createContainerResponse = request.SubmitStorageRequest(containerName.Encode());
             if (createContainerResponse.Status == HttpStatusCode.Accepted)
                 throw new ContainerAlreadyExistsException("The container already exists");
-
+            
             var headers = new ContainerHeaders(createContainerResponse.Headers);
-            return new Container(containerName, this,headers.ObjectCount, headers.BytesUsed);
+            return new Container(containerName, this, headers.ObjectCount, headers.BytesUsed);
         }
         private class ContainerHeaders
         {
@@ -95,8 +102,8 @@ namespace Rackspace.CloudFiles
             public long ObjectCount { get; private set; }
             public ContainerHeaders(NameValueCollection headers)
             {
-                 ObjectCount = long.Parse(headers["X-Container-Object-Count"]);
-                BytesUsed= long.Parse(headers["X-Container-Bytes-Used"]);
+                ObjectCount = long.Parse(headers["X-Container-Object-Count"]);
+                BytesUsed = long.Parse(headers["X-Container-Bytes-Used"]);
             }
         }
         /// <summary>
@@ -120,8 +127,9 @@ namespace Rackspace.CloudFiles
             var request = Connection.CreateRequest();
             request.Method = HttpVerb.DELETE;
             var response = request.SubmitStorageRequest(containerName);
-            if(response.Status==HttpStatusCode.Conflict)throw new ContainerNotEmptyException();
-            if (response.Status == HttpStatusCode.NoContent)throw new ContainerNotFoundException();
+            if (response.Status == HttpStatusCode.Conflict) throw new ContainerNotEmptyException();
+            if (response.Status == HttpStatusCode.NotFound) throw new ContainerNotFoundException();
+
 
 
         }
@@ -135,7 +143,8 @@ namespace Rackspace.CloudFiles
 
         public long ContainerCount
         {
-            get; private set;
+            get;
+            private set;
         }
 
         public long BytesUsed
@@ -143,7 +152,9 @@ namespace Rackspace.CloudFiles
             get;
             private set;
         }
-      
+
+       
+
         public Container GetContainer(string containerName)
         {
             Ensure.NotNullOrEmpty(containerName);
@@ -151,12 +162,23 @@ namespace Rackspace.CloudFiles
 
             var request = Connection.CreateRequest();
             request.Method = HttpVerb.HEAD;
-            var response = request.SubmitStorageRequest(containerName);
-            if (response.Status == HttpStatusCode.NoContent) throw new ContainerNotFoundException();
-            var containerheaders = new ContainerHeaders(response.Headers);
-           
-            return new Container(containerName, this, containerheaders.ObjectCount, containerheaders.BytesUsed); 
-               
+            var response = request.SubmitStorageRequest("/" + containerName);
+            if (response.Status == HttpStatusCode.NoContent)
+            {
+                var containerheaders = new ContainerHeaders(response.Headers);
+
+                var container = new Container(containerName, this, containerheaders.ObjectCount,
+                                              containerheaders.BytesUsed);
+                return container;
+
+                
+            }
+
+
+            if (response.Status == HttpStatusCode.NotFound) throw new ContainerNotFoundException();
+            if (response.Status == HttpStatusCode.Unauthorized) throw new AuthenticationFailedException();
+            throw new Exception("Response code was " + response.Status);
+
         }
 
         public IList<Container> GetContainers(int limit)
@@ -164,7 +186,7 @@ namespace Rackspace.CloudFiles
             limit.CanNotBeMoreThan(10000);
             var request = Connection.CreateRequest();
             request.Method = HttpVerb.GET;
-            request.SubmitStorageRequest("?limit="+limit+"&format=xml");
+            request.SubmitStorageRequest("?limit=" + limit + "&format=xml");
             return new List<Container>();
         }
 
@@ -172,16 +194,17 @@ namespace Rackspace.CloudFiles
         {
             var request = Connection.CreateRequest();
             request.Method = HttpVerb.GET;
-            var response = request.SubmitStorageRequest("?format=xml");
+            string xml = "";
+            var response = request.SubmitStorageRequest("?format=xml",req=> { }, 
+                res=> xml  =_readerWriter.GetStringFromStream(res) );
 
-            var xml = response.GetResponseStream().ConvertToString();
+            
             var masterelement = XElement.Parse(xml);
             var containers = masterelement.Elements("container");
-            var objects =    containers.Select(x => new Container(
-                                                                                    x.Element("name").Value,
-                                                                                    this,
-                                                                                    long.Parse(x.Element("count").Value),
-                                                                                    long.Parse(x.Element("bytes").Value)
+            var objects = containers.Select(x => new Container(x.Element("name").Value,
+                                                                  this,
+                                                                  long.Parse(x.Element("count").Value),
+                                                                  long.Parse(x.Element("bytes").Value)
                                                                                     ));
 
             return objects.ToArray();

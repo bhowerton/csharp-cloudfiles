@@ -15,44 +15,49 @@ namespace Rackspace.CloudFiles
     /// <summary>
     /// StorageObject
     /// </summary>
-    public class StorageObject 
+    public class StorageObject
     {
+        private readonly IHttpReaderWriter _readerwriter;
         private readonly IContainer _container;
- 
+
         private readonly string objectName;
-         
+
         private readonly string objectContentType;
         private readonly long contentLength;
         private readonly DateTime lastModified;
-         
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="containerName"></param>
         /// <param name="objectName"></param>
-        /// <param name="metadata"></param>
         /// <param name="objectContentType"></param>
         /// <param name="contentLength"></param>
         /// <param name="lastModified"></param>
+        /// <param name="readerwriter"></param>
         /// <param name="container"></param>
-        public StorageObject(IContainer container, string objectName, 
-		                    
-		                     string objectContentType, 
-		                     long contentLength, 
-		                     DateTime lastModified,
-		                     string etag)
+        public StorageObject(IHttpReaderWriter readerwriter, IContainer container, string objectName,
+
+                             string objectContentType,
+                             long contentLength,
+                             DateTime lastModified,
+                             string etag)
         {
+            _readerwriter = readerwriter;
             _container = container;
             this.ETag = etag;
             this.objectName = objectName;
             this.lastModified = lastModified;
             this.contentLength = contentLength;
             this.objectContentType = objectContentType;
-           
-           
-        }
 
-     
+
+        }
+        public StorageObject(IContainer container, string objectName, string objectContentLength,long contentLength ,
+            DateTime lastmodified, string etag):
+            this(new HttpReaderWriter(), container, objectName, objectContentLength, contentLength,lastmodified, etag)
+        {
+            
+        }
 
 
         /// <summary>
@@ -71,11 +76,12 @@ namespace Rackspace.CloudFiles
             get { return objectContentType; }
         }
 
-        
+
 
         public string ETag
         {
-            get ;private set;
+            get;
+            private set;
         }
         /// <summary>
         /// 
@@ -108,47 +114,50 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public void SendToCloud(string localFilePath, Dictionary<string, string> metadata)
         {
+
             Ensure.NotNullOrEmpty(localFilePath);
-            
 
-            try
+
+            var remoteName = Path.GetFileName(localFilePath);
+            var localName = localFilePath.Replace("/", "\\");
+            SendToCloud(File.OpenRead(localName), remoteName, metadata, (l, d) => { });
+
+        }
+        public void SendToCloud(Stream streamToRead, string remotename, Dictionary<string, string> metadata)
+        {
+            SendToCloud(streamToRead, remotename, metadata, (i, o) => { });
+        }
+        public void SendToCloud(Stream streamToRead, string remotename, Dictionary<string, string> metadata,
+            Action<long, long> progressevent)
+        {
+            var request = _container.Connection.CreateRequest();
+            request.Method = HttpVerb.PUT;
+
+
+            if (metadata != null && metadata.Count > 0)
             {
-                var remoteName = Path.GetFileName(localFilePath);
-                var localName = localFilePath.Replace("/", "\\");
-                var request = _container.Connection.CreateRequest();
-                request.Method = HttpVerb.PUT;
-
-
-                if (metadata != null && metadata.Count > 0)
+                foreach (var s in metadata.Keys)
                 {
-                    foreach (var s in metadata.Keys)
-                    {
-                        request.Headers.Add(Constants.META_DATA_HEADER + s, metadata[s]);
-                    }
+                    request.Headers.Add(Constants.META_DATA_HEADER + s, metadata[s]);
                 }
-
-                request.AllowWriteStreamBuffering = false;
-                string fileurl = CleanUpFilePath(remoteName);
-                request.ContentType = _contentType(fileurl);
-                //dirty hack FIXME and refactory
-                var filetosend = File.OpenRead(localName);
-                request.SetContent(filetosend);
-              
-                request.SubmitStorageRequest(_container.Name.Encode() + "/" + remoteName.StripSlashPrefix().Encode());
             }
-            catch (WebException webException)
-            {
+            string fileurl = CleanUpFilePath(remotename);
+            request.ContentType = _contentType(fileurl);
+            request.AllowWriteStreamBuffering = false;
+    
+            var webResponse =
+                request.SubmitStorageRequest(_container.Name.Encode() + "/" + remotename.StripSlashPrefix().Encode(),
+                req => _readerwriter.WriteRequest(req, streamToRead, progressevent),
+                res =>
+                    {
+                        //do nothing with response
+                    });
 
 
-                var webResponse = (HttpWebResponse)webException.Response;
-                if (webResponse == null) throw;
-                if (webResponse.StatusCode == HttpStatusCode.BadRequest)
-                    throw new ContainerNotFoundException("The requested container does not exist");
-                if (webResponse.StatusCode == HttpStatusCode.PreconditionFailed)
-                    throw new PreconditionFailedException(webException.Message);
-
-                throw;
-            }
+            if (webResponse.Status == HttpStatusCode.BadRequest)
+                throw new ContainerNotFoundException("The requested container does not exist");
+            if (webResponse.Status == HttpStatusCode.PreconditionFailed)
+                throw new PreconditionFailedException("Precondition Failed");
         }
         private string CleanUpFilePath(string filePath)
         {
@@ -179,21 +188,8 @@ namespace Rackspace.CloudFiles
         public void SaveToDisk(Stream streamToWriteTo)
         {
 
-            var request = _container.Connection.CreateRequest();
-            request.Method = HttpVerb.GET;
-            var response = request.SubmitStorageRequest(_container.Name + "/" + RemoteName);
-            using (var responseStream = response.GetResponseStream())
-            {
-                byte[] buffer = new byte[4096];
 
-                int amt = 0;
-                while ((amt = responseStream.Read(buffer, 0, buffer.Length)) != 0)
-                {
-                    streamToWriteTo.Write(buffer, 0, amt);
-
-                }
-
-            }
+            SaveToDisk(streamToWriteTo, (i, d) => { });
 
         }
         /// <summary>
@@ -207,6 +203,31 @@ namespace Rackspace.CloudFiles
                 SaveToDisk(fs);
             }
 
+        }
+
+        public void SaveToDisk(Stream streamToWriteTo, Action<long, long> progressevent)
+        {
+            var request = _container.Connection.CreateRequest();
+            request.Method = HttpVerb.GET;
+            Action<HttpWebResponse> del = response =>
+            {
+                using (var responseStream = response.GetResponseStream())
+                {
+                    byte[] buffer = new byte[4096];
+
+                    int amt = 0;
+                    long totalread = 0;
+                    while ((amt = responseStream.Read(buffer, 0, buffer.Length)) != 0)
+                    {
+                        totalread += amt;
+                        streamToWriteTo.Write(buffer, 0, amt);
+                        progressevent.Invoke(totalread, responseStream.Length);
+                    }
+
+                }
+            };
+
+            var cfresponse = request.SubmitStorageRequest(_container.Name + "/" + RemoteName, req => { }, del);
         }
     }
 }

@@ -26,7 +26,9 @@ namespace Rackspace.CloudFiles
             throw new NotImplementedException();
         }
 
-        public PublicContainer MakeContainerPublic(Container privateContainer, int ttl, bool isLoggingEnabled, string userAcl, string referrerAcl)
+        public PublicContainer MakeContainerPublic(Container privateContainer, 
+            int ttl, bool isLoggingEnabled, 
+            string userAcl, string referrerAcl)
         {
             throw new NotImplementedException();
         }
@@ -42,7 +44,11 @@ namespace Rackspace.CloudFiles
         /// <param containerName="ttl">valid values are </param>
         /// <param containerName="referreracl"></param>
         /// <param containerName="useragentacl"></param>
-        public void SetDetailsOnPublicContainer(string containerName, bool loggingenabled, int ttl, string referreracl, string useragentacl)
+        public void SetDetailsOnPublicContainer(string containerName,
+            bool loggingenabled,
+            int ttl,
+            string referreracl, 
+            string useragentacl)
         {
 
             try

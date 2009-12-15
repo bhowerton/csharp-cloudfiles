@@ -51,6 +51,7 @@ namespace Rackspace.CloudFiles
             var storageurl = response.Headers[Constants.X_STORAGE_URL];
             var cdnmanagmenturl = response.Headers[Constants.X_CDN_MANAGEMENT_URL];
             var authtoken = response.Headers[Constants.X_AUTH_TOKEN];
+            response.Close();
             var factory = new AuthenticatedRequestFactory(storageurl, cdnmanagmenturl, authtoken);
             return factory;
            

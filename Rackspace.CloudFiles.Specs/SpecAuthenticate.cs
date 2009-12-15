@@ -93,6 +93,6 @@ namespace Rackspace.CloudFiles.Specs
         {
             _mockrauthedrequest.VerifySet(x=>x.Method=HttpVerb.HEAD);
         }
-       
+    
     }
 }

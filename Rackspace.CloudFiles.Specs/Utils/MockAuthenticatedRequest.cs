@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using Moq;
 using Rackspace.CloudFiles.Interfaces;
 using Rackspace.Cloudfiles.Response.Interfaces;
 
@@ -18,7 +20,27 @@ namespace Rackspace.CloudFiles.Specs.Utils
             _response = response;
         }
 
+        public ICloudFilesResponse SubmitCdnRequest(string appendtocdnurl, Action<HttpWebRequest> attachtorequest, Action<HttpWebResponse> getresponsestream)
+        {
+            return _response;
+        }
+
         public ICloudFilesResponse SubmitStorageRequest(string appendtostorageurl)
+        {
+            return _response;
+        }
+
+        public ICloudFilesResponse SubmitStorageRequest(string appendtostorageurl, 
+            Action<HttpWebRequest> attachtorequest, 
+            Action<HttpWebResponse> getresponsestream)
+        {
+            _storageurlsPassed.Add(appendtostorageurl);
+            attachtorequest.Invoke(It.IsAny<HttpWebRequest>());
+            getresponsestream.Invoke(It.IsAny<HttpWebResponse>());
+            return _response;
+        }
+
+        public ICloudFilesResponse SubmitStorageRequest(string appendtostorageurl, Stream attachStream)
         {
             return _response;
         }
@@ -44,6 +66,16 @@ namespace Rackspace.CloudFiles.Specs.Utils
             set; get;
         }
 
+        public bool Chunked
+        {
+            set; get;
+        }
+
+        public int ContentLength
+        {
+            get; set;
+        }
+
         public void SetContent(Stream stream)
         {
             StreamSet = stream;
@@ -61,6 +93,12 @@ namespace Rackspace.CloudFiles.Specs.Utils
             get; private set;
         }
         public ICloudFilesResponse SubmitCdnRequest(string appendtocdnurl)
+        {
+            _cdnurlspassed.Add(appendtocdnurl);
+            return _response;
+        }
+
+        public ICloudFilesResponse SubmitCdnRequest(string appendtocdnurl, Stream attachstream)
         {
             _cdnurlspassed.Add(appendtocdnurl);
             return _response;

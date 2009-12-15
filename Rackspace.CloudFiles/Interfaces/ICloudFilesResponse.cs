@@ -1,18 +1,22 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Mime;
-using Rackspace.CloudFiles.domain.response;
 
 namespace Rackspace.Cloudfiles.Response.Interfaces
 {
-    public interface ICloudFilesResponse:IResponse
-    {
-        void Close();
+    public interface ICloudFilesResponse
+    { 
 
+        /// <summary>
+        /// A property representing the status of the request from cloudfiles
+        /// </summary>
+        HttpStatusCode Status { get; }
 
+        /// <summary>
+        /// A collection of key-value pairs representing the headers returned from each request
+        /// </summary>
+        WebHeaderCollection Headers { get; }
         /// <summary>
         /// dictionary of meta tags assigned to this storage item
         /// </summary>
@@ -23,11 +27,12 @@ namespace Rackspace.Cloudfiles.Response.Interfaces
         string StatusDescription { get;  }
    
         string ContentType{ get; }
-        string ETag { get; set; }
+        string ETag { get;  }
         long ContentLength { get; }
         DateTime LastModified { get; }
-        Stream GetResponseStream();
-      
-       
+        
+
+
+        
     }
 }

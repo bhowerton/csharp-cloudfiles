@@ -26,12 +26,14 @@ namespace Rackspace.CloudFiles
             _request.Headers.Add(Constants.X_AUTH_USER, username.Encode());
             _request.Headers.Add(Constants.X_AUTH_KEY, apikey.Encode());
             var authenicatedrequest = _request.Submit();
-
+            
             var accountrequest = authenicatedrequest.CreateRequest();
             accountrequest.Method = HttpVerb.HEAD;
             var accountresponse = accountrequest.SubmitStorageRequest("");
             var containercount = long.Parse(accountresponse.Headers[Constants.X_ACCOUNT_CONTAINER_COUNT]);
             var bytecount = long.Parse(accountresponse.Headers[Constants.X_ACCOUNT_BYTES_USED]);
+
+           
             return new Account(authenicatedrequest, containercount, bytecount);
         }
         public Account ConnectToAccount(string username, string apikey, IWebProxy webproxy)
