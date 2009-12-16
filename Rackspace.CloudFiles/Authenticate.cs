@@ -1,5 +1,4 @@
 using System.Net;
-using Rackspace.CloudFiles.domain;
 using Rackspace.CloudFiles.Interfaces;
 using Rackspace.CloudFiles.utils;
 

@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Xml;
-using Rackspace.CloudFiles.domain;
 
 namespace Rackspace.CloudFiles.Interfaces
 {

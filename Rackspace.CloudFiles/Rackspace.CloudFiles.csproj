@@ -77,6 +77,7 @@
     <Compile Include="AuthenticatedRequest.cs" />
     <Compile Include="AuthenticatedRequestFactory.cs" />
     <Compile Include="CdnService.cs" />
+    <Compile Include="Exceptions\InvalidAccountUrlException.cs" />
     <Compile Include="Exceptions\InvalidResponseCodeException.cs" />
     <Compile Include="Exceptions\MissingHeaderException.cs" />
     <Compile Include="HttpVerb.cs" />
@@ -90,14 +91,8 @@
     <Compile Include="Interfaces\IHttpReaderWriter.cs" />
     <Compile Include="ProdWebRequest.cs" />
     <Compile Include="PublicContainer.cs" />
-    <Compile Include="Request\Format.cs" />
-    <Compile Include="Request\SetLoggingToContainerRequest.cs" />
-    <Compile Include="Request\Interfaces\IAddToWebRequest.cs" />
-    <Compile Include="Request\Interfaces\ICloudFilesRequest.cs" />
+    <Compile Include="Format.cs" />
     <Compile Include="Interfaces\ICloudFilesResponse.cs" />
-    <Compile Include="Interfaces\IConnection.cs" />
-    <Compile Include="Request\GetPublicContainers.cs" />
-    <Compile Include="Request\SetPublicContainerDetails.cs" />
     <Compile Include="CloudFilesResponse.cs" />
     <Compile Include="TemporaryDumpingGround.cs" />
     <Compile Include="Utils\Ensure.cs" />
@@ -107,7 +102,6 @@
     <Compile Include="Exceptions\DateTimeHttpHeaderFormatException.cs" />
     <Compile Include="Exceptions\NoContainersFoundException.cs" />
     <Compile Include="Container.cs" />
-    <Compile Include="Request\GetStorageObject.cs" />
     <Compile Include="Exceptions\ContainerAlreadyExistsException.cs" />
     <Compile Include="Exceptions\ContainerNotFoundException.cs" />
     <Compile Include="Exceptions\InvalidETagException.cs" />
@@ -122,6 +116,7 @@
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Exceptions\AuthenticationFailedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\MetaData.cs" />
     <Compile Include="Utils\StreamHelpers.cs" />
     <Compile Include="Utils\StringHelper.cs" />
     <Compile Include="Utils\HttpReaderWriter.cs" />

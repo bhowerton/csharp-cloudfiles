@@ -429,7 +429,8 @@ namespace Rackspace.CloudFiles.Specs
         private Container _container;
         private StorageObject so;
         private string _md5;
-
+        private MemoryStream _stream;
+        private Action<long, long> _progevent;
 
         [SetUp]
         public void Setup()
@@ -445,10 +446,10 @@ namespace Rackspace.CloudFiles.Specs
             _mockfactory.Setup(x => x.CreateRequest()).Returns(_mockrequest);
 
 
-            Stream stream = new MemoryStream(200);
-            _md5 = BitConverter.ToString(MD5.Create().ComputeHash(stream));
+            _stream = new MemoryStream(200);
+            _md5 = BitConverter.ToString(MD5.Create().ComputeHash(_stream));
 
-            
+
             _mockresponse.SetupGet(x => x.ETag).Returns(_md5);
             _mockresponse.SetupGet(x => x.LastModified).Returns(DateTime.MinValue);
             _mockresponse.SetupGet(x => x.ContentLength).Returns(200);
@@ -458,17 +459,37 @@ namespace Rackspace.CloudFiles.Specs
             account.SetupGet(x => x.Connection).Returns(_mockfactory.Object);
 
 
-
+            _progevent = (i, l) => { };
 
             _container = new Container("foobar", _mockreaderwriter.Object, account.Object, 1, 1);
             string remotename = "foobar.txt";
-         
-            IDictionary<string, string> metadata = new Dictionary<string, string>();
-             so = _container.CreateStorageObject(remotename, stream, metadata);
-            
+
+            IDictionary<string, string> metadata = new Dictionary<string, string>
+                                                       {
+                                                           {"fookey", "barme"},
+                                                           {"fookey2", "barnone"}
+                                                       };
+
+
+            so = _container.CreateStorageObject(remotename, _stream, metadata, _progevent);
+
 
         }
+        
 
+        [Test]
+        public void it_upload_file_through_writer()
+        {
+            _mockreaderwriter.Verify(x => x.WriteRequest(It.IsAny<HttpWebRequest>(), _stream, _progevent));
+        }
+
+
+        [Test]
+        public void it_adds_meta_data_to_request()
+        {
+            Assert.AreEqual("barme", _mockrequest.Headers["X-Object-Meta-fookey"]);
+            Assert.AreEqual("barnone", _mockrequest.Headers["X-Object-Meta-fookey2"]);
+        }
         [Test]
         public void it_uses_put_method()
         {
@@ -490,14 +511,14 @@ namespace Rackspace.CloudFiles.Specs
         [Test]
         public void it_sends_contenttype()
         {
-           Assert.AreEqual( "text/plain",_mockrequest.ContentType);
+            Assert.AreEqual("text/plain", _mockrequest.ContentType);
         }
 
-        
+
         [Test]
         public void it_stores_response_values_in_storageobject()
         {
-            Assert.AreEqual( 200, so.ContentLength);
+            Assert.AreEqual(200, so.ContentLength);
             Assert.AreEqual(_md5, so.ETag);
             Assert.AreEqual(DateTime.MinValue, so.LastModified);
             Assert.AreEqual("foobar.txt", so.RemoteName);
@@ -508,13 +529,17 @@ namespace Rackspace.CloudFiles.Specs
     [TestFixture]
     public class SpecContainerWhenCreatingStorageObjectAndResponseCodeIs412
     {
-      
+
         [Test]
         public void it_throws_missing_header_exception()
         {
             try
             {
                 var fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.LengthRequired);
+                fakehttp.Request.Setup(
+                    x =>
+                    x.SubmitStorageRequest(It.IsAny<string>(), It.IsAny<Action<HttpWebRequest>>(),
+                                           It.IsAny<Action<HttpWebResponse>>())).Returns(fakehttp.Response.Object);
                 var account = new Account(fakehttp.Factory.Object, 1, 2);
                 var container = new Container("foobar", account, 1, 2);
                 container.CreateStorageObject("foobar", new MemoryStream(), new Dictionary<string, string>());
@@ -538,6 +563,10 @@ namespace Rackspace.CloudFiles.Specs
             try
             {
                 var fakehttp = FakeHttpResponse.CreateWithResponseCode((HttpStatusCode)422);
+                fakehttp.Request.Setup(
+                  x =>
+                  x.SubmitStorageRequest(It.IsAny<string>(), It.IsAny<Action<HttpWebRequest>>(),
+                                         It.IsAny<Action<HttpWebResponse>>())).Returns(fakehttp.Response.Object);
                 var account = new Account(fakehttp.Factory.Object, 1, 2);
                 var container = new Container("foobar", account, 1, 2);
                 container.CreateStorageObject("foobar", new MemoryStream(), new Dictionary<string, string>());
@@ -556,12 +585,16 @@ namespace Rackspace.CloudFiles.Specs
     [TestFixture]
     public class SpecContainerWhenCreatingStorageObjectAndResponseCodeIsNot412Or422Or201
     {
-          [Test]
+        [Test]
         public void it_throws_missing_header_exception()
         {
             try
             {
                 var fakehttp = FakeHttpResponse.CreateWithResponseCode(HttpStatusCode.Unauthorized);
+                fakehttp.Request.Setup(
+                  x =>
+                  x.SubmitStorageRequest(It.IsAny<string>(), It.IsAny<Action<HttpWebRequest>>(),
+                                         It.IsAny<Action<HttpWebResponse>>())).Returns(fakehttp.Response.Object);
                 var account = new Account(fakehttp.Factory.Object, 1, 2);
                 var container = new Container("foobar", account, 1, 2);
                 container.CreateStorageObject("foobar", new MemoryStream(), new Dictionary<string, string>());

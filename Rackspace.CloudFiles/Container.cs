@@ -4,11 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
-using System.Text;
+using Rackspace.Cloudfiles;
 using Rackspace.CloudFiles.exceptions;
 using Rackspace.CloudFiles.Interfaces;
-using Rackspace.CloudFiles.Request;
-using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 using System.Xml.Linq;
 
@@ -78,13 +76,17 @@ namespace Rackspace.CloudFiles
         {
             return CreateStorageObject(filename, File.OpenRead(filename), metadata);
         }
-        public StorageObject CreateStorageObject(string remotename, Stream stream, IDictionary<string, string> metadata)
+        public StorageObject CreateStorageObject(string remotename, Stream stream, IDictionary<string, string> metadata, Action<long,long> progressevent)
         {
             var request = Connection.CreateRequest();
+            request.Headers.AddMetaDict(metadata);
             request.Method = HttpVerb.PUT;
             request.Etag = BitConverter.ToString(MD5.Create().ComputeHash(stream));
             request.ContentType = remotename.MimeType();
-            var response = request.SubmitStorageRequest("/" + Name.Encode() + "/" + remotename.Encode());
+
+            var response = request.SubmitStorageRequest("/" + Name.Encode() + "/" + remotename.Encode(),
+                req => _httpReaderWriter.WriteRequest(req, stream, progressevent), resp => { });
+
             if (response.Status == HttpStatusCode.Created)
                 return new StorageObject(this, remotename.Encode(), response.ContentType, response.ContentLength, response.LastModified, response.ETag);
             if(response.Status == HttpStatusCode.LengthRequired)
@@ -92,6 +94,10 @@ namespace Rackspace.CloudFiles
             if ((int)response.Status == 422)
                 throw new InvalidETagException(etagerror);
             throw new InvalidResponseCodeException(response.Status);
+        }
+        public StorageObject CreateStorageObject(string remotename, Stream stream , IDictionary<string,string> metadata)
+        {
+            return CreateStorageObject(remotename, stream, metadata, (k, p) => { });
         }
         /// <summary>
         /// This method deletes a storage object in a given container
@@ -219,12 +225,8 @@ namespace Rackspace.CloudFiles
 
         }
         private readonly string etagerror = "The sent ETAG does not match the ETAG check on the remote server. Please verify the ETAG sent is the correct MD5 hash for the file sent";
-        private ICloudFilesResponse BaseGetContainerObjectList(Format format, string getresponse)
-        {
-            var request = _account.Connection.CreateRequest();
-            return request.SubmitStorageRequest("/" + Name.Encode() + "?format=" + format.GetDescription(), x => { }, resp => getresponse =
-                resp.GetResponseStream().ConvertToString());
-        }
+      
+        
         /// <summary>
         /// XML serialized format of the container's objects
         /// </summary>
@@ -239,10 +241,19 @@ namespace Rackspace.CloudFiles
         /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
         public string GetStorageObjectListInSpecifiedFormat(Format outputformat)
         {
+            string getresponse = "";
+            var request = _account.Connection.CreateRequest();
+            var response = request.SubmitStorageRequest("/" + Name.Encode() + "?format=" + outputformat.GetDescription(),
+                                                x => { },
+                                                resp => getresponse = _httpReaderWriter.GetStringFromStream(resp));
+                   
+            if(response.Status==HttpStatusCode.OK)
+            return getresponse;
 
-            string retvalue = "";
-            BaseGetContainerObjectList(outputformat, retvalue);
-            return retvalue;
+             if(response.Status==HttpStatusCode.NoContent)throw new ContainerNotFoundException();
+            if(response.Status==HttpStatusCode.NotFound)throw new InvalidAccountUrlException();
+            throw new InvalidResponseCodeException(response.Status);
+        
         }
 
   
@@ -261,7 +272,7 @@ namespace Rackspace.CloudFiles
                 return storageObject;
             }
             if (response.Status == HttpStatusCode.NotFound) throw new StorageObjectNotFoundException();
-            throw new Exception("Response status was " + response.Status);
+            throw new InvalidResponseCodeException(response.Status);
 
         }
         public IList<StorageObject> GetStorageObjects()
@@ -270,19 +281,25 @@ namespace Rackspace.CloudFiles
             request.Method = HttpVerb.GET;
             string xml = "";
             var response = request.SubmitStorageRequest("/"+Name, req => { }, resp => xml= _httpReaderWriter.GetStringFromStream(resp));
+            if (response.Status == HttpStatusCode.OK)
+            {
+                var rootelemtn = XElement.Parse(xml);
+                var objectelements = rootelemtn.Elements("object");
 
-            var rootelemtn = XElement.Parse(xml);
-            var objectelements = rootelemtn.Elements("object");
 
-            var objects = objectelements.Select(x =>
-                                                new StorageObject(this, x.Element("name").Value,
-                                                      x.Element("content_type").Value,
-                                                                  long.Parse(x.Element("bytes").Value),
-                                                                  x.Element("last_modified").Value.ParseCfDateTime(),
-                                                                  x.Element("hash").Value
-                                                                  )
-                                                );
-            return objects.ToArray();
+                var objects = objectelements.Select(x =>
+                                                    new StorageObject(this, x.Element("name").Value,
+                                                                      x.Element("content_type").Value,
+                                                                      long.Parse(x.Element("bytes").Value),
+                                                                      x.Element("last_modified").Value.ParseCfDateTime(),
+                                                                      x.Element("hash").Value
+                                                        )
+                    );
+                return objects.ToArray();
+            }
+            if(response.Status==HttpStatusCode.NoContent)throw new ContainerNotFoundException();
+            if(response.Status==HttpStatusCode.NotFound)throw new InvalidAccountUrlException();
+            throw new InvalidResponseCodeException(response.Status);
         }
     }
 }

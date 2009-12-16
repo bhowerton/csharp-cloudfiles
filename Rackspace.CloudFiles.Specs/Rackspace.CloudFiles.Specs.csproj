@@ -49,12 +49,6 @@
   <ItemGroup>
     <Compile Include="CustomAsserts\Asserts.cs" />
     <Compile Include="CustomAsserts\AssertIt.cs" />
-    <Compile Include="CustomAsserts\UriMatchers.cs" />
-    <Compile Include="CustomAsserts\WebHeaderMatchers.cs" />
-    <Compile Include="Domain\request\SetLoggingToContainerRequestSpec.cs" />
-    <Compile Include="Domain\request\GetPublicContainersSpecs.cs" />
-    <Compile Include="Domain\request\GetStorageObjectSpecs.cs" />
-    <Compile Include="Domain\request\SetPublicContainerDetailsSpecs.cs" />
     <Compile Include="SpecAccount.cs" />
     <Compile Include="SpecAuthenticate.cs" />
     <Compile Include="SpecContainer.cs" />

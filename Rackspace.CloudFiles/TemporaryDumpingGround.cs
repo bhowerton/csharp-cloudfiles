@@ -1,13 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Xml;
-using Rackspace.CloudFiles.domain;
-using Rackspace.CloudFiles.exceptions;
-using Rackspace.CloudFiles.Request;
 using Rackspace.CloudFiles.utils;
 
 namespace Rackspace.CloudFiles
@@ -35,84 +26,9 @@ namespace Rackspace.CloudFiles
           //  return GetStorageObject(storageObjectName, new Dictionary<RequestHeaderFields, string>());
         }
 
-        /// <summary>
-        /// An alternate method for downloading storage objects from cloudfiles directly to a file name specified in the method
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteStorageItem.txt", "C:\Local\File\Path\file.txt");
-        /// </code>
-        /// </example>
-        /// <param name="containerName">The name of the container that contains the storage object to retrieve</param>
-        /// <param name="storageObjectName">The name of the storage object to retrieve</param>
-        /// <param name="localFileName">The file name to save the storage object into on disk</param>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public void GetStorageObject(string storageObjectName, string localFileName)
-        {
-            Ensure.NotNullOrEmpty(storageObjectName, localFileName);
+      
 
-            Ensure.ValidStorageObjectName(storageObjectName);
 
-            GetStorageObject(storageObjectName, localFileName, new Dictionary<RequestHeaderFields, string>());
-        }
-
-        /// <summary>
-        /// An alternate method for downloading storage objects from cloudfiles directly to a file name specified in the method
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// Dictionary{RequestHeaderFields, string} requestHeaderFields = Dictionary{RequestHeaderFields, string}();
-        /// string dummy_etag = "5c66108b7543c6f16145e25df9849f7f";
-        /// requestHeaderFields.Add(RequestHeaderFields.IfMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfNoneMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteFileName.txt", "C:\Local\File\Path\file.txt", requestHeaderFields);
-        /// </code>
-        /// </example>
-        /// <param name="storageObjectName">The name of the storage object to retrieve</param>
-        /// <param name="localFileName">The file name to save the storage object into on disk</param>
-        /// <param name="requestHeaderFields">A dictionary containing the special headers and their values</param>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public void GetStorageObject(string storageObjectName, string localFileName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
-        {
-
-            Ensure.NotNullOrEmpty(storageObjectName, localFileName);
-            Ensure.ValidStorageObjectName(storageObjectName);
-            throw new AbandonedMutexException();
-            //this will become the core class for file transfer, sync calls will call this as well.
-//
-//            var getStorageItem = new GetStorageObject(StorageUrl, containerName, storageObjectName, requestHeaderFields);
-//
-//            try
-//            {
-//                var getStorageItemResponse = _requestfactory.Submit(getStorageItem, AuthToken, _usercreds.ProxyCredentials);
-//                foreach (var callback in callbackFuncs)
-//                {
-//                    getStorageItemResponse.Progress += callback;
-//                }
-//                var stream = getStorageItemResponse.GetResponseStream();
-//
-//                StoreFile(localFileName, stream);
-//            }
-//            catch (WebException we)
-//            {
-//
-//                var response = (HttpWebResponse)we.Response;
-//                response.Close();
-//                if (response.StatusCode == HttpStatusCode.NotFound)
-//                    throw new StorageObjectNotFoundException("The requested storage object does not exist");
-//
-//                throw;
-//            }
-        
-        
-        }
         
         /// <summary>
         /// This method retrieves meta information and size, in bytes, of a requested storage object
@@ -151,85 +67,7 @@ namespace Rackspace.CloudFiles
 //
 //                throw;
 //            }
-      //  }
-        /// <summary>
-        /// This method downloads a storage object from cloudfiles asychronously
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// private void transferComplete()
-        /// {
-        ///     if (InvokeRequired)
-        ///     {
-        ///         Invoke(new CloseCallback(Close), new object[]{});
-        ///     }
-        ///     else
-        ///     {
-        ///         if (!IsDisposed)
-        ///             Close();
-        ///     }
-        /// }
-        /// 
-        /// private void fileTransferProgress(int bytesTransferred)
-        /// {
-        ///    if (InvokeRequired)
-        ///    {
-        ///        Invoke(new FileProgressCallback(fileTransferProgress), new object[] {bytesTransferred});
-        ///    }
-        ///    else
-        ///    {
-        ///        System.Console.WriteLine(totalTransferred.ToString());
-        ///        totalTransferred += bytesTransferred;
-        ///        bytesTransferredLabel.Text = totalTransferred.ToString();
-        ///        var progress = (int) ((totalTransferred/filesize)*100.0f);
-        ///        if(progress > 100)
-        ///            progress = 100;
-        ///        transferProgressBar.Value = progress ;
-        ///    }
-        /// }
-        /// Dictionary{RequestHeaderFields, string} requestHeaderFields = Dictionary{RequestHeaderFields, string}();
-        /// string dummy_etag = "5c66108b7543c6f16145e25df9849f7f";
-        /// requestHeaderFields.Add(RequestHeaderFields.IfMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfNoneMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials);
-        /// connection.AddProgressWatcher(fileTransferProgress);
-        /// connection.OperationComplete += transferComplete;
-        /// connection.GetStorageObjectAsync("container name", "RemoteStorageItem.txt", "RemoteStorageItem.txt", requestHeaderFields);
-        /// </code>
-        /// </example>
-        /// <param name="containerName">The name of the container that contains the storage object to retrieve</param>
-        /// <param name="storageItemName">The name of the storage object to retrieve</param>
-        /// <param name="localFileName">The name to write the file to on your hard drive. </param>
-        /// <param name="requestHeaderFields">A dictionary containing the special headers and their values</param>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public void GetStorageObjectAsync(string containerName, string storageItemName, string localFileName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
-        {
-            //will decide if I use this or not
-            /*
-            var thread = new Thread(
-                 () =>
-                 {
-                     try
-                     {
-                         GetStorageObject(containerName, storageItemName, localFileName, requestHeaderFields);
-                     }
-                    finally //Always fire the completed event
-                     {
-                         if (OperationComplete != null)
-                         {
-                             //Fire the operation complete event if there aren't any listeners
-                             OperationComplete();
-                         }
-                     }
-                 }
-             );
-            thread.Start();
-             * */
-        }
+   
 
         /// <summary>
         /// This method downloads a storage object from cloudfiles asychronously
@@ -301,59 +139,6 @@ namespace Rackspace.CloudFiles
 //            thread.Start();
         }
 
-        /// <summary>
-        /// An alternate method for downloading storage objects. This one allows specification of special HTTP 1.1 compliant GET headers
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
-        /// IConnection connection = new Account(userCredentials); 
-        /// Dictionary{RequestHeaderFields, string} requestHeaderFields = Dictionary{RequestHeaderFields, string}();
-        /// string dummy_etag = "5c66108b7543c6f16145e25df9849f7f";
-        /// requestHeaderFields.Add(RequestHeaderFields.IfMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfNoneMatch, dummy_etag);
-        /// requestHeaderFields.Add(RequestHeaderFields.IfModifiedSince, DateTime.Now.AddDays(6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.IfUnmodifiedSince, DateTime.Now.AddDays(-6).ToString());
-        /// requestHeaderFields.Add(RequestHeaderFields.Range, "0-5");
-        /// StorageObject storageItem = connection.GetStorageObject("container name", "RemoteStorageItem.txt", requestHeaderFields);
-        /// </code>
-        /// </example>
-        /// <param name="containerName">The name of the container that contains the storage object</param>
-        /// <param name="storageObjectName">The name of the storage object</param>
-        /// <param name="requestHeaderFields">A dictionary containing the special headers and their values</param>
-        /// <returns>An instance of StorageObject with the stream containing the bytes representing the desired storage object</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
-        public StorageObject GetStorageObject(string storageObjectName, Dictionary<RequestHeaderFields, string> requestHeaderFields)
-        {
-            //will get this working but may implement differently
-            
-            Ensure.NotNullOrEmpty(storageObjectName);
-            Ensure.ValidStorageObjectName(storageObjectName);
-
-//            try
-//            {
-//                var getStorageItem = new GetStorageObject(StorageUrl, containerName, storageObjectName, requestHeaderFields);
-//                var getStorageItemResponse = _requestfactory.Submit(getStorageItem, AuthToken, _usercreds.ProxyCredentials);
-//
-//
-//                var metadata = GetMetadata(getStorageItemResponse);
-//                var storageItem = new StorageObject(TODO, containerName, storageObjectName, metadata, getStorageItemResponse.ContentType, getStorageItemResponse.GetResponseStream(), getStorageItemResponse.ContentLength, getStorageItemResponse.LastModified);
-//                //                getStorageItemResponse.Dispose();
-//                return storageItem;
-//            }
-//            catch (WebException we)
-//            {
-//
-//
-//                var response = (HttpWebResponse)we.Response;
-//                response.Close();
-//                if (response.StatusCode == HttpStatusCode.NotFound)
-//                    throw new StorageObjectNotFoundException("The requested storage object does not exist");
-//
-//                throw;
-//            }
-            throw new AbandonedMutexException();
-        }
 
 //        /// <summary>
 //        /// This method sets a container as public on the CDN
@@ -754,6 +539,106 @@ namespace Rackspace.CloudFiles
 //                containerList = getContainersResponse.ContentBody;
 //            }
 //            return containerList.ToList();
+//        }
+
+//        public class GetPublicContainers : IAddToWebRequest
+//        {
+//            private readonly string _cdnManagementUrl;
+//
+//            public GetPublicContainers(string cdnManagementUrl)
+//            {
+//                _cdnManagementUrl = cdnManagementUrl;
+//                if (string.IsNullOrEmpty(cdnManagementUrl))
+//                    throw new ArgumentNullException();
+//            }
+//
+//            public Uri CreateUri()
+//            {
+//                return new Uri(_cdnManagementUrl + "?enabled_only=true");
+//            }
+//
+//            public void Apply(ICloudFilesRequest request)
+//            {
+//                request.Method = "GET";
+//
+//            }
+////        }
+//        public class SetLoggingToContainerRequest : IAddToWebRequest
+//        {
+//            private readonly string _publiccontainer;
+//            private readonly string _cdnManagmentUrl;
+//            private readonly bool _loggingenabled;
+//
+//            public SetLoggingToContainerRequest(string publiccontainer, string cdnManagmentUrl, bool loggingenabled)
+//            {
+//                _publiccontainer = publiccontainer;
+//                _cdnManagmentUrl = cdnManagmentUrl;
+//                _loggingenabled = loggingenabled;
+//
+//            }
+//
+//            public Uri CreateUri()
+//            {
+//                return new Uri(_cdnManagmentUrl + "/" + _publiccontainer.Encode());
+//            }
+//
+//            public void Apply(ICloudFilesRequest request)
+//            {
+//                request.Method = "POST";
+//                string enabled = "False";
+//                if (_loggingenabled)
+//                    enabled = "True";
+//                request.Headers.Add("X-Log-Retention", enabled);
+//
+//            }
+//        }
+//        public class SetPublicContainerDetails : IAddToWebRequest
+//        {
+//            private readonly string _cdnManagementUrl;
+//            private readonly string _containerName;
+//            private readonly bool _isCdnEnabled;
+//            private readonly bool _isLoggingEnabled;
+//            private readonly int _timeToLiveInSeconds;
+//            private readonly string _agentacl;
+//            private readonly string _refacl;
+//
+//            /// <summary>
+//            /// Assigns various details to containers already publicly available on the CDN
+//            /// </summary>
+//            /// <param name="cdnManagementUrl">The CDN URL</param>
+//            /// <param name="containerName">The name of the container to update the details for</param>
+//            /// <param name="isCdnEnabled">Sets whether or not specified container is available on the CDN</param>
+//            /// <param name="timeToLiveInSeconds"></param>
+//            public SetPublicContainerDetails(string cdnManagementUrl, string containerName, bool isCdnEnabled, bool isLoggingEnabled, int timeToLiveInSeconds, string agentacl, string refacl)
+//            {
+//
+//                if (String.IsNullOrEmpty(cdnManagementUrl) ||
+//                    String.IsNullOrEmpty(containerName))
+//                    throw new ArgumentNullException();
+//                _cdnManagementUrl = cdnManagementUrl;
+//                _containerName = containerName;
+//                _isCdnEnabled = isCdnEnabled;
+//                _isLoggingEnabled = isLoggingEnabled;
+//                _timeToLiveInSeconds = timeToLiveInSeconds;
+//                _agentacl = agentacl;
+//                _refacl = refacl;
+//            }
+//
+//            public Uri CreateUri()
+//            {
+//                return new Uri(_cdnManagementUrl + "/" + _containerName.Encode());
+//            }
+//
+//            public void Apply(ICloudFilesRequest request)
+//            {
+//                request.Method = "POST";
+//                request.Headers.Add(Constants.X_CDN_ENABLED, _isCdnEnabled.Capitalize());
+//                request.Headers.Add(Constants.X_LOG_RETENTION, _isLoggingEnabled.Capitalize());
+//                if (_timeToLiveInSeconds > -1) request.Headers.Add(Constants.X_CDN_TTL, _timeToLiveInSeconds.ToString());
+//                if (!String.IsNullOrEmpty(_agentacl)) request.Headers.Add(Constants.X_USER_AGENT_ACL, _agentacl);
+//                if (!String.IsNullOrEmpty(_refacl)) request.Headers.Add(Constants.X_REFERRER_ACL, _refacl);
+//
+//            }
 //        }
     }
 }

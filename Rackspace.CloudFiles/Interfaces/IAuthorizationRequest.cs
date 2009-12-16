@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Net;
-using Rackspace.CloudFiles.domain;
 
 namespace Rackspace.CloudFiles.Interfaces
 {

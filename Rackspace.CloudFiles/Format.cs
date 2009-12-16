@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Rackspace.CloudFiles.Request
+namespace Rackspace.Cloudfiles
 {
     public enum Format
     {

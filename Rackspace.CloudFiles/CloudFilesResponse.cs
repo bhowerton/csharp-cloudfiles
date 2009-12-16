@@ -9,7 +9,7 @@ using System.Net;
 using Rackspace.Cloudfiles.Response.Interfaces;
 using Rackspace.CloudFiles.utils;
 
-namespace Rackspace.Cloudfiles
+namespace Rackspace.CloudFiles
 {
     /// <summary>
     /// Represents the response information from a CloudFiles request
