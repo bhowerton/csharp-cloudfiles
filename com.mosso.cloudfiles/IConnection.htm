@@ -1,0 +1,635 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>IConnection - csharp-floudfiles Documentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <link type="text/css" rel="stylesheet" href="../main.css"/>
+  </head>
+  <body><div id="namespaces">
+	<h2 class="fixed">Namespaces</h2>
+	<div class="scroll">
+		<ul><li>
+          <a href="../com.mosso.cloudfiles/index.htm" class="current">com.mosso.cloudfiles</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain/index.htm">com.mosso.cloudfiles.domain</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain.request/index.htm">com.mosso.cloudfiles.domain.request</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain.request.Interfaces/index.htm">com.mosso.cloudfiles.domain.request.Interfaces</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain.response/index.htm">com.mosso.cloudfiles.domain.response</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain.response.Interfaces/index.htm">com.mosso.cloudfiles.domain.response.Interfaces</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.exceptions/index.htm">com.mosso.cloudfiles.exceptions</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.Exceptions/index.htm">com.mosso.cloudfiles.Exceptions</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.utils/index.htm">com.mosso.cloudfiles.utils</a>
+      </li>
+		</ul>
+	</div>
+</div><div id="types">
+	<h2 class="fixed">Types</h2>
+	<div class="scroll">
+		<ul><li>
+            <a href="../com.mosso.cloudfiles/Connection.htm">Connection</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/Error`1.htm">Error&lt;T&gt;</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/Error`2.htm">Error&lt;R, T&gt;</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/ErrorAction`1.htm">ErrorAction&lt;T&gt;</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/ErrorAction`2.htm">ErrorAction&lt;R, T&gt;</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/ErrorMessage`1.htm">ErrorMessage&lt;T&gt;</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/ErrorMessage`2.htm">ErrorMessage&lt;R, T&gt;</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/Execution.htm">Execution</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/Execution`1.htm">Execution&lt;R&gt;</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/GetItemListParameters.htm">GetItemListParameters</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/IConnection.htm" class="current">IConnection</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/OperationCompleteCallback.htm">OperationCompleteCallback</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/ProgressCallback.htm">ProgressCallback</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/StartMessage.htm">StartMessage</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles/StartProcess.htm">StartProcess</a>
+        </li>
+		</ul>
+	</div>
+</div>
+    <div class="header">
+		<p class="class"><strong>Type</strong> IConnection</p>
+		<p><strong>Namespace</strong> com.mosso.cloudfiles</p>
+	</div>
+    <div class="sub-header">
+
+
+			<h3 class="section">Methods</h3>
+			<ul><li><a href="#CreateContainer" class="type">CreateContainer</a></li><li><a href="#DeleteContainer" class="type">DeleteContainer</a></li><li><a href="#DeleteStorageItem" class="type">DeleteStorageItem</a></li><li><a href="#GetAccountInformation" class="type">GetAccountInformation</a></li><li><a href="#GetAccountInformationJson" class="type">GetAccountInformationJson</a></li><li><a href="#GetAccountInformationXml" class="type">GetAccountInformationXml</a></li><li><a href="#GetContainerInformation" class="type">GetContainerInformation</a></li><li><a href="#GetContainerInformationJson" class="type">GetContainerInformationJson</a></li><li><a href="#GetContainerInformationXml" class="type">GetContainerInformationXml</a></li><li><a href="#GetContainerItemList" class="type">GetContainerItemList</a></li><li><a href="#GetContainerItemList" class="type">GetContainerItemList</a></li><li><a href="#GetContainers" class="type">GetContainers</a></li><li><a href="#GetPublicAccountInformationJSON" class="type">GetPublicAccountInformationJSON</a></li><li><a href="#GetPublicAccountInformationXML" class="type">GetPublicAccountInformationXML</a></li><li><a href="#GetPublicContainerInformation" class="type">GetPublicContainerInformation</a></li><li><a href="#GetPublicContainers" class="type">GetPublicContainers</a></li><li><a href="#GetStorageItem" class="type">GetStorageItem</a></li><li><a href="#GetStorageItem" class="type">GetStorageItem</a></li><li><a href="#GetStorageItem" class="type">GetStorageItem</a></li><li><a href="#GetStorageItem" class="type">GetStorageItem</a></li><li><a href="#GetStorageItemAsync" class="type">GetStorageItemAsync</a></li><li><a href="#GetStorageItemInformation" class="type">GetStorageItemInformation</a></li><li><a href="#MakePath" class="type">MakePath</a></li><li><a href="#MarkContainerAsPrivate" class="type">MarkContainerAsPrivate</a></li><li><a href="#MarkContainerAsPublic" class="type">MarkContainerAsPublic</a></li><li><a href="#MarkContainerAsPublic" class="type">MarkContainerAsPublic</a></li><li><a href="#PutStorageItem" class="type">PutStorageItem</a></li><li><a href="#PutStorageItem" class="type">PutStorageItem</a></li><li><a href="#PutStorageItem" class="type">PutStorageItem</a></li><li><a href="#PutStorageItem" class="type">PutStorageItem</a></li><li><a href="#PutStorageItemAsync" class="type">PutStorageItemAsync</a></li><li><a href="#PutStorageItemAsync" class="type">PutStorageItemAsync</a></li><li><a href="#SetDetailsOnPublicContainer" class="type">SetDetailsOnPublicContainer</a></li><li><a href="#SetStorageItemMetaInformation" class="type">SetStorageItemMetaInformation</a></li>
+			</ul>
+
+			<h3 class="section">Properties</h3>
+			<ul><li><a href="#Account" class="type">Account</a></li><li><a href="#AuthToken" class="type">AuthToken</a></li><li><a href="#StorageUrl" class="type">StorageUrl</a></li>
+			</ul>
+
+	</div>
+
+
+	<h3 class="section">Public instance methods</h3>
+<div id="CreateContainer" class="method">
+		<h4>void <strong>CreateContainer</strong>(string containerName)</h4>
+		<div class="content">This method is used to create a container on cloudfiles with a given name
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The desired name of the container</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="DeleteContainer" class="method">
+		<h4>void <strong>DeleteContainer</strong>(string continerName)</h4>
+		<div class="content">This method is used to delete a container on cloudfiles
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> continerName</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="DeleteStorageItem" class="method">
+		<h4>void <strong>DeleteStorageItem</strong>(string containerName, string storageItemname)</h4>
+		<div class="content">This method deletes a storage object in a given container
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container that contains the storage object</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> storageItemname</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetAccountInformation" class="method">
+		<h4>AccountInformation <strong>GetAccountInformation</strong>()</h4>
+		<div class="content">This method returns the number of containers and the size, in bytes, of the specified account
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><a href="../com.mosso.cloudfiles.domain/AccountInformation.htm">AccountInformation</a></code></td>
+					<td>An instance of AccountInformation, containing the byte size and number of containers associated with this account</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetAccountInformationJson" class="method">
+		<h4>string <strong>GetAccountInformationJson</strong>()</h4>
+		<div class="content">Get account information in json format
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.string">string</span></code></td>
+					<td>JSON serialized format of the account information</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetAccountInformationXml" class="method">
+		<h4>XmlDocument <strong>GetAccountInformationXml</strong>()</h4>
+		<div class="content">Get account information in xml format
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Xml.XmlDocument">XmlDocument</span></code></td>
+					<td>XML serialized format of the account information</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetContainerInformation" class="method">
+		<h4>Container <strong>GetContainerInformation</strong>(string containerName)</h4>
+		<div class="content">This method retrieves the number of storage objects in a container, and the total size, in bytes, of the container
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><a href="../com.mosso.cloudfiles.domain/Container.htm">Container</a></code></td>
+					<td>An instance of container, with the number of storage objects contained and total byte allocation</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to query about</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetContainerInformationJson" class="method">
+		<h4>string <strong>GetContainerInformationJson</strong>(string containerName)</h4>
+		<div class="content">JSON serialized format of the container's objects
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.string">string</span></code></td>
+					<td>json string of object information inside the container</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>name of the container to get information</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetContainerInformationXml" class="method">
+		<h4>XmlDocument <strong>GetContainerInformationXml</strong>(string containerName)</h4>
+		<div class="content">XML serialized format of the container's objects
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Xml.XmlDocument">XmlDocument</span></code></td>
+					<td>xml document of object information inside the container</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>name of the container to get information</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetContainerItemList" class="method">
+		<h4>List&lt;string&gt; <strong>GetContainerItemList</strong>(string containerName, Dictionary&lt;GetItemListParameters, string&gt; parameters)</h4>
+		<div class="content">This method retrieves the contents of a container
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Collections.Generic.List<string>">List&lt;string&gt;</span></code></td>
+					<td>An instance of List, containing the names of the storage objects in the give container</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container</td>
+				</tr><tr>
+					<td><code><span title="System.Collections.Generic.Dictionary<GetItemListParameters, string>">Dictionary&lt;GetItemListParameters, string&gt;</span></code> parameters</td>
+					<td>Parameters to feed to the request to filter the returned list</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetContainerItemList" class="method">
+		<h4>List&lt;string&gt; <strong>GetContainerItemList</strong>(string containerName)</h4>
+		<div class="content">This method retrieves the contents of a container
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Collections.Generic.List<string>">List&lt;string&gt;</span></code></td>
+					<td>An instance of List, containing the names of the storage objects in the give container</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetContainers" class="method">
+		<h4>List&lt;string&gt; <strong>GetContainers</strong>()</h4>
+		<div class="content">This method retrieves a list of containers associated with a given account
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Collections.Generic.List<string>">List&lt;string&gt;</span></code></td>
+					<td>An instance of List, containing the names of the containers this account owns</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetPublicAccountInformationJSON" class="method">
+		<h4>string <strong>GetPublicAccountInformationJSON</strong>()</h4>
+		<div class="content">JSON serialized format of the public account information
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.string">string</span></code></td>
+					<td>json string of public account information</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetPublicAccountInformationXML" class="method">
+		<h4>XmlDocument <strong>GetPublicAccountInformationXML</strong>()</h4>
+		<div class="content">XML serialized format of the public account information
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Xml.XmlDocument">XmlDocument</span></code></td>
+					<td>xml document of public account information</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetPublicContainerInformation" class="method">
+		<h4>Container <strong>GetPublicContainerInformation</strong>(string containerName)</h4>
+		<div class="content">Retrieves a Container object containing the public CDN information
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><a href="../com.mosso.cloudfiles.domain/Container.htm">Container</a></code></td>
+					<td>An instance of Container with appropriate CDN information or null</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to query about</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetPublicContainers" class="method">
+		<h4>List&lt;string&gt; <strong>GetPublicContainers</strong>()</h4>
+		<div class="content">This method retrieves the names of the of the containers made public on the CDN
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Collections.Generic.List<string>">List&lt;string&gt;</span></code></td>
+					<td>A list of the public containers</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetStorageItem" class="method">
+		<h4>StorageItem <strong>GetStorageItem</strong>(string containerName, string storageItemName)</h4>
+		<div class="content">This method downloads a storage object from cloudfiles
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><a href="../com.mosso.cloudfiles.domain/StorageItem.htm">StorageItem</a></code></td>
+					<td>An instance of StorageItem with the stream containing the bytes representing the desired storage object</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container that contains the storage object to retrieve</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> storageItemName</td>
+					<td>The name of the storage object to retrieve</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetStorageItem" class="method">
+		<h4>void <strong>GetStorageItem</strong>(string containerName, string storageItemName, string localFileName)</h4>
+		<div class="content">An alternate method for downloading storage objects from cloudfiles directly to a file name specified in the method
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container that contains the storage object to retrieve</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> storageItemName</td>
+					<td>The name of the storage object to retrieve</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> localFileName</td>
+					<td>The file name to save the storage object into on disk</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetStorageItem" class="method">
+		<h4>StorageItem <strong>GetStorageItem</strong>(string containerName, string storageItemName, Dictionary&lt;RequestHeaderFields, string&gt; requestHeaderFields)</h4>
+		<div class="content">An alternate method for downloading storage objects. This one allows specification of special HTTP 1.1 compliant GET headers
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><a href="../com.mosso.cloudfiles.domain/StorageItem.htm">StorageItem</a></code></td>
+					<td>An instance of StorageItem with the stream containing the bytes representing the desired storage object</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container that contains the storage object</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> storageItemName</td>
+					<td>The name of the storage object</td>
+				</tr><tr>
+					<td><code><span title="System.Collections.Generic.Dictionary<RequestHeaderFields, string>">Dictionary&lt;RequestHeaderFields, string&gt;</span></code> requestHeaderFields</td>
+					<td>A dictionary containing the special headers and their values</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetStorageItem" class="method">
+		<h4>void <strong>GetStorageItem</strong>(string containerName, string storageItemName, string localFileName, Dictionary&lt;RequestHeaderFields, string&gt; requestHeaderFields)</h4>
+		<div class="content">An alternate method for downloading storage objects from cloudfiles directly to a file name specified in the method
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container that contains the storage object to retrieve</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> storageItemName</td>
+					<td>The name of the storage object to retrieve</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> localFileName</td>
+					<td>The file name to save the storage object into on disk</td>
+				</tr><tr>
+					<td><code><span title="System.Collections.Generic.Dictionary<RequestHeaderFields, string>">Dictionary&lt;RequestHeaderFields, string&gt;</span></code> requestHeaderFields</td>
+					<td>A dictionary containing the special headers and their values</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetStorageItemAsync" class="method">
+		<h4>void <strong>GetStorageItemAsync</strong>(string containerName, string storageItemName, string localItemName)</h4>
+		<div class="content">This method downloads a storage object from cloudfiles asychronously
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container that contains the storage object to retrieve</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> storageItemName</td>
+					<td>The name of the storage object to retrieve</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> localItemName</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetStorageItemInformation" class="method">
+		<h4>StorageItemInformation <strong>GetStorageItemInformation</strong>(string containerName, string storageItemName)</h4>
+		<div class="content">This method retrieves meta information and size, in bytes, of a requested storage object
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><a href="../com.mosso.cloudfiles.domain/StorageItemInformation.htm">StorageItemInformation</a></code></td>
+					<td>An instance of StorageItem containing the byte size and meta information associated with the container</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container that contains the storage object</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> storageItemName</td>
+					<td>The name of the storage object</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="MakePath" class="method">
+		<h4>void <strong>MakePath</strong>(string containerName, string path)</h4>
+		<div class="content">This method ensures directory objects created for the entire path
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The container to create the directory objects in</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> path</td>
+					<td>The path of directory objects to create</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="MarkContainerAsPrivate" class="method">
+		<h4>void <strong>MarkContainerAsPrivate</strong>(string containerName)</h4>
+		<div class="content">This method sets a container as private on the CDN
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to mark public</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="MarkContainerAsPublic" class="method">
+		<h4>Uri <strong>MarkContainerAsPublic</strong>(string containerName)</h4>
+		<div class="content">This method sets a container as public on the CDN
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Uri">Uri</span></code></td>
+					<td>A string representing the URL of the public container or null</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to mark public</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="MarkContainerAsPublic" class="method">
+		<h4>Uri <strong>MarkContainerAsPublic</strong>(string containerName, int timeToLiveInSeconds)</h4>
+		<div class="content">This method sets a container as public on the CDN
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.Uri">Uri</span></code></td>
+					<td>A string representing the URL of the public container or null</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to mark public</td>
+				</tr><tr>
+					<td><code><span title="System.int">int</span></code> timeToLiveInSeconds</td>
+					<td>The maximum time (in seconds) content should be kept alive on the CDN before it checks for freshness.</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="PutStorageItem" class="method">
+		<h4>void <strong>PutStorageItem</strong>(string containerName, Stream storageStream, string remoteStorageItemName, Dictionary&lt;string, string&gt; metadata)</h4>
+		<div class="content">This method uploads a storage object to cloudfiles with an alternate name
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to put the storage object in</td>
+				</tr><tr>
+					<td><code><span title="System.IO.Stream">Stream</span></code> storageStream</td>
+					<td>The file stream to upload</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> remoteStorageItemName</td>
+					<td>The name of the storage object as it will be called on cloudfiles</td>
+				</tr><tr>
+					<td><code><span title="System.Collections.Generic.Dictionary<string, string>">Dictionary&lt;string, string&gt;</span></code> metadata</td>
+					<td>An optional parameter containing a dictionary of meta tags to associate with the storage object</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="PutStorageItem" class="method">
+		<h4>void <strong>PutStorageItem</strong>(string containerName, string localFilePath, Dictionary&lt;string, string&gt; metadata)</h4>
+		<div class="content">This method uploads a storage object to cloudfiles with meta tags
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to put the storage object in</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> localFilePath</td>
+					<td>The complete file path of the storage object to be uploaded</td>
+				</tr><tr>
+					<td><code><span title="System.Collections.Generic.Dictionary<string, string>">Dictionary&lt;string, string&gt;</span></code> metadata</td>
+					<td>An optional parameter containing a dictionary of meta tags to associate with the storage object</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="PutStorageItem" class="method">
+		<h4>void <strong>PutStorageItem</strong>(string containerName, string localFilePath)</h4>
+		<div class="content">This method uploads a storage object to cloudfiles
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to put the storage object in</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> localFilePath</td>
+					<td>The complete file path of the storage object to be uploaded</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="PutStorageItem" class="method">
+		<h4>void <strong>PutStorageItem</strong>(string containerName, Stream storageStream, string remoteStorageItemName)</h4>
+		<div class="content">This method uploads a storage object to cloudfiles with an alternate name
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to put the storage object in</td>
+				</tr><tr>
+					<td><code><span title="System.IO.Stream">Stream</span></code> storageStream</td>
+					<td>The stream representing the storage item to upload</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> remoteStorageItemName</td>
+					<td>The alternate name as it will be called on cloudfiles</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="PutStorageItemAsync" class="method">
+		<h4>void <strong>PutStorageItemAsync</strong>(string containerName, Stream storageStream, string remoteStorageItemName)</h4>
+		<div class="content">This method uploads a storage object to cloudfiles asychronously
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to put the storage object in</td>
+				</tr><tr>
+					<td><code><span title="System.IO.Stream">Stream</span></code> storageStream</td>
+					<td>The stream representing the storage item to upload</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> remoteStorageItemName</td>
+					<td>The alternate name as it will be called on cloudfiles</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="PutStorageItemAsync" class="method">
+		<h4>void <strong>PutStorageItemAsync</strong>(string containerName, string localStorageItemName)</h4>
+		<div class="content">This method uploads a storage object to cloudfiles asychronously
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container to put the storage object in</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> localStorageItemName</td>
+					<td>The name of the file locally</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="SetDetailsOnPublicContainer" class="method">
+		<h4>void <strong>SetDetailsOnPublicContainer</strong>(string publiccontainer, bool loggingenabled, int ttl, string referreracl, string useragentacl)</h4>
+		<div class="content">
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> publiccontainer</td>
+					<td></td>
+				</tr><tr>
+					<td><code><span title="System.bool">bool</span></code> loggingenabled</td>
+					<td></td>
+				</tr><tr>
+					<td><code><span title="System.int">int</span></code> ttl</td>
+					<td></td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> referreracl</td>
+					<td></td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> useragentacl</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="SetStorageItemMetaInformation" class="method">
+		<h4>void <strong>SetStorageItemMetaInformation</strong>(string containerName, string storageItemName, Dictionary&lt;string, string&gt; metadata)</h4>
+		<div class="content">This method applies meta tags to a storage object on cloudfiles
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.string">string</span></code> containerName</td>
+					<td>The name of the container containing the storage object</td>
+				</tr><tr>
+					<td><code><span title="System.string">string</span></code> storageItemName</td>
+					<td>The name of the storage object</td>
+				</tr><tr>
+					<td><code><span title="System.Collections.Generic.Dictionary<string, string>">Dictionary&lt;string, string&gt;</span></code> metadata</td>
+					<td>A dictionary containiner key/value pairs representing the meta data for this storage object</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+  <h3 class="section">Public properties</h3>
+<div id="Account" class="method">
+    <h4>IAccount <strong>Account</strong> get; </h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <a href="../com.mosso.cloudfiles.domain/IAccount.htm">IAccount</a></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="AuthToken" class="method">
+    <h4>string <strong>AuthToken</strong> get; </h4>
+    <div class="content">the session based token used to ensure the user was authenticated
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.string">string</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="StorageUrl" class="method">
+    <h4>string <strong>StorageUrl</strong> get; </h4>
+    <div class="content">The storage url used to interact with cloud files
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.string">string</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<div id="footer">
+  <p>Based on v1.4.2.5 of   (csharp-floudfiles)</p>
+  <p>Generated by <a href="http://docu.jagregory.com">docu</a></p>
+</div>
+  </body>
+</html>

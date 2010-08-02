@@ -1,0 +1,241 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>ICloudFilesRequest - csharp-floudfiles Documentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <link type="text/css" rel="stylesheet" href="../main.css"/>
+  </head>
+  <body><div id="namespaces">
+	<h2 class="fixed">Namespaces</h2>
+	<div class="scroll">
+		<ul><li>
+          <a href="../com.mosso.cloudfiles/index.htm">com.mosso.cloudfiles</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain/index.htm">com.mosso.cloudfiles.domain</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain.request/index.htm">com.mosso.cloudfiles.domain.request</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain.request.Interfaces/index.htm" class="current">com.mosso.cloudfiles.domain.request.Interfaces</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain.response/index.htm">com.mosso.cloudfiles.domain.response</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.domain.response.Interfaces/index.htm">com.mosso.cloudfiles.domain.response.Interfaces</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.exceptions/index.htm">com.mosso.cloudfiles.exceptions</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.Exceptions/index.htm">com.mosso.cloudfiles.Exceptions</a>
+      </li><li>
+          <a href="../com.mosso.cloudfiles.utils/index.htm">com.mosso.cloudfiles.utils</a>
+      </li>
+		</ul>
+	</div>
+</div><div id="types">
+	<h2 class="fixed">Types</h2>
+	<div class="scroll">
+		<ul><li>
+            <a href="../com.mosso.cloudfiles.domain.request.Interfaces/IAddToWebRequest.htm">IAddToWebRequest</a>
+        </li><li>
+            <a href="../com.mosso.cloudfiles.domain.request.Interfaces/ICloudFilesRequest.htm" class="current">ICloudFilesRequest</a>
+        </li>
+		</ul>
+	</div>
+</div>
+    <div class="header">
+		<p class="class"><strong>Type</strong> ICloudFilesRequest</p>
+		<p><strong>Namespace</strong> com.mosso.cloudfiles.domain.request.Interfaces</p>
+	</div>
+    <div class="sub-header">
+
+
+			<h3 class="section">Methods</h3>
+			<ul><li><a href="#GetRequestStream" class="type">GetRequestStream</a></li><li><a href="#GetResponse" class="type">GetResponse</a></li><li><a href="#SetContent" class="type">SetContent</a></li>
+			</ul>
+
+			<h3 class="section">Properties</h3>
+			<ul><li><a href="#AllowWriteStreamBuffering" class="type">AllowWriteStreamBuffering</a></li><li><a href="#ContentLength" class="type">ContentLength</a></li><li><a href="#ContentStream" class="type">ContentStream</a></li><li><a href="#ContentType" class="type">ContentType</a></li><li><a href="#ETag" class="type">ETag</a></li><li><a href="#Headers" class="type">Headers</a></li><li><a href="#IfModifiedSince" class="type">IfModifiedSince</a></li><li><a href="#Method" class="type">Method</a></li><li><a href="#RangeFrom" class="type">RangeFrom</a></li><li><a href="#RangeTo" class="type">RangeTo</a></li><li><a href="#RequestUri" class="type">RequestUri</a></li><li><a href="#SendChunked" class="type">SendChunked</a></li>
+			</ul>
+
+	</div>
+
+
+	<h3 class="section">Public instance methods</h3>
+<div id="GetRequestStream" class="method">
+		<h4>Stream <strong>GetRequestStream</strong>()</h4>
+		<div class="content">
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><span title="System.IO.Stream">Stream</span></code></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="GetResponse" class="method">
+		<h4>ICloudFilesResponse <strong>GetResponse</strong>()</h4>
+		<div class="content">GetRequest
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td>return <code><a href="../com.mosso.cloudfiles.domain.response.Interfaces/ICloudFilesResponse.htm">ICloudFilesResponse</a></code></td>
+					<td>a HttpWebRequest object that has all the information to make a request against CloudFiles</td>
+				</tr>
+			</table>
+		</div>
+	</div><div id="SetContent" class="method">
+		<h4>void <strong>SetContent</strong>(Stream stream, ProgressCallback progress)</h4>
+		<div class="content">
+
+<table>
+        <caption>Parameters</caption><tr>
+					<td><code><span title="System.IO.Stream">Stream</span></code> stream</td>
+					<td></td>
+				</tr><tr>
+					<td><code><a href="../com.mosso.cloudfiles/ProgressCallback.htm">ProgressCallback</a></code> progress</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+  <h3 class="section">Public properties</h3>
+<div id="AllowWriteStreamBuffering" class="method">
+    <h4>bool <strong>AllowWriteStreamBuffering</strong> get; set;</h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.bool">bool</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="ContentLength" class="method">
+    <h4>long <strong>ContentLength</strong> get; </h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.long">long</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="ContentStream" class="method">
+    <h4>Stream <strong>ContentStream</strong> get; </h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.IO.Stream">Stream</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="ContentType" class="method">
+    <h4>string <strong>ContentType</strong> get; set;</h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.string">string</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="ETag" class="method">
+    <h4>string <strong>ETag</strong> get; </h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.string">string</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="Headers" class="method">
+    <h4>WebHeaderCollection <strong>Headers</strong> get; </h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.Net.WebHeaderCollection">WebHeaderCollection</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="IfModifiedSince" class="method">
+    <h4>DateTime <strong>IfModifiedSince</strong> get; set;</h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.DateTime">DateTime</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="Method" class="method">
+    <h4>string <strong>Method</strong> get; set;</h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.string">string</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="RangeFrom" class="method">
+    <h4>int <strong>RangeFrom</strong> get; set;</h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.int">int</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="RangeTo" class="method">
+    <h4>int <strong>RangeTo</strong> get; set;</h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.int">int</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="RequestUri" class="method">
+    <h4>Uri <strong>RequestUri</strong> get; </h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.Uri">Uri</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div><div id="SendChunked" class="method">
+    <h4>bool <strong>SendChunked</strong> get; set;</h4>
+    <div class="content">
+      <table>
+        <tr>
+          <td>
+            <code>return <span title="System.bool">bool</span></code>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<div id="footer">
+  <p>Based on v1.4.2.5 of   (csharp-floudfiles)</p>
+  <p>Generated by <a href="http://docu.jagregory.com">docu</a></p>
+</div>
+  </body>
+</html>
