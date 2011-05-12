@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Request\CopyStorageItem.cs" />
     <Compile Include="Domain\Request\GetPublicContainerInformationSerialized.cs" />
     <Compile Include="Domain\Request\PutStorageDirectory.cs" />
     <Compile Include="Domain\Request\SetLoggingToContainerRequest.cs" />

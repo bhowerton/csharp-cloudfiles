@@ -873,6 +873,37 @@ namespace com.mosso.cloudfiles
         }
 
         /// <summary>
+        /// This method copies a storage object in a given container
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// UserCredentials userCredentials = new UserCredentials("username", "api key");
+        /// IConnection connection = new Connection(userCredentials);
+        /// connection.CopyStorageItem("container name", "Source Name", "Destination Name");
+        /// </code>
+        /// </example>
+        /// <param name="containerName">The name of the container that contains the storage object</param>
+        /// <param name="sourceItemName">The name of the storage object to copy</param>
+        /// <param name="destItemName">The name of the storage object copy</param>
+        /// <exception cref="ArgumentNullException">Thrown when any of the reference parameters are null</exception>
+        public void CopyStorageItem(string containerName, string sourceItemName, string destItemName)
+        {
+            if (string.IsNullOrEmpty(containerName) ||
+                string.IsNullOrEmpty(sourceItemName) ||
+                string.IsNullOrEmpty(destItemName))
+                throw new ArgumentNullException();
+
+            StartProcess
+                .ByLoggingMessage("Copying storage item " + sourceItemName + " to " + destItemName + " in container '" + containerName + "' for user " + _usercreds.Username)
+                .ThenDoing(() => copyStorageItem(containerName, sourceItemName, destItemName))
+                .AndIfErrorThrownIs<WebException>()
+                .Do(DetermineReasonForStorageItemError)
+                .AndLogError("Error copying storage item " + sourceItemName + " to " + destItemName + " in container '" + containerName + "' for user " + _usercreds.Username)
+                .Now();
+        }
+
+
+        /// <summary>
         /// This method deletes a storage object in a given container
         /// </summary>
         /// <example>
@@ -1893,6 +1924,12 @@ namespace com.mosso.cloudfiles
         {
             var deleteStorageItem = new DeleteStorageItem(StorageUrl, containerName, storageItemName);
             _requestfactory.Submit(deleteStorageItem, AuthToken);
+        }
+
+        private void copyStorageItem(string containerName, string sourceItemName, string destItemName)
+        {
+            var copyStorageItem = new CopyStorageItem(StorageUrl, containerName, sourceItemName, destItemName);
+            _requestfactory.Submit(copyStorageItem, AuthToken);
         }
 
         private void purgePublicStorageItem(string containerName, string storageItemName, string[] emailAddresses)
